@@ -4,7 +4,7 @@
         <div> 
             <div class="title-chart">2023년 8월 시점</div>
             <div class="legendBox" >
-                <button class="item" id="stationaryCombustion" v-on:click="toggleData(0)">고정연소</button>
+                <button class="item" id="stationaryCombustion" v-on:click="toggleData(0)"></button>
                 <button class="item" id="mobileCombustion" v-on:click="toggleData(2)"></button>
                 <button class="item" id="commute" v-on:click="toggleData(4)"></button>
                 <button class="item" id="waterworks" v-on:click="toggleData(6)"></button>
@@ -54,13 +54,21 @@
 <script>
 import predict_chart from './predictCategoryChart1.ts'
 
+
+
 export default {
     name: "predict_category1",
     components: {
         predict_chart
     },
-
     setup(){
+        function changeBackgroundColor() {
+            console.log(123)
+             document.getElementById('stationaryCombustion').style.backgroundColor = predict_chart.chartData.datasets[0].backgroundColor
+        }
+        function changeInnerText() {
+            document.getElementById('stationaryCombustion').style.innerText = predict_chart.chartData.datasets[0].label
+        }
         /*function toggleData(value) {
             console.log(value)
             const visibilityData = predict_chart.isDatasetVisible(0)
@@ -70,10 +78,10 @@ export default {
             if (visibilityData === false ){
                 predict_chart.show(value)
             }
-        }
-        return{
-            toggleData
         }*/
+        return{
+            changeBackgroundColor, changeInnerText
+        }
     }
 
 }
