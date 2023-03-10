@@ -2,8 +2,8 @@
     <div class="predict-header">
         <p class="measure-name">탄소 예측</p>
         <div class="measure-setting">
-            <p class="header-text">탄소 배출량 예측</p>
-            <p class="header-text">카테고리별 탄소 배출량</p>
+            <router-link to="/predict" class="header-text">탄소 배출량 예측</router-link>
+            <router-link to="/predictCategory" class="header-text">카테고리별 탄소 배출량</router-link>
         </div>
     </div>
 </template>
@@ -19,6 +19,7 @@
         font-weight:900;
         margin-left:4vw;
         color:#11263C;
+        text-decoration: none;
     }
 
 </style>
