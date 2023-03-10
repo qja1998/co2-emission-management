@@ -3,31 +3,31 @@
         <div>
             <div class="title-border">고정연소</div>
             <div class="frame" id="frame-categoryChart">
-                <predict_StickChart1 class="bar-graph"/>
+                <stain_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">이동연소</div>
             <div class="frame" id="frame-categoryChart">
-                <predict_StickChart2 class="bar-graph"/>
+                <mobile_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">임직원 출퇴근</div>
             <div class="frame" id="frame-categoryChart">
-                <predict_StickChart3 class="bar-graph"/>
+                <commute_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">수도 사용</div>
             <div class="frame" id="frame-categoryChart">
-                <predict_StickChart4 class="bar-graph"/>
+                <water_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">전력 사용</div>
             <div class="frame" id="frame-categoryChart">
-                <predict_StickChart5 class="bar-graph"/>
+                <power_bargraph class="bar-graph"/>
             </div>
         </div>
     </div>
@@ -52,20 +52,20 @@
 </style>
 
 <script>
-    import predict_StickChart1 from './predictCategoryStick1.ts'
-    import predict_StickChart2 from './predictCategoryStick2.ts'
-    import predict_StickChart3 from './predictCategoryStick3.ts'
-    import predict_StickChart4 from './predictCategoryStick4.ts'
-    import predict_StickChart5 from './predictCategoryStick5.ts'
+    import stain_bargraph from './stain-bargraph.ts'
+    import mobile_bargraph from './mobile-bargraph.ts'
+    import commute_bargraph from './commute-bargraph.ts'
+    import water_bargraph from './water-bargraph.ts'
+    import power_bargraph from './power-bargraph.ts'
 
 export default {
     name: "predict_category2",
     components: {
-        predict_StickChart1,
-        predict_StickChart2,
-        predict_StickChart3,
-        predict_StickChart4,
-        predict_StickChart5
+        stain_bargraph,
+        mobile_bargraph,
+        commute_bargraph,
+        water_bargraph,
+        power_bargraph
     }
 }
 

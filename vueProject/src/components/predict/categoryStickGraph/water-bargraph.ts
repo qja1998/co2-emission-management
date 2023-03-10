@@ -53,8 +53,8 @@ export default defineComponent({
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
-            label:'임직원 출퇴근',
-            data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
+            label:'수도',
+            data: [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
             backgroundColor: ['#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
             barThickness: 20,
           }
