@@ -53,11 +53,10 @@ export default defineComponent({
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
-            label:'이동',
+            label:'이동연소',
             data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor: ['#FFA800'],
+            backgroundColor: ['#FFA800','#FFA800','#FFA800','#FFA800','#FFA800','#FFA800','#FFA800','#FFA800','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
             barThickness: 20,
-            borderRadius:20,
           }
       ]
     }

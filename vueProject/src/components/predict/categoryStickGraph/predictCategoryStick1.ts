@@ -54,11 +54,10 @@ export default defineComponent({
       datasets: [
         {
             label:'고정연소',
-            data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor: ['#9FD72A'],
+            data: [530, 495, 486, 570, 573, 664, 667, 663,  660, 670, 673, 750],
+            backgroundColor: ['#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
             barThickness: 20,
-            borderRadius:20,
-          }
+        }
       ]
     }
 
@@ -74,7 +73,7 @@ export default defineComponent({
         x:{
           grid:{
             display:false
-          }
+          },
         },
         y:{
           stacked:true,

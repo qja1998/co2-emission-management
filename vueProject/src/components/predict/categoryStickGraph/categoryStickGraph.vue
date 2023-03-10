@@ -37,6 +37,7 @@
 
 .dash-bar{
     margin-top:5vh;
+    margin-bottom: 1vh;
 }
 .bar-graph{
     width:90%;

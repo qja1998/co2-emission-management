@@ -55,9 +55,8 @@ export default defineComponent({
         {
             label:'임직원 출퇴근',
             data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor: ['#5E8CFF'],
+            backgroundColor: ['#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
             barThickness: 20,
-            borderRadius:20,
           }
       ]
     }
