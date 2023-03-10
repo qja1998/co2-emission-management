@@ -8,7 +8,6 @@ import register from "./views/measureVue/Register"
 import insight from "./views/Insight"
 import predict from "./views/predictCarbonPreview"
 import predictCategory from "./views/predictCategoryDetailLine"
-import natureCarbon from "./views/natureCarbon.vue"
 import setting from "./views/Setting/Setting"
 import groupinfo from "./views/Setting/GroupInfo.vue"
 import survey from "./views/Survey"
@@ -68,11 +67,6 @@ const router = createRouter({
       path: "/predictCategory",
       name: "predictCategory",
       component: predictCategory,
-    },
-    {
-      path: "/natureCarbon",
-      name: "natureCarbon",
-      component: natureCarbon,
     },
     {
       path: "/setting",
