@@ -66,7 +66,7 @@ export default {
         commute_bargraph,
         water_bargraph,
         power_bargraph
-    }
+    },
 }
 
 </script>

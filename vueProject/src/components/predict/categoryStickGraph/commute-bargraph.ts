@@ -12,6 +12,7 @@ import {
   LinearScale,
   Plugin
 } from 'chart.js'
+import chart from '@/components/measure/input1/chart'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -55,10 +56,22 @@ export default defineComponent({
         {
             label:'임직원 출퇴근',
             data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor: ['#49C5E0','#49C5E0','#49C5E0','#49C5E0','#49C5E0','#49C5E0','#49C5E0','#49C5E0','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
+            backgroundColor : chooseColor(this),
             barThickness: 20,
           }
       ]
+    }
+
+    function chooseColor(commuteData){
+      var color : string[] = []
+      for (var i=0; commuteData.labels.length; i++){
+        if (i >= 9) {
+          color.push('#BFBFBF')
+        } else {
+          color.push('#49C5E0')
+        }
+      }
+      return color
     }
 
     const chartOptions = {
