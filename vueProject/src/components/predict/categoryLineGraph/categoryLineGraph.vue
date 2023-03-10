@@ -54,8 +54,6 @@
 <script>
 import predict_chart from './predictCategoryChart1.ts'
 
-
-
 export default {
     name: "predict_category1",
     components: {
@@ -64,23 +62,23 @@ export default {
     setup(){
         function changeBackgroundColor() {
             console.log(123)
-             document.getElementById('stationaryCombustion').style.backgroundColor = predict_chart.chartData.datasets[0].backgroundColor
+            document.getElementById('stationaryCombustion').style.backgroundColor = predict_chart.chartData.datasets[0].backgroundColor
         }
         function changeInnerText() {
             document.getElementById('stationaryCombustion').style.innerText = predict_chart.chartData.datasets[0].label
         }
-        /*function toggleData(value) {
+        function toggleData(value) {
             console.log(value)
-            const visibilityData = predict_chart.isDatasetVisible(0)
+            const visibilityData = predict_chart.isDatasetVisible(value)
             if (visibilityData === true ){
                 predict_chart.hide(value)
             }
             if (visibilityData === false ){
                 predict_chart.show(value)
             }
-        }*/
+        }
         return{
-            changeBackgroundColor, changeInnerText
+            changeBackgroundColor, changeInnerText, toggleData
         }
     }
 
