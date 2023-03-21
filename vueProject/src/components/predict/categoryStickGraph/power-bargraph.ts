@@ -55,12 +55,22 @@ export default defineComponent({
         {
             label:'전력',
             data: [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
-            backgroundColor: ['#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#5E8CFF','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
+            backgroundColor: chooseColor(),
             barThickness: 20,
           }
       ]
     }
-
+    function chooseColor(){
+      var color : string[] = []
+      for (var i=0; i<=12; i++){
+        if (i >= 9) {
+          color.push('#BFBFBF')
+        } else {
+          color.push('#5E8CFF')
+        }
+      }
+      return color
+    }
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,

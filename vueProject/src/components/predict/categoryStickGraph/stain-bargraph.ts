@@ -55,12 +55,22 @@ export default defineComponent({
         {
             label:'고정연소',
             data: [530, 495, 486, 570, 573, 664, 667, 663,  660, 670, 673, 750],
-            backgroundColor: ['#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#9FD72A','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
+            backgroundColor: chooseColor(),
             barThickness: 20,
         }
       ]
     }
-
+    function chooseColor(){
+      var color : string[] = []
+      for (var i=0; i<=12; i++){
+        if (i >= 9) {
+          color.push('#BFBFBF')
+        } else {
+          color.push('#9FD72A')
+        }
+      }
+      return color
+    }
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
