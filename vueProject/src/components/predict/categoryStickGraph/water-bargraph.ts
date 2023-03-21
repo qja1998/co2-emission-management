@@ -55,12 +55,22 @@ export default defineComponent({
         {
             label:'수도',
             data: [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
-            backgroundColor: ['#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#FF3B3B','#BFBFBF','#BFBFBF','#BFBFBF','#BFBFBF'],
+            backgroundColor : chooseColor(),
             barThickness: 20,
           }
       ]
     }
-
+    function chooseColor(){
+      var color : string[] = []
+      for (var i=0;  i<=12; i++){
+        if (i >= 9) {
+          color.push('#BFBFBF')
+        } else {
+          color.push('#FF3B3B')
+        }
+      }
+      return color
+    }
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
