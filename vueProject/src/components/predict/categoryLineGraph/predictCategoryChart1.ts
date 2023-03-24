@@ -117,7 +117,9 @@ export default defineComponent({
           display: true,
           position: 'right' as const,
           labels:{
-            padding:50
+            boxHeight:6,
+            boxWidth:25,
+            padding:35
           }
         },
       },
