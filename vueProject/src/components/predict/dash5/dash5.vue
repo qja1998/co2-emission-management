@@ -1,7 +1,7 @@
 <template>
     <div style="">
         <div class="title-border" id="dash5-title-border">카테고리별 탄소 배출량 예측
-            <button onclick="location.href='/predictCategory';">전체보기</button>
+            <button onclick="location.href='predict/predictCategory';">전체보기</button>
         </div>  
         <div class="frame" id="frame-dash5">
             <div class="predict-column">

@@ -18,8 +18,9 @@
     .header-text{
         font-weight:900;
         margin-left:4vw;
-        color:#11263C;
+        margin-top:2vh;
         text-decoration: none;
+        color:#11263C;
     }
 
 </style>
