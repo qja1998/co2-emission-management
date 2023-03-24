@@ -6,8 +6,10 @@ import measure from "./views/measureVue/Measure"
 import input1 from "./views/measureVue/Input1Measure"
 import register from "./views/measureVue/Register"
 import insight from "./views/Insight"
-import predict from "./views/predictCarbonPreview"
-import predictCategory from "./views/predictCategoryDetailLine"
+import predict from "./views/Predict/predictCarbonPreview"
+import predictCategory from "./views/Predict/predictCategoryDetailLine"
+import assesment from "./views/Nature/carbonNatureAssessment"
+import target from "./views/Nature/carbonNatureTarget"
 import setting from "./views/Setting/Setting"
 import groupinfo from "./views/Setting/GroupInfo.vue"
 import survey from "./views/Survey"
@@ -16,7 +18,6 @@ import idinfo from "./views/Signup/SignupAdminIdInfo"
 import signOK from "./views/Signup/SignupAdminOK"
 import signcheck from "./views/Signup/SignupAdminCheck"
 import signupSub from "./views/Signup/SignupSub"
-
 
 const router = createRouter({
   history: createWebHistory(),
@@ -64,9 +65,19 @@ const router = createRouter({
       component: predict,
     },
     {
-      path: "/predictCategory",
+      path: "/predict/predictCategory",
       name: "predictCategory",
       component: predictCategory,
+    },
+    {
+      path: "/nature",
+      name: "assesment",
+      component: assesment,
+    },
+    {
+      path: "/nature/target",
+      name: "target",
+      component: target,
     },
     {
       path: "/setting",

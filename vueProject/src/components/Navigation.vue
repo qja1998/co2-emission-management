@@ -20,7 +20,7 @@
             <img src="@/assets/carbonPredict.png" alt="" class="menu-icon">
             <a>탄소 예측</a>
         </div>
-        <div class="menu" style=" cursor: pointer;" onclick="location.href='/survey';">
+        <div class="menu" style=" cursor: pointer;" onclick="location.href='/nature';">
             <img src="@/assets/carbonNatural.png" alt="" class="menu-icon">
             <a>탄소 중립</a>
         </div>
