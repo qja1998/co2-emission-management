@@ -55,7 +55,7 @@ export default defineComponent({
         {
             label:'이동연소',
             data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor: chooseColor(),
+            backgroundColor : chooseColor(),
             barThickness: 20,
           }
       ]

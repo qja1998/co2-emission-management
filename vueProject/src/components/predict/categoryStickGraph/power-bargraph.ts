@@ -62,7 +62,7 @@ export default defineComponent({
     }
     function chooseColor(){
       var color : string[] = []
-      for (var i=0; i<=12; i++){
+      for (var i=0;  i<=12; i++){
         if (i >= 9) {
           color.push('#BFBFBF')
         } else {

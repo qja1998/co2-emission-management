@@ -55,14 +55,14 @@ export default defineComponent({
         {
             label:'수도',
             data: [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
-            backgroundColor: chooseColor(),
+            backgroundColor : chooseColor(),
             barThickness: 20,
           }
       ]
     }
     function chooseColor(){
       var color : string[] = []
-      for (var i=0; i<=12; i++){
+      for (var i=0;  i<=12; i++){
         if (i >= 9) {
           color.push('#BFBFBF')
         } else {

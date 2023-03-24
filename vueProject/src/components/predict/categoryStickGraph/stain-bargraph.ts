@@ -55,14 +55,14 @@ export default defineComponent({
         {
             label:'고정연소',
             data: [530, 495, 486, 570, 573, 664, 667, 663,  660, 670, 673, 750],
-            backgroundColor: chooseColor(),
+            backgroundColor : chooseColor(),
             barThickness: 20,
         }
       ]
     }
     function chooseColor(){
       var color : string[] = []
-      for (var i=0; i<=12; i++){
+      for (var i=0;  i<=12; i++){
         if (i >= 9) {
           color.push('#BFBFBF')
         } else {
