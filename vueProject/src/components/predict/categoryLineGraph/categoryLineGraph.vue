@@ -1,32 +1,18 @@
 <template>
-    <div>
-        <div class="frame" id="frame-categoryChart" style="height: 100%;">
-        <div> 
-            <div class="title-chart">2023년 8월 시점</div>
-            <div class="legendBox" >
-                <button class="item" id="stationaryCombustion" v-on:click="toggleData(0)"></button>
-                <button class="item" id="mobileCombustion" v-on:click="toggleData(2)"></button>
-                <button class="item" id="commute" v-on:click="toggleData(4)"></button>
-                <button class="item" id="waterworks" v-on:click="toggleData(6)"></button>
-                <button class="item" id="power" v-on:click="toggleData(8)"></button>
-                <button class="item" id="fertilizer" v-on:click="toggleData(10)"></button>
-                <button class="item" id="waste" v-on:click="toggleData(12)"></button>
-                <button class="item" id="forest" v-on:click="toggleData(14)"></button>
-            </div>
-            <!--<canvas id="lineChart" width="400" height="400"></canvas>-->
-            <predict_chart id="category-lineGraph"/>
-        </div>
-        </div>
+    <div id="frame-category-lineChart">
+        <div class="title-chart">2023년 8월 시점</div>
+        <!--<canvas id="lineChart" width="400" height="400"></canvas>-->
+        <predict_chart id="category-lineGraph"/>
     </div>
 </template>
 
 <style>
-#frame-categoryChart {
-    width: 95%;
+#frame-category-lineChart {
+    padding:0% 5%
 }
 .title-chart {
     color:#5A5A5A;
-    font-size:1.5rem;
+    font-size:2rem;
     font-weight :600;
     text-align: center;
     margin-top: 1em;
@@ -45,9 +31,10 @@
     
 }
 #category-lineGraph{
-    margin-top:5vh;
-    width:76vw;
-    height:70vh;
+    margin-top:14vh;
+    width:75vw;
+    height:60vh;
+
 }
 </style>
 

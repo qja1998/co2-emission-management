@@ -1,32 +1,32 @@
 <template>
     <div>
-        <div>
+        <div class="dash-bar">
             <div class="title-border">고정연소</div>
-            <div class="frame" id="frame-categoryChart">
+            <div class="frame bar-frame">
                 <stain_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">이동연소</div>
-            <div class="frame" id="frame-categoryChart">
+            <div class="frame bar-frame">
                 <mobile_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">임직원 출퇴근</div>
-            <div class="frame" id="frame-categoryChart">
+            <div class="frame bar-frame">
                 <commute_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">수도 사용</div>
-            <div class="frame" id="frame-categoryChart">
+            <div class="frame bar-frame">
                 <water_bargraph class="bar-graph"/>
             </div>
         </div>
         <div class="dash-bar">
             <div class="title-border">전력 사용</div>
-            <div class="frame" id="frame-categoryChart">
+            <div class="frame bar-frame">
                 <power_bargraph class="bar-graph"/>
             </div>
         </div>
@@ -34,14 +34,14 @@
 </template>
 
 <style>
-
+.bar-frame{
+    width:76.5vw;
+}
 .dash-bar{
-    margin-top:5vh;
-    margin-bottom: 1vh;
+    margin-bottom: 7vh;
 }
 .bar-graph{
-    width:90%;
-    margin-left:3.5vw;
+    margin-top:3vh;
 }
 #frame-categoryChart {
     width: 95%;

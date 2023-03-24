@@ -4,7 +4,7 @@
     <div class="contents">
       <predict_header />
       <div class="background">
-          <div class="header-page" style="height: 140vh; margin-top: 20px;">카테고리별 탄소배출량 예측 전체보기
+          <div class="header-page">카테고리별 탄소배출량 예측 전체보기
             <span class="radio-group">
               <div class="radio">
                 <input type="radio" name="radio" id="clickbtn" checked="checked" value="line" @click="clickLine()"/>
@@ -14,7 +14,7 @@
               </div>
             </span><br>
             <span class="subHeader-page">Predicted Carbon emission Overview</span>
-            <div>  
+            <div >  
               <span class="wrap" v-if="kindOfGraph == 'stick'">
                 <predict_categoryStickGraph class="categoryStickGraph"/>
               </span>
@@ -30,10 +30,7 @@
 
 <style>
 .wrap > * {
-  float: left;
-  margin-top: 3vh;
-  height: 100vh;
-  width: 100%;
+  margin-top: 5vh;
 }
 .radio {
   margin: 0 0.25rem;
