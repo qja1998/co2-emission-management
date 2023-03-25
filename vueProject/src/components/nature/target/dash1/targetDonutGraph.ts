@@ -8,7 +8,6 @@ import {
   Legend,
   ArcElement,
   CategoryScale,
-  Plugin
 } from 'chart.js'
 
 ChartJS.register(
@@ -44,6 +43,7 @@ export default defineComponent({
           label: '카테고리별 탄소 배출량',
           backgroundColor: ['#9FD72A','#FFA800','#59CFE9','#B67FBF','#CA985E','#F6DD00','#3E9B96','#5E8CFF','#FF7D7D','#088AA6','#475674'],
           data: [2000, 1800, 1500, 1600, 1000, 1200, 680, 820, 760, 758, 100],
+          
         },
       ],
     }
@@ -55,7 +55,9 @@ export default defineComponent({
         legend: {
           display: false
         },
+        
       },
+      
       scales:{
         x:{
           display:false,
@@ -69,7 +71,9 @@ export default defineComponent({
             display:false
           }
         },
-      }
+      },
+      cutout: '70',
+      borderWidth:0
     }
     
     return () =>

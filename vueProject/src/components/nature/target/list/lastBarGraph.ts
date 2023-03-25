@@ -51,22 +51,14 @@ export default defineComponent({
   setup(props) {
     const chartData = {
       labels: [
-        '총 탄소 배출량',
+        '2022년 총 탄소 배출량', '2023년 총 탄소 배출량',
       ],
       datasets: [
         {
-          label : '2022년',
-          backgroundColor: ['#E0F599'],
+          label : '총 탄소 배출량',
+          backgroundColor: ['#2A565B','#3DC984'],
           borderRadius:10,
-          data: [40],
-          barThickness:20,
-          barPercentage: 0.5
-        },
-        {
-          label : '2023년',
-          backgroundColor: ['#62BC8A'],
-          borderRadius:10,
-          data: [30],
+          data: [40,30],
           barThickness:20,
         },
       ]
@@ -78,6 +70,7 @@ export default defineComponent({
       maintainAspectRatio: false,
       plugins:{
         legend: {
+          display:false,
           position:'top' as const,
           align	: 'end' as const,
           labels : {
@@ -89,6 +82,10 @@ export default defineComponent({
           }
 
         },
+      },
+      ticks: {
+        minRotation: 80, // x축 값의 회전 각도를 설정할 수 있어요.
+        padding: 5, // x축 값의 상하 패딩을 설정할 수 있어요.
       },
       scales:{
         x:{
