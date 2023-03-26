@@ -63,7 +63,9 @@ export default createStore({
             "폐기물처리시설(하수처리)",
             "폐기물처리시설(생물학적)",
             "폐기물처리시설(폐수)"
-        ]
+        ],
+        //탄소 중립
+        targetPopup:false
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -227,6 +229,14 @@ export default createStore({
           VueCookies.remove('accessToken');
           VueCookies.remove('refreshToken');
         },
+
+        //탄소 중립
+        openAddTarget(state){
+            state.targetPopup = true
+        },
+        closeAddTarget(state){
+            state.targetPopup = false
+        }
     },
     //전처리 후 Mutations에 데이터 전달
     actions:{

@@ -8,10 +8,6 @@
 
 </template>
 
-<style>
-
-</style>
-
 
 <script>
 import carbonLastBarGraph from './carbonLastBarGraph.vue';
@@ -25,3 +21,8 @@ import targetList from './targetList.vue';
         }
     }
 </script>
+
+<style>
+
+</style>
+
