@@ -5,9 +5,14 @@
             <evaluation_header/>
             <div class="background">
               <div style="height:140vh">
-                  <p class="header-page">탄소 배출량 평가<br>
-                      <span class="subHeader-page">Carbon Emissions Evaluation</span>
-                  </p>
+                <select class="select_group" v-model="selected_company" @change="change_company()">
+                  <option v-for="item in group_list" :key="item">{{ item }}</option>
+                </select>
+                <span class="header-page">탄소 배출량 평가</span><br>
+                <span class="subHeader-page">Carbon Emissions Evaluation</span>
+                <div>
+                    <div style="height: 50vh"><evaluation_dash1/></div>
+                </div>
               </div>
             </div>
         </div>
@@ -37,6 +42,10 @@
   <script>
   import navigation from "@/components/Navigation.vue"
   import evaluation_header from "@/components/evaluation/Header.vue"
+  import evaluation_dash1 from "@/components/evaluation/dash1/dashboard1_evaluation.vue"
+  import axios from "axios"
+  import { useStore } from "vuex"
+  import {computed, ref} from "vue"
 
   
     export default {
@@ -44,8 +53,66 @@
         components:{
             navigation,
             evaluation_header,
+            evaluation_dash1
         },
         setup() {
+            const store = useStore();
+            var month = computed(() => store.state.insight_month+1);
+            var year = computed(() => store.state.insight_year);
+            var scope1 = ref(0)
+            var scope2 = ref(0)
+            var scope3 = ref(0)
+            var total_emission = ref(0)
+            var rerender_signal = ref(0)
+            var group_list = computed(() => store.state.group_list).value
+            var selected_company = ref(group_list[0])
+
+
+            function change_company(){
+            store.commit("insight_select_company",selected_company.value);
+            console.log("11111111111111111111111111111111"+ store.state.insight_selected_company)
+            get_total_emission_month()
+            get_total_emission_year()
+          }
+          async function get_total_emission_month(){
+              await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
+                    console.log(res.data)
+                    console.log("연월"+year.value+month.value)
+                    scope1.value = res.data.Scopes[0]
+                    scope2.value = res.data.Scopes[1]
+                    scope3.value = res.data.Scopes[2]
+                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+                    store.commit("set_scopes",res.data.Scopes);
+                    store.commit("SetDetailEmission",res.data.EmissionList);
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                  rerender_signal.value +=1
+                })
+            }
+            async function get_total_emission_year(){
+              await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-12-28",config).then(res => {
+                    console.log(res.data)
+                    console.log("연월"+year.value)
+                    scope1.value = res.data.Scopes[0]
+                    scope2.value = res.data.Scopes[1]
+                    scope3.value = res.data.Scopes[2]
+                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+                    store.commit("set_scopes",res.data.Scopes);
+                    store.commit("SetDetailEmission",res.data.EmissionList);
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                  rerender_signal.value +=1
+                })
+            }
+          return{
+            group_list, selected_company, change_company
+          }
         }
     }
   </script>

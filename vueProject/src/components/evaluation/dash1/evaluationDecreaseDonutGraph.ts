@@ -2,6 +2,10 @@ import { defineComponent, h, PropType  } from 'vue'
 import axios from "axios";
 import { Doughnut } from 'vue-chartjs'
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { computed,ref } from "vue";
+
+
 import {
   Chart as ChartJS,
   Title,
@@ -11,9 +15,14 @@ import {
   CategoryScale,
   Plugin
 } from 'chart.js'
-import { useStore } from "vuex";
-import { computed,ref } from "vue";
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale)
+
+ChartJS.register(
+  Title, 
+  Tooltip, 
+  Legend, 
+  ArcElement, 
+  CategoryScale,
+  )
 
 export default defineComponent({
   name: 'DoughnutChart',
@@ -47,19 +56,31 @@ export default defineComponent({
       
     }
   },
-  async setup(props, { expose }) {
+  setup(props) {
     
     const chartData = {
-      labels: ['기준량','기준량 대비 총 탄소배출량'],
+      labels: ['기준량 대비 총 탄소배출량', '기준량'],
       datasets: [
         {
-          backgroundColor: ['#EFEFEF', '#3DC984'], 
+          backgroundColor: ['#3DC984', '#EFEFEF'], 
           borderColor: "#eee",
           hoverBorderColor: "#eee",
-          data: [30,70],
+          data: [30, 70], //기준량 대비 총 탄소배출량 = 작년 탄소배출량/기준량*100 -> 작년탄소배출량이 기준량보다 많으면, 비율이 1 이상
         }
       ]
     }
+
+    // function chooseColor(){
+    //   const color: string[] = []
+    //   if (chartData.datasets[0].data[0] > 1){
+    //     color.push('#FF7E7E')
+    //     color.push('#EFEFEF')
+    //   }
+    //   else{
+    //     color.push('#3DC984')
+    //     color.push('#EFEFEF')
+    //   }
+    // }
 
     const chartOptions = {
       responsive: true,
@@ -76,7 +97,7 @@ export default defineComponent({
         },
         Tooltip: {
           boxWidth: 15,
-        }
+        },
       },
       layout: {
         padding: {
@@ -94,7 +115,7 @@ export default defineComponent({
       }
     }
     
-    const store = useStore();
+    // const store = useStore();
 
 
     // async function get_list(){
