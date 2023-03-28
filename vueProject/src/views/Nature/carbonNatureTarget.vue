@@ -39,7 +39,7 @@ export default {
     },
     setup() {
         const store = useStore()
-        var targetPopup = computed(() => store.state.targetPopup)
+        var targetPopup = computed(() => store.state.CarbonCategories)
 
         return{
             targetPopup
