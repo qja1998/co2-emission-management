@@ -42,13 +42,13 @@
             </div>
         </div>
         <div v-else-if="input_regi == 1">
-
+            <Power_usage_excel></Power_usage_excel>
         </div>
         <div v-else-if="input_regi == 2">
             <Power_usage_autoVue></Power_usage_autoVue>
         </div>
     </div>
-    <button class ="input2_regi_btn" id="add_info_regi_btn" @click="click_regi_btn(unit_s)">상단 정보 등록</button>
+    <button v-if="input_regi == 0" class ="input2_regi_btn" id="add_info_regi_btn" @click="click_regi_btn(unit_s)">상단 정보 등록</button>
 </template>
 
 <style>
@@ -134,13 +134,15 @@
 
 <script>
 import Power_usage_autoVue from './Power_usage_auto.vue';
+import Power_usage_excel from './Power_usage_excel.vue';
 import {useStore} from 'vuex'
 import {ref,computed} from 'vue'
 
     export default {
         name :"power_usage",
         components:{ 
-            Power_usage_autoVue
+            Power_usage_autoVue,
+            Power_usage_excel
         },
         setup(){
             const store = useStore()
