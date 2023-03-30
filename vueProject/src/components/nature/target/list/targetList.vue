@@ -3,39 +3,42 @@
         <div class="frame" id="target-list">
             <div class="list-box">
                 전환
-                <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList('전환')">
+                <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList(0)">
                 <div class="list-content-group">
-                    <div class='list-content' v-for = "trans in transList" v-on:mouseover="hoverTarget(trans)" v-on:mouseleave="leaveTarget()">
-                        <span class="direction-icon">▶</span>
-                        <!-- 리스트 내용 -->
-                        <span class="list-content-text" v-if="edit[0]==false||edit[1]!=trans.index">{{ trans.category }}의 {{ trans.percentage}}%를 {{ trans.target }}로 전환</span>
-                        <div style="display:inline-block; float: right; margin-top:2.7vh" v-if="select==trans.index && listKind=='trans'">
-                            <img style="height:4vh;" src="@/assets/editBtn.png" v-if="edit[0]==false||edit[1]!=trans.index" @click="clickEditTarget(trans.index)">
-                            <img style="height:4vh; margin:0vh 1vw" src="@/assets/deleteBtn.png" v-if="edit[0]==false||edit[1]!=trans.index" @click="clickDeleteTarget(trans.index)">
-                        </div>
+                    <div id="default-translist" v-if="transListNum ==0 && add[1]!=0">
+                        <img src="@/assets/exclamationMark.png" style="width:7vh; margin: 13vh 15.5vw 2vh 15.5vw">
+                        <div style="text-align: center;">데이터를 추가해주세요</div>
+                    </div>
+                    <div class='list-content' v-for = "trans in targetList" v-on:mouseover="hoverTarget(trans)" v-on:mouseleave="leaveTarget()"> 
+                        <span v-if="trans.listkind==0">
+                            <span class="direction-icon">▶</span>
+                            <!-- 리스트 내용 -->
+                            <span class="list-content-text" v-if="edit[0]==false||edit[1]!=trans.index">{{ trans.category }}의 {{ trans.percentage}}%를 {{ trans.target }}로 전환</span>
+                            <!-- hover시 -->
+                            <div class="target-icon" v-if="select==trans.index && trans.listkind==0">
+                                <img src="@/assets/editBtn.png" v-if="edit[0]==false||edit[1]!=trans.index" @click="clickEditTarget(trans)">
+                                <img style="margin:0vh 1vw" src="@/assets/deleteBtn.png" v-if="edit[0]==false||edit[1]!=trans.index" @click="clickDeleteTarget(trans)">
+                            </div>
+                        </span>
                         <!-- 리스트 수정 -->
-                        <span class="list-content-text" v-if="edit[0]==true && edit[1]==trans.index" v-on:keyup.enter="submitEdit(trans.index)">
+                        <span class="list-content-text" v-if="edit[0]==true && edit[1]==trans.index &&trans.listkind==0" v-on:keyup.enter="submitEdit(trans)">
                             <select v-model="category" class="box drop-box" >
                                 <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
-                            </select> 의 <input class="box input-box"> %를
+                            </select> 의 <input class="box input-box" id="transPercent" placeholder='30'> %를
                             <select v-model="transEnargy" class="box drop-box" >
-                                <option value="태양열에너지">태양열에너지</option>
-                                <option value="태양광에너지">태양열에너지</option>
-                                <option value="풍력에너지">풍력에너지</option>
-                            </select> 로 <input class="box input-box"> 전환
+                                <option :value=trans v-for="trans in transEnargyList">{{trans}}</option >
+                            </select> 로 전환
                         </span> 
                     </div>
                     <!-- 리스트 추가 -->
-                    <div class='list-content' v-if="add[0]==true && add[1]=='전환' ">
+                    <div class='list-content' v-if="add[0]==true && add[1]==0">
                         <span class="list-content-text" v-on:keyup.enter="submitAdd()">
                             <select v-model="category" class="box drop-box" >
                                 <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
-                            </select> 의 <input class="box input-box"> %를
+                            </select> 의 <input class="box input-box " id="transPercent" placeholder='30'> %를
                             <select v-model="transEnargy" class="box drop-box" >
-                                <option value="태양열에너지">태양열에너지</option>
-                                <option value="태양광에너지">태양열에너지</option>
-                                <option value="풍력에너지">풍력에너지</option>
-                            </select> 로 <input class="box input-box"> 전환
+                                <option :value=trans v-for="trans in transEnargyList">{{trans}}</option >
+                            </select> 로 전환
                         </span> 
                     </div>
                 </div>
@@ -43,32 +46,41 @@
             <div class = "line"></div>
             <div class="list-box increse-box">
                 감축
-                <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList('감축')">
+                <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList(1)">
                 <div class="list-content-group">
-                    <div class ="list-content" v-for = "increas in increasList" v-on:mouseover="hoverTarget(increas)" v-on:mouseleave="leaveTarget()">
-                        <span class="direction-icon">▶</span>
-                        <!-- 리스트 내용 -->
-                        <span class="list-content-text" v-if="edit[0]==false||edit[1]!=increas.index">{{increas.category}}의 {{increas.percentage}}%를 감축</span>
-                        <div style="display:inline-block; float: right; margin-top:2.7vh" v-if="select==increas.index && listKind=='increase'">
-                            <img class="icon" src="@/assets/editBtn.png" v-if="edit[0]==false||edit[1]!=increas.index" @click="clickEditTarget(increas.index)">
-                            <img class="icon" style="margin:0vh 1vw" src="@/assets/deleteBtn.png" v-if="edit[0]==false||edit[1]!=increas.index" @click="clickDeleteTarget(increas.index)">
-                        </div>
+                    <div id="default-increaslist" v-if="increasListNum ==0 && add[1]!=1">
+                        <img src="@/assets/exclamationMark.png" style="width:7vh; margin: 13vh 13vw 2vh 13vw">
+                        <div style="text-align: center;">데이터를 추가해주세요</div>
+                    </div>
+                    <div class ="list-content" v-for = "increas in targetList" v-on:mouseover="hoverTarget(increas)" v-on:mouseleave="leaveTarget()">
+                        <span v-if="increas.listkind==1">
+                            <span class="direction-icon">▶</span>
+                            <!-- 리스트 내용 -->
+                            <span class="list-content-text" v-if="edit[0]==false||edit[1]!=increas.index">{{increas.category}}의 {{increas.percentage}}%를 감축</span>
+                            <div class="target-icon" v-if = "select==increas.index && increas.listkind==1">
+                                <img src="@/assets/editBtn.png" v-if="edit[0]==false||edit[1]!=increas.index" @click="clickEditTarget(increas)">
+                                <img  style="margin:0vh 1vw" src="@/assets/deleteBtn.png" v-if="edit[0]==false||edit[1]!=increas.index" @click="clickDeleteTarget(increas)">
+                            </div>
+                        </span>
+                        
                         <!-- 리스트 수정 -->
-                        <span class="list-content-text" v-if="edit[0]==true && edit[1]==increas.index" v-on:keyup.enter="submitEdit(increas.index)">
+                        <span class="list-content-text" v-if="edit[0]==true && edit[1]==increas.index && increas.listkind==1" v-on:keyup.enter="submitEdit(increas)">
                             <select v-model="category" class="box drop-box" >
                                 <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
-                            </select> 의 <input class="box input-box"> %를 감축
+                            </select> 의 <input class="box input-box" id="increasPercent" placeholder='30'> %를 감축
                         </span> 
                     </div>
-                    <div class='list-content' v-if="add[0]==true && add[1]=='감축'">
+                    <!-- 리스트 추가 -->
+                    <div class='list-content' v-if="add[0]==true && add[1]==1">
                         <span class="list-content-text" v-on:keyup.enter="submitAdd('감축')">
                             <select v-model="category" class="box drop-box" >
                                 <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
-                            </select> 의 <input class="box input-box"> %를 감축
+                            </select> 의 <input class="box input-box" id="increasPercent" placeholder='30'> %를 감축
                         </span> 
                     </div>
                 </div>
             </div>
+        
             <button :class="{clickbtn: editContent, 'nonclickbtn': !editContent}" id="target-add-btn" @click="clickSaveTarget()">저장하기</button>
             <!-- <button class="clickbtn" id="target-add-btn" @click="clickOpenAddTarget()">+ 추가하기</button> -->
         </div>
@@ -88,81 +100,149 @@ import {computed, ref} from 'vue'
         },
         setup(){
             const store = useStore();
-            var editContent = ref(false);
-            var edit = ref([false, -1]);
-            var del = ref([false, -1]);
-            var add = ref([false,''])
-            var categoryList= computed(() => store.state.CarbonCategories)
-            var category ='고정연소'
-            var transList=[
-                {index:0,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:1,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:2,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:3,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-            ]
-            var increasList=[
-                {index:4,category:'전력사용', percentage: 30},
-                {index:5,category:'전력사용', percentage: 30},
-                {index:6,category:'전력사용', percentage: 30}
-            ]
-            const clickOpenAddTarget = () => {
-                store.commit('openAddTarget')
-                console.log('open')
-            }
+            var editContent = ref(false); //리스트 변경사항이 있는지 확인하는 변수
 
-            var select =ref(-1)
-            var listKind = ref('')
+            var edit = ref([false, -1]); 
+            var del = ref([false, -1]);
+            var add = ref([false,-1])
+
+            //수정과 추가시 선택하는데 필요한 리스트
+            var categoryList= computed(() => store.state.CarbonCategories)
+            var transEnargyList = [
+                '태양열 에너지',
+                '풍력 에너지',
+                '태양광 에너지'
+            ]
+            var category =ref('고정연소')
+            var transEnargy =ref('태양열 에너지')
+
+            //사용자의 전환, 감축 목표 리스트
+            var targetList=[]
+
+            //각각의 리스트 내용의 개수를 나타내는 변수
+            var transListNum = ref(targetList.filter(list => list.listkind === 0).length) 
+            var increasListNum = ref(targetList.filter(list => list.listkind === 1).length)
+
+            console.log(targetList)
+            // 내용 추가 팝업창 여는 함수
+            // const clickOpenAddTarget = () => {
+            //     store.commit('openAddTarget')
+            //     console.log('open')
+            // }
+
+            var select =ref(-1) // 마우스가 가리키고있는 리스트 내용
+
+            //마우스 오버시 수정, 삭제 기능 옵션 on
             const hoverTarget=(value)=>{
                 select.value = value.index
-                if (value.target == null){
-                    listKind.value = 'increase'
-                }
-                else{
-                    listKind.value = 'trans'
-                }
-                console.log(listKind.value)
             }
+
+            //마우스 오버시 수정, 삭제 기능 옵션 off
             const leaveTarget=()=>{
                 select.value = -1
             }
+
+            //추가하기 버튼 클릭시 추가 폼 여는 함수
+            function addList(kind_){
+                add.value[0]=true
+                add.value[1]=kind_   
+            }
+
+            //수정하기 버튼 클릭시 수정 폼 여는 함수
+            function clickEditTarget(list){
+                edit.value[0] = true
+                edit.value[1] = list.index
+            }
+
+            //추가 완료후 리스트 업
+            function submitAdd(){
+                var addIndex = targetList.length
+                console.log('엔터')
+                if(add.value[1]==0){
+                    targetList.push({
+                        listkind:0, 
+                        index:addIndex, 
+                        category:category.value, 
+                        percentage: document.getElementById('transPercent').value,
+                        target: transEnargy.value
+                    })
+                    
+                    editContent.value = true
+                    transListNum.value = targetList.filter(list => list.listkind === 0).length
+                }
+                else{
+                    targetList.push({
+                        listkind:1, 
+                        index:addIndex, 
+                        category:category.value, 
+                        percentage: document.getElementById('increasPercent').value, 
+                        target: null
+                    })
+                    editContent.value = true
+                    increasListNum.value = targetList.filter(list => list.listkind === 1).length
+                }
+                
+                console.log(targetList)
+                add.value[0]=false
+                add.value[1]=-1  
+                
+            }
+
+            //수정 완료후 리스트 업
+            function submitEdit(list){
+                console.log('수정엔터')
+                if(list.listkind==0){
+                    targetList[list.index] = {
+                        listkind:list.listkind, 
+                        index:list.index, 
+                        category:category.value, 
+                        percentage: document.getElementById('transPercent').value,
+                        target: transEnargy.value
+                    }
+                }
+                else{
+                    targetList[list.index] = {
+                        listkind:list.listkind, 
+                        index:list.index, 
+                        category:category.value, 
+                        percentage: document.getElementById('increasPercent').value,
+                        target: null
+                    }
+                }
+                
+                edit.value[0]=false
+                edit.value[1]=-1
+                editContent.value = true
+            }
+
+            //리스트 삭제 함수
+            function clickDeleteTarget(list){
+                targetList.splice(list.index, 1);
+                editContent.value=true
+
+                for(var i=list.index; i<targetList.length; i++){
+                    targetList[i].index=targetList[i].index-1
+                }
+                transListNum.value = targetList.filter(list => list.listkind === 0).length
+                increasListNum.value = targetList.filter(list => list.listkind === 1).length
+                console.log(transListNum.value)
+            }
+
+            //서버에 저장
             function clickSaveTarget(){
                 console.log('저장')
                 editContent.value=false
             }
-            function addList(kind){
-                add.value[0]=true
-                add.value[1]=kind   
-                console.log(add.value)
-            }
-            function clickEditTarget(index){
-                edit.value[0] = true
-                edit.value[1] = index
-                console.log(edit.value[1])
-                
-            }
-            function submitAdd(){
-                add.value[0]=false
-                add.value[1]=''
-                editContent.value = true
-                
-            }
-            function submitEdit(index){
-                console.log('수정엔터')
-                edit.value[0]=false
-                edit.value[1]=-1
-                editContent.value = true
-                
-            }
+
             return{
-                transList,
-                increasList,
-                clickOpenAddTarget,
-                select,
-                listKind,
+                targetList,
+                // clickOpenAddTarget,
+ 
                 hoverTarget,
                 leaveTarget,
                 clickSaveTarget,
                 clickEditTarget,
+                select,
                 categoryList,
                 category,
                 edit,
@@ -170,7 +250,13 @@ import {computed, ref} from 'vue'
                 submitEdit,
                 submitAdd,
                 addList,
-                editContent
+                clickDeleteTarget,
+                editContent,
+                transEnargy,
+                transEnargyList,
+                transListNum,
+                increasListNum
+
             }
         }
     }
@@ -253,6 +339,9 @@ import {computed, ref} from 'vue'
     background: #EFF1F9;
     border: none;
 }
+.long-drop-box{
+    width:10vw
+}
 #target-add-btn{
     float:right;
 }
@@ -264,5 +353,28 @@ import {computed, ref} from 'vue'
 }
 .add-icon{
     float:right
+}
+.target-icon{
+    display:inline-block; 
+    float: right; 
+    margin-top:2.7vh
+}
+.target-icon> img{
+    height:4vh;
+}
+.target-icon> img:hover{
+    cursor: pointer;
+}
+#default-translist{
+    width:inherit; 
+    height:40vh; 
+    border:1px solid #d5d5d5; 
+    border-radius: 2vh;
+}
+#default-increaslist{
+    width:inherit; 
+    height:40vh; 
+    border:1px solid #d5d5d5; 
+    border-radius: 2vh;
 }
 </style>
