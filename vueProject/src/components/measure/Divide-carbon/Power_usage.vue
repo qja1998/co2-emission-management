@@ -134,7 +134,7 @@
 
 <script>
 import Power_usage_autoVue from './Power_usage_auto.vue';
-import Power_usage_excel from './Power_usage_excel.vue';
+import Power_usage_excel from './excel/Power_usage_excel.vue';
 import {useStore} from 'vuex'
 import {ref,computed} from 'vue'
 
