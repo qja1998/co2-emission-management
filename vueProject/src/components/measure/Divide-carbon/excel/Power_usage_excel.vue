@@ -92,8 +92,8 @@
           var info_list={
             Type:"7",
             DetailType:"전력",
-            StartDate: sheets[i].시작날짜,
-            EndDate:sheets[i].종료날짜,
+            StartDate: excelSerialDateToJSDate(sheets[i].시작날짜),
+            EndDate:excelSerialDateToJSDate(sheets[i].종료날짜),
             Location:"",
             scope:2,
             data:sheets[i].전력사용량,
@@ -108,6 +108,28 @@
           store.commit("SetTableContent",info_list)
         }
       }
+      
+      //엑셀 날짜 받아와서 타입에 맞춰 바꾸는 함수
+      function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+      }
+      function excelSerialDateToJSDate (excelSerialDate) {
+        const daysBeforeUnixEpoch = 70 * 365 + 19;
+        const hour = 60 * 60 * 1000;
+        return formatDate(new Date(Math.round((excelSerialDate - daysBeforeUnixEpoch) * 24 * hour) + 12 * hour));
+      };
+      
+
       return{
         file,
         selectedSheet,
