@@ -72,7 +72,7 @@ export default defineComponent({
 
     // function chooseColor(){
     //   const color: string[] = []
-    //   if (chartData.datasets[0].data[0] > 1){
+    //   if (chartData.datasets[0].data[0] > 1){  실제 데이터로 해야할듯.
     //     color.push('#FF7E7E')
     //     color.push('#EFEFEF')
     //   }
