@@ -9,15 +9,21 @@
                 <div class="dash-text" style="text-align: center;">2022년 탄소 배출량 평가</div>
                 <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
             </div>
-            <div class="measure">
-                <span style="border: 2px solid grey; border-radius: 5px;">나쁨</span>
-                <span style="border: 2px solid grey; border-radius: 5px;">미흡</span>
-                <span style="border: 2px solid grey; border-radius: 5px;">양호</span>
-                <span style="border: 2px solid grey; border-radius: 5px;">좋음</span>
+            <div class="measure" >
+                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 0">나쁨</span>
+                <span id="measure-issue" style="background-color: white;" v-else>나쁨</span>
+                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 10">미흡</span>
+                <span id="measure-issue" style="background-color: white;" v-else>미흡</span>
+                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 30">양호</span>
+                <span id="measure-issue" style="background-color: white;" v-else>양호</span>
+                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData >= 30">좋음</span>
+                <span id="measure-issue" style="background-color: white;" v-else>좋음</span>
+
             </div>
             <div class = "stick">
                 <evaluationStickGraph style="height: 7vh"></evaluationStickGraph>
             </div>
+            <div class="notice">* 0% 이하 감소 : 나쁨 | 0~9% 감소 : 미흡 | 10~29% 감소 : 양호 | 30% 이상 감소 : 좋음</div>
         </div>
     </div>
     
@@ -26,7 +32,7 @@
 <style>
 #evaluation-dash1{
     width: 40vw;
-    height: 95vh;
+    height: 85vh;
 }
 .dashFalse{
     width: 40vw;
@@ -46,14 +52,29 @@
 .measure {
     font-size: 1.5vh;
     width: inherit;
-    text-align: center;
+    height: 5vh;
+    margin-left: 4%;
 }
-.measrue > span {
-    width: 30vw;
-    height: 20vh;
+
+#measure-issue {
+    width: 21.5%;
+    height: 50px;
+
     display: inline-block;
-    line-height: 5vh;
-    padding-left: 5vw;
+    text-align: left;
+    text-indent: 20px;
+    line-height: 50px;
+    margin-left: 10px;
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+}
+
+.notice {
+    margin-top: 3vh;
+    margin-right: 1vw;
+    text-align: right; 
+    font-size: 15px; 
+    color: #5A5A5A;
 }
 </style>
 
@@ -71,8 +92,9 @@ import evaluationStickGraph from './evaluationStickGraph';
 },
       setup() {
         const standardData = true //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
+        const realData = 20 // 작년 탄소 배출량(%)
          return{
-            standardData
+            standardData, realData
          }
         }
   }
