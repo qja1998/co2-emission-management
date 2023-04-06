@@ -32,7 +32,7 @@
 <style>
 #evaluation-dash1{
     width: 40vw;
-    height: 85vh;
+    height: 84vh;
 }
 .dashFalse{
     width: 40vw;

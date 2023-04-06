@@ -5,15 +5,25 @@
           <Popup_inputStandard style="position:fixed" v-if="this.standardInfo==true" @setInput="setInput"></Popup_inputStandard>
             <evaluation_header/>
             <div class="background">
-              <div style="height:140vh">
+              <div style="height:160vh">
                 <select class="select_group" v-model="selected_company" @change="change_company()">
                   <option v-for="item in group_list" :key="item">{{ item }}</option>
                 </select>
                 <span class="header-page">탄소 배출량 평가</span><br>
                 <span class="subHeader-page">Carbon Emissions Evaluation</span>
                 <div>
-                    <span style="height: 50vh"><evaluation_dash1/></span>
-                    <evaluation_dash2 style="margin-left: 3vw;"></evaluation_dash2>
+                    <span><evaluation_dash1/></span>
+                    <span>
+                      <evaluation_dash2 style="margin-left: 3vw;"></evaluation_dash2>
+                    </span>
+                    <div>
+                      <evaluation_dash3 style="margin-left: 3vw"></evaluation_dash3>
+                    </div>
+                </div>
+                <div>
+                  <evaluation_decreaseList/>
+                  <evaluation_progress style="margin-left: 1.4vw"/>
+                  <evaluation_progress style="margin-left: 1.4vw"/>
                 </div>
               </div>
             </div>
@@ -49,6 +59,9 @@ import navigation from "@/components/Navigation.vue"
 import evaluation_header from "@/components/evaluation/Header.vue"
 import evaluation_dash1 from "@/components/evaluation/dash1/dashboard1_evaluation.vue"
 import evaluation_dash2 from "@/components/evaluation/dash2/dash2.vue"
+import evaluation_dash3 from "@/components/evaluation/dash3/dash3.vue"
+import evaluation_decreaseList from "@/components/evaluation/dash4/carbonDecreaseList.vue"
+import evaluation_progress from "@/components/evaluation/dash4/carbonProgress.vue"
 import axios from "axios"
 import { useStore } from "vuex"
 import {computed, ref} from "vue"
@@ -62,6 +75,9 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       evaluation_header,
       evaluation_dash1,
       evaluation_dash2,
+      evaluation_dash3,
+      evaluation_decreaseList,
+      evaluation_progress,
       Popup_inputStandard
     },
     method: {

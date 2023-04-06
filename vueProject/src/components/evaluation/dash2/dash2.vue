@@ -1,24 +1,27 @@
 <template>
         <div style="float:left; ">
-        <div class="dash_title" >조직명</div>
-        <div class="dashboard" id="dashboard1">
-            <div style =" ">
+        <div class="dash_title">기준량</div>
+        <div class="dashboard" id="evaluation-dash2">
+            <div style="margin: 1.8vh 0 0 1.5vw;">
                 <!-- 회사명(ex:경상대학교) -->
-                <div style ="float: left; color:#5A5A5A; font-weight:bold; font-size: 3.7vh; margin-top:1vh">{{group_name}}</div>
-                <div style="float: right;">
+                <span style ="color:#5A5A5A; font-weight:bold; font-size: 3.7vh;">{{group_name}}</span>
+                <span style="margin-left: 18vw;">
                     <button class="input-button" @click="open_popup()" type="button">기준 입력하기</button>
+                </span>
+                <div style="float: left;">
+                    <div style="margin-top: 2vh;  font-weight: bold; font-size: 2vh; color:#5A5A5A;">기준연도 : </div>
+                    <div style="margin-top: 2vh; font-weight: bold; font-size: 2vh; color:#5A5A5A;">탄소 배출 기준량 : </div>
                 </div>
-                <!-- <div v-else>
-                    <div style=" float:left; margin-top: 2vh;  font-weight: bold; font-size: 2vh; color:#5A5A5A;">기준연도 : </div>
-                    <div style="float: left; margin-top: 2vh; font-weight: bold; font-size: 2vh; margin-left:2vw; color:#5A5A5A;">탄소 배출 기준량 : </div>
-                </div> -->
-                
             </div>
         </div>
     </div>
 </template>
 
 <style>
+#evaluation-dash2{
+    width: 35vw;
+    height: 20vh;
+}
 .input-button {
     line-height: 50px; 
     background-color: white; 
@@ -65,7 +68,7 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
         }
 
         return{
-            group_name,기관명,위치,scope1, open_popup
+            group_name,기관명,위치,scope1, open_popup,
         }
     }
   }
