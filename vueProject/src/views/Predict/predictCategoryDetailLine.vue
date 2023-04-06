@@ -4,7 +4,7 @@
     <div class="contents">
       <predict_header />
       <div class="background">
-          <div class="header-page">카테고리별 탄소배출량 예측 전체보기
+          <div class="header-page" style="margin-top:0vh">카테고리별 탄소배출량 예측 전체보기
             <span class="radio-group">
               <div class="radio">
                 <input type="radio" name="radio" id="clickbtn" checked="checked" value="line" @click="clickLine()"/>

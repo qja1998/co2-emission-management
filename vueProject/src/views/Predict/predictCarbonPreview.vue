@@ -4,8 +4,8 @@
       <div class="contents">
           <predict_header/>
           <div class="background">
-            <div style="height:140vh">
-                <p class="header-page">탄소 배출량 예측 전체보기<br>
+            <div style="height:140vh;">
+                <p class="header-page" style="margin:0">탄소 배출량 예측 전체보기<br>
                     <span class="subHeader-page">Predicted Carbon emission Overview</span>
                 </p>
                 <div id="wrap1">
@@ -30,7 +30,7 @@
     background:#F7F9FB;
     min-height:86vh;
     height: inherit;
-    padding:5vh 2.5vw;
+    padding:3vh 2.5vw;
 }
 .header-page{
     color:#5A5A5A;
