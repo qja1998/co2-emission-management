@@ -23,6 +23,24 @@ export default defineComponent({
   components: {
     Doughnut
   },
+  props: {
+    width: {
+      type: Number,
+      default:50 
+    },
+    height: {
+      type: Number,
+      default: 50
+    },
+    cssClasses: {
+      default: '',
+      type: String
+    },
+    styles: {
+      type: Object as PropType<Partial<CSSStyleDeclaration>>,
+      default: () => {}
+    },
+  },
   setup(props) {
     const chartData = {
       labels: [
@@ -61,7 +79,7 @@ export default defineComponent({
           }
         },
       },
-      cutout: '120',
+      cutout: '100',
       borderWidth:0
     }
     

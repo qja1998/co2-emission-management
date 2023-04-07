@@ -1,11 +1,11 @@
 <template>
     <div> 
         <div class="frame" id="last-bargraph-content">
-            <div class="dash-text" id="last-bargraph-title" >2022년 대비 2023년 감축목표</div>
+            <div class="dash-text" id="last-bargraph-title" >{{year-1}}년 대비 {{year}}년 감축목표</div>
             <div>
                 <div id="last-bargraph-x">
-                    <div> 2022년</div>
-                    <div style="margin-top:3.5vh"> 2023년</div>
+                    <div> {{year-1}}년</div>
+                    <div style="margin-top:3.5vh"> {{year}}년</div>
                 </div>
                 <lastBarGraph id ="last-bargraph" style=" "></lastBarGraph>
             </div>
@@ -18,10 +18,18 @@
 
 <script>
 import lastBarGraph from './lastBarGraph';
+import {ref} from 'vue'
     export default {
         name :"target_dash1",
         components:{
             lastBarGraph
+        },
+        setup(){
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = ref(now.getFullYear())	// 년도
+            return{
+                year
+            }
         }
     }
 </script>
