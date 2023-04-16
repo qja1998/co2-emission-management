@@ -10,6 +10,7 @@ import predict from "./views/Predict/predictCarbonPreview"
 import predictCategory from "./views/Predict/predictCategoryDetailLine"
 import assesment from "./views/Nature/carbonNatureAssessment"
 import target from "./views/Nature/carbonNatureTarget"
+import progress from "./views/Nature/carbonNatureProgress.vue"
 import setting from "./views/Setting/Setting"
 import groupinfo from "./views/Setting/GroupInfo.vue"
 import survey from "./views/Survey"
@@ -18,6 +19,7 @@ import idinfo from "./views/Signup/SignupAdminIdInfo"
 import signOK from "./views/Signup/SignupAdminOK"
 import signcheck from "./views/Signup/SignupAdminCheck"
 import signupSub from "./views/Signup/SignupSub"
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -78,6 +80,11 @@ const router = createRouter({
       path: "/nature/target",
       name: "target",
       component: target,
+    },
+    {
+      path: "/nature/progress",
+      name: "progress",
+      component: progress
     },
     {
       path: "/setting",
