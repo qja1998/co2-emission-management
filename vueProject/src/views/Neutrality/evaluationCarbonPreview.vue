@@ -23,7 +23,7 @@
                 <div>
                   <evaluation_decreaseList/>
                   <evaluation_progress style="margin-left: 1.4vw"/>
-                  <evaluation_progress style="margin-left: 1.4vw"/>
+                  <evaluation_scenario style="margin-left: 1.4vw"/>
                 </div>
               </div>
             </div>
@@ -62,6 +62,7 @@ import evaluation_dash2 from "@/components/evaluation/dash2/dash2.vue"
 import evaluation_dash3 from "@/components/evaluation/dash3/dash3.vue"
 import evaluation_decreaseList from "@/components/evaluation/dash4/carbonDecreaseList.vue"
 import evaluation_progress from "@/components/evaluation/dash4/carbonProgress.vue"
+import evaluation_scenario from "@/components/evaluation/dash4/carbonScenario.vue"
 import axios from "axios"
 import { useStore } from "vuex"
 import {computed, ref} from "vue"
@@ -78,6 +79,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       evaluation_dash3,
       evaluation_decreaseList,
       evaluation_progress,
+      evaluation_scenario,
       Popup_inputStandard
     },
     method: {

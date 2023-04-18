@@ -1,6 +1,6 @@
 import { defineComponent, h, PropType } from 'vue'
-
-import { Bar } from 'vue-chartjs'
+import annotationPlugin from 'chartjs-plugin-annotation'
+import { Bar, Line } from 'vue-chartjs'
 
 import {
   Chart as ChartJS,
@@ -12,14 +12,13 @@ import {
   LinearScale,
   Plugin
 } from 'chart.js'
-import chart from '@/components/measure/input1/chart'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, annotationPlugin)
 
 export default defineComponent({
   name: 'BarChart',
   components: {
-    Bar
+    Bar, Line
   },
   props: {
     chartId: {
@@ -51,20 +50,32 @@ export default defineComponent({
   },
   setup(props) {
     const chartData = {
+      type: "bar",
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
-            label:'총 탄소 배출량',
-            data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-            backgroundColor : '#3DC984',
-            barThickness: 30,
+          label:'총 탄소 배출량',
+          data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
+          backgroundColor : '#3DC984',
+          barThickness: 30,
         },
         // {
-        //     type: 'line',
+        //     type: "Line",
         //     label: '월별 기준량',
         //     data: [600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600],
         //     backgroundColor: '#FF3B3B'
         // }
+      ]
+    }
+    const chartData2 = {
+      type: "line",
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      datasets: [
+        {
+            label: '월별 기준량',
+            data: [600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600],
+            backgroundColor: '#FF3B3B'
+        }
       ]
     }
 
@@ -75,7 +86,18 @@ export default defineComponent({
         legend:{
           display:true,
           position:'top' as const,
-        }
+        },
+        // annotation: {
+        //   annotations: {
+        //     line1: {
+        //       type: 'line',
+        //       xMin: 590,
+        //       yMax: 590,
+        //       borderColor: '#FF3B3B',
+        //       borderWidth: 2
+        //     }
+        //   }
+        // }
       },
       scales:{
         x:{
@@ -87,12 +109,13 @@ export default defineComponent({
           stacked:true,
           display:true,
         },
-      }
+      },
     }
 
     return () =>
       h(Bar, {
         chartData,
+        chartData2,
         chartOptions,
         chartId: props.chartId,
         width: props.width,
@@ -100,6 +123,6 @@ export default defineComponent({
         cssClasses: props.cssClasses,
         styles: props.styles,
         plugins: props.plugins,
-      })
+      }, Line)
   }
 })
