@@ -2,7 +2,7 @@
     <div class="nav">
         <div class="who">
             <img src="@/assets/livit.png" alt="icon" id="icon" onclick="location.href='/';">
-            <span>livit</span>
+            <span style="font-size:2vh">탄소 줄여조</span>
         </div>
         <div class="menu" style=" cursor: pointer;" onclick="location.href='/group';">
             <img src="@/assets/group.png" alt="" class="menu-icon">
@@ -55,7 +55,7 @@ span{
     flex-direction: column;  /*아이콘 제외 값 세로로*/
 }
 .who{            
-    margin: 4vw;
+    margin: 7vh 2vw;
     display: flex;
     justify-content: space-around;
 }
