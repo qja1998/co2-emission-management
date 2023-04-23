@@ -4,13 +4,14 @@
         <div class="dashboard" id="evaluation-dash2">
             <div style="margin: 1.8vh 0 0 1.5vw;">
                 <!-- 회사명(ex:경상대학교) -->
-                <span style ="color:#5A5A5A; font-weight:bold; font-size: 3.7vh;">{{group_name}}</span>
-                <span style="margin-left: 18vw;">
+                <br>
+                <span style ="color:#5A5A5A; font-weight:bold; font-size: 1.5vw;">경상국립대학교</span>
+                <span style="margin-left: 13vw;">
                     <button class="input-button" @click="open_popup()" type="button">기준 입력하기</button>
                 </span>
-                <div style="float: left;">
-                    <div style="margin-top: 2vh;  font-weight: bold; font-size: 2vh; color:#5A5A5A;">기준연도 : </div>
-                    <div style="margin-top: 2vh; font-weight: bold; font-size: 2vh; color:#5A5A5A;">탄소 배출 기준량 : </div>
+                <div style="float: left; margin-top: 3vh;">
+                    <span style="margin-top: 2vh;  font-weight: bold; font-size: 1vw; color:#5A5A5A;">기준연도 : 2019년</span>
+                    <span style="margin: 2vh 0 0 2vw; font-weight: bold; font-size: 1vw; color:#5A5A5A;">탄소 배출 기준량 : 30,190kg</span>
                 </div>
             </div>
         </div>
@@ -23,9 +24,9 @@
     height: 20vh;
 }
 .input-button {
-    line-height: 50px; 
+    line-height: 5vh; 
     background-color: white; 
-    font-size: 20px; 
+    font-size: 1vw; 
     color: #404040; 
     border: 1px solid #D0D0D0; 
     border-radius: 10px;

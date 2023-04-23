@@ -20,8 +20,8 @@
                       <evaluation_dash3 style="margin-left: 3vw"></evaluation_dash3>
                     </div>
                 </div>
-                <div>
-                  <evaluation_decreaseList/>
+                <div style="display: inline-block;">
+                  <evaluation_decreaseList />
                   <evaluation_progress style="margin-left: 1.4vw"/>
                   <evaluation_scenario style="margin-left: 1.4vw"/>
                 </div>
