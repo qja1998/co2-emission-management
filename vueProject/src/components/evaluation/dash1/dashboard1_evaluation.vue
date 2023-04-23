@@ -6,7 +6,7 @@
                 <img class="nonData-img" src="@/assets/evaluationGraph/NonData.png" alt="기준 연도를 입력해주세요.">
             </div>
             <div v-else-if = "standardData == true">
-                <div class="dash-text" style="text-align: center;">2022년 탄소 배출량 평가</div>
+                <div class="dash-text" style="text-align: center; height:10vh; line-height: 10vh;">2022년 탄소 배출량 평가</div>
                 <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
             </div>
             <div class="measure" >
@@ -21,7 +21,7 @@
 
             </div>
             <div class = "stick">
-                <evaluationStickGraph style="height: 7vh"></evaluationStickGraph>
+                <evaluationStickGraph style="height: 8vh"></evaluationStickGraph>
             </div>
             <div class="notice">* 0% 이하 감소 : 나쁨 | 0~9% 감소 : 미흡 | 10~29% 감소 : 양호 | 30% 이상 감소 : 좋음</div>
         </div>
@@ -69,7 +69,7 @@
 }
 
 .notice {
-    margin-top: 1.5vh;
+    margin-top:5vh;
     margin-right: 1vw;
     text-align: right; 
     font-size: 0.7vw; 

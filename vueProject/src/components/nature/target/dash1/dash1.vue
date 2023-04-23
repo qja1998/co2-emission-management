@@ -28,17 +28,17 @@ import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear()-1)	// 년도
             var categoryLastEmission = [
-                {category:'고정연소', emission:20486 },
-                {category:'이동연소', emission:20486 },
-                {category:'탈루배출', emission:20486 },
-                {category:'폐기물 처리시설', emission:20486 },
-                {category:'비료사용', emission:20486 },
-                {category:'대학동물소유', emission:20486 },
-                {category:'산림에의한흡수', emission:20486 },
-                {category:'전력', emission:20486 },
-                {category:'열', emission:20486 },
-                {category:'수도', emission:20486 },
-                {category:'폐기물', emission:20486 },
+                {category:'고정연소', emission:2000 },
+                {category:'이동연소', emission:1800 },
+                {category:'탈루배출', emission:1500 },
+                {category:'폐기물 처리시설', emission:1600 },
+                {category:'비료사용', emission:1000 },
+                {category:'대학동물소유', emission:1200 },
+                {category:'산림에의한흡수', emission:680 },
+                {category:'전력', emission:820 },
+                {category:'열', emission:760 },
+                {category:'수도', emission:758 },
+                {category:'폐기물', emission:100 },
             ]
             var activeColor = [
                 '#9FD72A',
@@ -64,7 +64,7 @@ import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
 
 <style>
 .dash-text-middle{
-    font-size:1.4rem;
+    font-size:2.5vh;
     width:inherit;
     text-align: center;
     margin-top:2vh;

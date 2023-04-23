@@ -27,11 +27,11 @@ export default defineComponent({
     },
     width: {
       type: Number,
-      default:10
+      default:5
     },
     height: {
       type: Number,
-      default: 1000
+      default: 10
     },
     cssClasses: {
       default: '',
@@ -94,13 +94,16 @@ export default defineComponent({
             stepSize: 10
           },
           grid:{
-            display: true
-          }
+            display: false,
+            drawBorder: false,
+          },
+    
 
         },
         yAxes:{
           grid:{
-            display: false   
+            display: false,
+            drawBorder: false,   
           },
         },
       },

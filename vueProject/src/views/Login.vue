@@ -26,7 +26,7 @@ export default{
       const store = useStore();
       const router = useRouter();
 
-      var ID = '123@gmail.com'
+      var ID = 'gpal6072@naver.com'
       var PW = '123';
       async function Confirm(){
         await axios.post("User/Login",{'Email':this.ID,'password':this.PW})

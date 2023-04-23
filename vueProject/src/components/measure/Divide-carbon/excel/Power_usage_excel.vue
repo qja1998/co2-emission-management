@@ -96,7 +96,7 @@
             EndDate:excelSerialDateToJSDate(sheets[i].종료날짜),
             Location:"",
             scope:2,
-            data:sheets[i].전력사용량,
+            data:sheets[i].전력사용량+"/"+'kg',
             emissions:sheets[i].전력사용량+4,
             Carbonunit:"kg",
             CarbonActivity:sheets[i].탄소배출내용,

@@ -86,7 +86,7 @@ import { computed } from "vue";
       },
       setup() {
         const store = useStore()
-        var group_name = computed(() => store.state.insight_selected_company).value
+        var group_name = '경상국립대학교'//computed(() => store.state.insight_selected_company).value
 
          function close(){
             store.commit('OffGroupInfo')

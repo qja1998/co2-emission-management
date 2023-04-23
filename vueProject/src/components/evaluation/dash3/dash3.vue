@@ -26,7 +26,7 @@
 .notice_standard {
     margin-top: 1.5vh;
     text-align: right; 
-    font-size: 15px; 
+    font-size: 0.7vw; 
     color: #5A5A5A;
 }
 </style>
