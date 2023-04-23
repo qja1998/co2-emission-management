@@ -46,11 +46,10 @@
     object-fit: cover;
 }
 .stick{
-    margin-left: 3%;
-    margin-right: 3%;
+    margin: 1.5vh 3% 0 3%;
 }
 .measure {
-    font-size: 1.5vh;
+    font-size: 0.8vw;
     width: inherit;
     height: 5vh;
     margin-left: 4%;
@@ -58,22 +57,22 @@
 
 #measure-issue {
     width: 21.5%;
-    height: 50px;
+    height: 100%;
 
     display: inline-block;
     text-align: left;
-    text-indent: 20px;
-    line-height: 50px;
-    margin-left: 10px;
+    text-indent: 1vw;
+    line-height: 5vh;
+    margin-left: 0.4vw;
     border: 1px solid #D0D0D0;
     border-radius: 5px;
 }
 
 .notice {
-    margin-top: 3vh;
+    margin-top: 1.5vh;
     margin-right: 1vw;
     text-align: right; 
-    font-size: 15px; 
+    font-size: 0.7vw; 
     color: #5A5A5A;
 }
 </style>
