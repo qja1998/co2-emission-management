@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 volumes:
-  CarbonVol:
+  CarbonVolHyemi:
     external: true
 
 services:
@@ -18,11 +18,11 @@ services:
     links:
       - "carbon_mysql:db"
     ports:
-      - "${CARBON_PORT}:8000"
+      - ${CARBON_PORT}:8000
     networks:
       - default
       - carbon
-    container_name: CarbonAppServer
+    container_name: CarbonAppServerHyemi
     depends_on:
       - carbon_mysql
     restart: always
@@ -37,4 +37,4 @@ services:
       - default
       - carbon
     command: --default-authentication-plugin=mysql_native_password
-    container_name: carbon_mysql
+    container_name: carbon_mysql_hyemi
