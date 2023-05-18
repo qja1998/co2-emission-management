@@ -48,7 +48,13 @@ export default defineComponent({
         },
       ]
     }
-
+    
+    var server_total_data=[20,50,30,40,20,50,]
+    //해당 조직의 정한 기간만큼의 총 탄소 배출량 
+    
+    var server_predict_total_data= [50,40,30,20,50,80] 
+    // 예측된 6개월치 총 탄소 배출량 
+      
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,

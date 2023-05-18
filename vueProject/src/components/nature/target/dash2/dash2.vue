@@ -83,6 +83,26 @@ import {ref} from 'vue'
                     img:require('@/assets/previewDetail/11.png')
                 }
             ]
+
+            var server_method = 
+            [
+                {
+                    name:'수도',
+                    content:'내용',
+                    img:''
+                },
+                {
+                    name:'열',
+                    content:'내용',
+                    img:NAN
+                },
+                {
+                    name:'전력',
+                    content:'내용',
+                    img:NAN
+                }
+            ]
+
             var methodCategory = ref('고정연소')
             var methodContent = ref(methodOfCategory[0].content)
             var methodImg = ref(require('@/assets/previewDetail/1.png'))

@@ -94,6 +94,23 @@ import {ref } from 'vue';
                 {img:require('@/assets/previewDetail/13.png'),name:'출장', data:547, predictData: 352,  percent:0},
                 {img:require('@/assets/previewDetail/14.png'),name:'위탁운영 차량', data:71, predictData: 346,  percent:0},
             ]
+
+            var category_server = [
+                {name:'고정 연소',data:210, predictData: 304},
+                {name:'이동 연소', data:130, predictData: 120},
+                {name:'탈루 배출', data:20, predictData: 513},
+                {name:'폐기물 처리시설', data:150, predictData: 150},
+                {name:'비료 사용', data:170, predictData: 120},
+                {name:'대학 소유 동물', data:130, predictData: 53},
+                {name:'산림에 의한 흡수', data:54, predictData: 316,},
+                {name:'전력 사용', data:21, predictData: 254},
+                {name:'열 사용', data:34, predictData: 268},
+                {name:'수도 사용', data:51, predictData: 270},
+                {name:'폐기물', data:180, predictData: 240},
+                {name:'통근/통학', data:53, predictData: 53},
+                {name:'출장', data:547, predictData: 352},
+                {name:'위탁운영 차량', data:71, predictData: 346},
+            ]
             var sortCategory = ref(percent(category,14))
 
             const sortReverse=()=> {

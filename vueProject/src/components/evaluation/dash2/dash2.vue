@@ -58,6 +58,9 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
       },
       setup() {
         const store = useStore();
+
+        var server_evaluation={BaseYear:2019, BaseEmissions:60520}
+        
         var group_name = '경상대학교'//computed(() => store.state.insight_selected_company).value // 나중에 바꾸기
         var 기관명 = '기업'
         var  위치 =  '경남 진주시'

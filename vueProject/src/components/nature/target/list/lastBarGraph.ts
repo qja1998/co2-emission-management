@@ -63,6 +63,7 @@ export default defineComponent({
         },
       ]
     }
+    var server_targetTotal_data = 30
 
     const chartOptions = {
       indexAxis: 'y' as const,
