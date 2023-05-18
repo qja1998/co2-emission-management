@@ -94,12 +94,12 @@ import {ref} from 'vue'
                 {
                     name:'열',
                     content:'내용',
-                    img:NAN
+                    img:''
                 },
                 {
                     name:'전력',
                     content:'내용',
-                    img:NAN
+                    img:''
                 }
             ]
 
