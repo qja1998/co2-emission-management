@@ -62,7 +62,6 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
         var 기관명 = '기업'
         var  위치 =  '경남 진주시'
         var  scope1 = 123.4
-
         function open_popup(){
             console.log('popup')
             store.commit('OnGroupInfo')

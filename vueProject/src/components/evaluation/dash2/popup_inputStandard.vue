@@ -86,6 +86,13 @@ import { computed } from "vue";
       },
       setup() {
         const store = useStore()
+
+        var server_EmissionInfo={
+            groupName: '경상국립대학교',
+            BaseYear:standardYear,
+            BaseEmissions:(standardEmission1+standardEmission2+standardEmission3)/3
+        }
+
         var group_name = '경상국립대학교'//computed(() => store.state.insight_selected_company).value
 
          function close(){
