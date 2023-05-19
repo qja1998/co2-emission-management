@@ -18,6 +18,8 @@ import func
 from CarbonConstant import CarbonDef, CarbonClass
 from Swag import CarSwag
 
+import datetime
+from dateutil.relativedelta import relativedelta
 
 class CarbonEmissionQuery(APIView):
 
@@ -367,3 +369,45 @@ class CarbonFixingQuery(APIView):
         temp.save()
         tempInfo.save()
         return Response("Change Complete", status=status.HTTP_200_OK)
+
+# 일정 기간에 맞게 리턴
+class CarbonPartQuery(APIView):
+
+    permission_classes = (IsAuthenticated,)  # 로그인 검증
+
+    year = datetime.date.__str__(datetime.date.today())[:4]
+
+    @swagger_auto_schema(
+        operation_summary="요청한 조직에서 발생한 특정 기간의 탄소 배출량을 반환하는 Api",
+        responses={404: "입력한 회사가 존재하지 않음", 201: "API가 정상적으로 실행 됨"},
+    )
+    def get(self, request, Depart, start_date, end_date, format=None):
+
+        UserRoot = func.GetUserRoot(request)
+        
+        try:  # 요청받은 회사가 루트가 아닌 경우
+            Root = ComModel.Department.objects.get(
+                DepartmentName=Depart, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            )
+        except ComModel.Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
+            try:
+                Root = ComModel.Company.objects.get(ComName=Depart)
+            except ComModel.Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+                return Response(
+                    "This Company/Department doesn't exist.",
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+        start_date = start_date.replace(day=1)
+        end_date = (end_date + relativedelta(month=1)).replace(day=1) + relativedelta(day=-1)
+        carbon_data_list = []
+        while start_date < end_date:    
+            carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date, EndtDate=end_date, Chief=Root.Chief)
+            cur_data = CarModel.Carbon.objects.filter(RootCom=Root.RootCom,
+                                            BelongDepart=Root.BelongCom,
+                                            CarbonInfo=carbon_info.pk
+                                            ).values('CarbonData')
+            carbon_data_list.append(cur_data)
+            start_date += relativedelta(month=1)
+
+        return Response(carbon_data_list, status=status.HTTP_201_CREATED)

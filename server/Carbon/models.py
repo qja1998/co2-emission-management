@@ -41,3 +41,8 @@ class CarbonInfo(models.Model):
     )  # 관리자
     Category = models.IntegerField()  # 탄소 배출 원인과 숫자를 매핑 ex) 고정연소, 이동연소
     Division = models.TextField()  # 구분 : 저장 형태 {건물명 : '', 설비명:'', 연료정보:'', 연료량:''}
+
+
+class Category(models.Model):
+    Category = models.IntegerField()
+    CarbonUnit = models.TextField()

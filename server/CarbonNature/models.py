@@ -32,16 +32,16 @@ class Method(models.Model):
 
 #어떤 조직이 몇년도에 어떤 감축목표를 가지는지 저장하는 테이블
 class CompanyGoal(models.Model):
-		Com_id = models.ForeignKey( 
-			"Company.Company",
-			related_name="Com_id",
-			on_delete=models.CASCADE,
-			null = True
-		),
-		Goal_id = models.ForeignKey(
-			"CarbonNature.Goal",
-			related_name="ID",
-			on_delete=models.CASCADE,
-			null = True
-		) 
-		GoalDate = models.DateField() #감축 목표 년도
+	Com_id = models.ForeignKey( 
+		"Company.Company",
+		related_name="Com_id",
+		on_delete=models.CASCADE,
+		null = True
+	),
+	Goal_id = models.ForeignKey(
+		"CarbonNature.Goal",
+		related_name="ID",
+		on_delete=models.CASCADE,
+		null = True
+	) 
+	GoalDate = models.DateField() #감축 목표 년도
