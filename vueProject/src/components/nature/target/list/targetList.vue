@@ -117,7 +117,33 @@ import {computed, ref} from 'vue'
             var transEnargy =ref('태양열 에너지')
 
             //사용자의 전환, 감축 목표 리스트
-            var targetList=[]
+            var targetList=[
+                    {
+                        listkind:1, 
+                        index:0, 
+                        id:'',
+                        category:'고정연소', 
+                        percentage:30, 
+                        target: null,
+                        
+                    },
+                    {
+                        listkind:0, 
+                        index:1, 
+                        id:'',
+                        category:'고정연소', 
+                        percentage: 20, 
+                        target: '태양열 에너지',
+                    },
+                    {
+                        listkind:0, 
+                        index:2, 
+                        id:'',
+                        category:'고정연소', 
+                        percentage: 20, 
+                        target: '태양열 에너지',
+                    },
+            ]
 
             //각각의 리스트 내용의 개수를 나타내는 변수
             var transListNum = ref(targetList.filter(list => list.listkind === 0).length) 
