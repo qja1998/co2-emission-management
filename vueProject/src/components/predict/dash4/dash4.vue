@@ -41,11 +41,25 @@
 
 
 <script>
+import {ref} from 'vue'
+
     export default {
         name :"predict_dash4",
         setup(){
-            var total_emission = {data:380, predictData:260}
-            var percent =Math.round(percentage(total_emission))
+            var server_total_data = [152,120,123,130,128,136,139,150,130]
+            var server_predict_total_data = [160,60,40,20,30,40]
+
+            var total_emission = ref({
+                data:0,
+                predictData:0
+            })
+
+            total_emission.value.data = server_total_data[server_total_data.length-1]
+            total_emission.value.predictData = server_predict_total_data[0]
+
+            console.log(total_emission.value)
+
+            var percent =Math.round(percentage(total_emission.value))
             function percentage(value){
                 return ((value.predictData-value.data)/value.data)*100
             }

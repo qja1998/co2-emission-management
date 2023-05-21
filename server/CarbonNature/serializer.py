@@ -8,6 +8,13 @@ class EvaluationSerializer(serializers.ModelSerializer):
         model = models.Evaluation
         fields = "__all__"
 
+class EmissionInfo(serializers.ModelSerializer):
+    GroupName = serializers.SerializerMethodField()
+    class Meta:
+        model = models.Evaluation
+        fields = ('GruopName', 'BaseYear', 'BaseEmissions')
+
+
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Goal

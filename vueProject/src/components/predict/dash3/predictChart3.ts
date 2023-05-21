@@ -30,20 +30,30 @@ export default defineComponent({
     Line
   },
   setup(props) {
+    var server_total_data = [152,120,123,130,128,136,139,150,130]
+    var server_predict_total_data = [50,60,40,20,30,40]
+    
+    var server_predict_data = [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN]
+    server_predict_data.push(server_total_data[server_total_data.length - 1])
+    for(var i=0; i<server_predict_total_data.length; i++){
+      server_predict_data.push(server_predict_total_data[i])
+      
+    }
+    console.log(server_predict_data)
     const chartData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      labels: ['January','February','March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
           label: 'Total Carbon Emission',
           backgroundColor: '#4A946F',
-          data: [152, 120, 123, 130, 128,136,139,150,130],
+          data: server_total_data,
           borderColor: '#4A946F',
         },
         {
           label: 'Predict Total Carbon Emission',
           backgroundColor: '#3DC984',
           borderColor: '#3DC984',
-          data: [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN,130,142,154,158],
+          data: server_predict_data,
           borderDash:[2]
         },
       ]

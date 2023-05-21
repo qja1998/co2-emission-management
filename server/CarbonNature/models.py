@@ -9,7 +9,7 @@ class Evaluation(models.Model):
 		on_delete=models.CASCADE,
 		null = True
 	)
-    BaseYear = models.DateField(), #기준년도
+    BaseYear = models.DateField() #기준년도
     BaseEmissions= models.IntegerField() #기준량
 
 #감축목표 내용, 양을 저장하는 테이블

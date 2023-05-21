@@ -381,7 +381,8 @@ class CarbonPartQuery(APIView):
         operation_summary="요청한 조직에서 발생한 특정 기간의 탄소 배출량을 반환하는 Api",
         responses={404: "입력한 회사가 존재하지 않음", 201: "API가 정상적으로 실행 됨"},
     )
-    def get(self, request, Depart, start_date, end_date, format=None):
+
+    def get(self, request, Depart, start_date, end_date, is_cartegory, format=None):
 
         UserRoot = func.GetUserRoot(request)
         
@@ -400,14 +401,28 @@ class CarbonPartQuery(APIView):
 
         start_date = start_date.replace(day=1)
         end_date = (end_date + relativedelta(month=1)).replace(day=1) + relativedelta(day=-1)
-        carbon_data_list = []
-        while start_date < end_date:    
-            carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date, EndtDate=end_date, Chief=Root.Chief)
-            cur_data = CarModel.Carbon.objects.filter(RootCom=Root.RootCom,
-                                            BelongDepart=Root.BelongCom,
-                                            CarbonInfo=carbon_info.pk
-                                            ).values('CarbonData')
-            carbon_data_list.append(cur_data)
-            start_date += relativedelta(month=1)
+        server_category_data = []
+        server_total_data = []
 
-        return Response(carbon_data_list, status=status.HTTP_201_CREATED)
+        while start_date < end_date:    
+            cate_data = []
+            total_data = 0
+            categories = CarModel.Category.objects.values_list('Category')
+            for cate in categories:
+                carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date,
+                                                                EndtDate=start_date + relativedelta(month=1),
+                                                                Chief=Root.Chief,
+                                                                Category=cate)
+                carbon_data = CarModel.Carbon.objects.filter(RootCom=Root.RootCom,
+                                                             BelongDepart=Root.BelongCom,
+                                                             CarbonInfo=carbon_info.pk)
+                cate_data.append(carbon_data)
+                total_data += carbon_data
+            server_category_data.append(cate_data)
+            server_total_data.append(sum(total_data))
+            start_date += relativedelta(month=1)
+        
+        if is_cartegory:
+            return Response(server_category_data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(server_total_data, status=status.HTTP_201_CREATED)
