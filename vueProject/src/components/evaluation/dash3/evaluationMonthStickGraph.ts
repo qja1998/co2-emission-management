@@ -1,7 +1,7 @@
 import { defineComponent, h, PropType } from 'vue'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import { Bar, Line } from 'vue-chartjs'
-
+import {ref} from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -49,13 +49,18 @@ export default defineComponent({
     
   },
   setup(props) {
+    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+    var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+
+    var month_baseemissions = server_evaluation.BaseEmissions/12
+
     const chartData = {
       type: "bar",
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
           label:'총 탄소 배출량',
-          data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
+          data: server_total_data,
           backgroundColor : '#3DC984',
           barThickness: 30,
         },
@@ -73,7 +78,14 @@ export default defineComponent({
       datasets: [
         {
             label: '월별 기준량',
-            data: [600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600, 600],
+            data: [
+              month_baseemissions, month_baseemissions, 
+              month_baseemissions, month_baseemissions, 
+              month_baseemissions, month_baseemissions, 
+              month_baseemissions, month_baseemissions, 
+              month_baseemissions, month_baseemissions, 
+              month_baseemissions, month_baseemissions
+            ],
             backgroundColor: '#FF3B3B'
         }
       ]

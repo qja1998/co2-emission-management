@@ -57,7 +57,15 @@ export default defineComponent({
     }
   },
   setup(props) {
+    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+    var sum =ref(0)
+    for(var i=0; i<server_total_data.length; i++){
+        sum.value = server_total_data[i] + sum.value
+    }
+    var server_evaluation = {BaseYear:2019, BaseEmissions:980}
     
+
+    var data = []
     const chartData = {
       labels: ['기준량 대비 총 탄소배출량', '기준량'],
       datasets: [
@@ -65,7 +73,7 @@ export default defineComponent({
           backgroundColor: ['#3DC984', '#EFEFEF'], 
           borderColor: "#eee",
           hoverBorderColor: "#eee",
-          data: [30, 70], //기준량 대비 총 탄소배출량 = 작년 탄소배출량/기준량*100 -> 작년탄소배출량이 기준량보다 많으면, 비율이 1 이상
+          data: [sum.value, server_evaluation.BaseEmissions], //기준량 대비 총 탄소배출량 = 작년 탄소배출량/기준량*100 -> 작년탄소배출량이 기준량보다 많으면, 비율이 1 이상
         }
       ]
     }

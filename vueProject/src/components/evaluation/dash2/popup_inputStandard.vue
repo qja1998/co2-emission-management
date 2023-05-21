@@ -33,8 +33,9 @@
                             </div>
                         </div>
                     </div>
-                    <button class="input-button" @click="close()" type="button" style="margin-top: 5vh; float: right;">저장하기</button>
+                    <button class="input-button" @click="saveBaseEmission()" type="button" style="margin-top: 5vh; float: right;">저장하기</button>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -66,40 +67,46 @@ input::-webkit-inner-spin-button {
 
 <script>
 import {useStore} from 'vuex'
-import { computed } from "vue";
+import { computed , ref} from "vue";
 
     export default {
       name :"popup_inputStandard",
-      data(){
-        return{
-            picked: '',
-            standardYear: 0,
-            standardEmission: 0,
-            standardEmission1: 0,
-            standardEmission2: 0,
-            standardEmission3: 0
-        }
-      },    
       methods: {
       },
       components:{
       },
       setup() {
+
         const store = useStore()
+        var picked= ref('')
+        var standardYear= ref(0)
+        var standardEmission= ref(0)
+        var standardEmission1= ref(0)
+        var standardEmission2= ref(0)
+        var standardEmission3=ref(0)
 
-        var server_EmissionInfo={
-            groupName: '경상국립대학교',
-            BaseYear:standardYear,
-            BaseEmissions:(standardEmission1+standardEmission2+standardEmission3)/3
-        }
+        var server_EmissionInfo=ref({
+            groupName: '',
+            BaseYear: 0,
+            BaseEmissions:0
+        })
 
+       
         var group_name = '경상국립대학교'//computed(() => store.state.insight_selected_company).value
 
-         function close(){
+        function close(){
             store.commit('OffGroupInfo')
         }
+    
+        function saveBaseEmission(){
+            server_EmissionInfo.value.groupName = '경상국립대학교'
+            server_EmissionInfo.value.BaseYear = standardYear.value
+            server_EmissionInfo.value.BaseEmissions = parseInt((standardEmission1.value+standardEmission2.value+standardEmission3.value)/3) + standardEmission.value
+            console.log(server_EmissionInfo.value)
+            close()
+        }
         return{
-            group_name, close,
+            group_name,saveBaseEmission,close,picked,standardYear,standardEmission1,standardEmission2,standardEmission3,standardEmission
         }
     }
   }

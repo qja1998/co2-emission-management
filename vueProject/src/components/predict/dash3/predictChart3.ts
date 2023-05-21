@@ -30,31 +30,35 @@ export default defineComponent({
     Line
   },
   setup(props) {
+    var server_total_data = [152,120,123,130,128,136,139,150,130]
+    var server_predict_total_data = [50,60,40,20,30,40]
+    
+    var server_predict_data = [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN]
+    server_predict_data.push(server_total_data[server_total_data.length - 1])
+    for(var i=0; i<server_predict_total_data.length; i++){
+      server_predict_data.push(server_predict_total_data[i])
+      
+    }
+    console.log(server_predict_data)
     const chartData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      labels: ['January','February','March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
           label: 'Total Carbon Emission',
           backgroundColor: '#4A946F',
-          data: [152, 120, 123, 130, 128,136,139,150,130],
+          data: server_total_data,
           borderColor: '#4A946F',
         },
         {
           label: 'Predict Total Carbon Emission',
           backgroundColor: '#3DC984',
           borderColor: '#3DC984',
-          data: [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN,130,142,154,158],
+          data: server_predict_data,
           borderDash:[2]
         },
       ]
     }
-    
-    var server_total_data=[20,50,30,40,20,50,]
-    //해당 조직의 정한 기간만큼의 총 탄소 배출량 
-    
-    var server_predict_total_data= [50,40,30,20,50,80] 
-    // 예측된 6개월치 총 탄소 배출량 
-      
+
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,

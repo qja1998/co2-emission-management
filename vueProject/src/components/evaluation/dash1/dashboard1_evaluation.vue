@@ -80,7 +80,7 @@
 <script>
 import evaluationDonutGraph from './evaluationDonutGraph.ts';
 import evaluationStickGraph from './evaluationStickGraph';
-
+import {ref} from 'vue'
 
   export default {
       name :"dashboard1_evaluation",
@@ -90,8 +90,29 @@ import evaluationStickGraph from './evaluationStickGraph';
     evaluationStickGraph
 },
       setup() {
-        const standardData = true //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
-        const realData = 20 // 작년 탄소 배출량(%)
+        const standardData = ref(true) //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
+        const realData = ref(20) // 작년 탄소 배출량(%)
+
+        //서버
+        var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+        var sum =ref(0)
+        for(var i=0; i<server_total_data.length; i++){
+            sum.value = server_total_data[i] + sum.value
+        }
+
+        var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+
+        realData.value = (server_evaluation.BaseEmissions-sum.value)/(server_evaluation.BaseEmissions) *100
+
+        console.log(realData.value)
+        if(server_evaluation.BaseEmissions!=0){
+            standardData.value=true
+        }
+        else{
+            standardData.value=false
+        }
+
+       
          return{
             standardData, realData
          }

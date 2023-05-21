@@ -1,5 +1,5 @@
 import { defineComponent,computed, h, PropType } from 'vue'
-
+import {ref} from 'vue'
 import { Bar } from 'vue-chartjs'
 import { useStore } from "vuex";
 import {
@@ -49,6 +49,13 @@ export default defineComponent({
     
   },
   setup(props) {
+    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+    var sum =ref(0)
+    for(var i=0; i<server_total_data.length; i++){
+        sum.value = server_total_data[i] + sum.value
+    }
+    var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+    var realData = (server_evaluation.BaseEmissions-sum.value)/(server_evaluation.BaseEmissions) *100
 
     const chartData = {
         labels : [''],
@@ -57,7 +64,7 @@ export default defineComponent({
           label : '기준량 대비 총 탄소 배출량',
           borderRadius:20,
           backgroundColor: chooseColor(),
-          data: [63], // 기준량 대비 총 탄소배출량(%)
+          data: [realData], // 기준량 대비 총 탄소배출량(%)
           barThickness: 20,
           padding: 4,
         },

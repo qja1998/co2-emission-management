@@ -10,8 +10,8 @@
                     <button class="input-button" @click="open_popup()" type="button">기준 입력하기</button>
                 </span>
                 <div style="float: left; margin-top: 3vh;">
-                    <span style="margin-top: 2vh;  font-weight: bold; font-size: 1vw; color:#5A5A5A;">기준연도 : 2019년</span>
-                    <span style="margin: 2vh 0 0 2vw; font-weight: bold; font-size: 1vw; color:#5A5A5A;">탄소 배출 기준량 : 30,190kg</span>
+                    <span style="margin-top: 2vh;  font-weight: bold; font-size: 1vw; color:#5A5A5A;">기준연도 : {{baseYear}}년</span>
+                    <span style="margin: 2vh 0 0 2vw; font-weight: bold; font-size: 1vw; color:#5A5A5A;">탄소 배출 기준량 : {{baseEmissions}}kg</span>
                 </div>
             </div>
         </div>
@@ -58,9 +58,11 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
       },
       setup() {
         const store = useStore();
-
+        //서버
         var server_evaluation={BaseYear:2019, BaseEmissions:60520}
-        
+ 
+        var baseYear = server_evaluation.BaseYear
+        var baseEmissions = server_evaluation.BaseEmissions
         var group_name = '경상대학교'//computed(() => store.state.insight_selected_company).value // 나중에 바꾸기
         var 기관명 = '기업'
         var  위치 =  '경남 진주시'
@@ -71,7 +73,7 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
         }
 
         return{
-            group_name,기관명,위치,scope1, open_popup,
+            group_name,기관명,위치,scope1, open_popup,baseYear,baseEmissions
         }
     }
   }
