@@ -2,7 +2,7 @@
     <div> 
         <div class="title-border">감축 목표 대비 현재 총 탄소 배출량</div>
         <div class="frame"  style="height:77vh; width:25vw">
-            <div class="dash-text-middle" style="font-size:4vh">〈 {{year}}년 〉</div>
+            <div class="dash-text-middle" style="font-size:2.5rem">〈 {{year}}년 〉</div>
             <div id="progress-dash1-graph">
                 <progressDonutGraph style="height:inherit"></progressDonutGraph>
             </div>
@@ -72,5 +72,3 @@ import {ref} from 'vue'
     margin-top:1vh;
 }
 </style>
-
-
