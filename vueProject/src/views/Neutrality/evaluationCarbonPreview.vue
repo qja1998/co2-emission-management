@@ -6,7 +6,7 @@
             <evaluation_header/>
             <div class="background">
               <div style="height:160vh">
-                <select class="select_group" v-model="selected_company" @change="change_company()">
+                <select class="select_group" v-model="selected_company" @change="change_company(selected_company)">
                   <option v-for="item in group_list" :key="item">{{ item }}</option>
                 </select>
                 <span class="header-page">탄소 배출량 평가</span><br>
@@ -99,54 +99,14 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var rerender_signal = ref(0)
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
-
-      function change_company(){
-        store.commit("insight_select_company",selected_company.value);
-        console.log("11111111111111111111111111111111"+ store.state.insight_selected_company)
-        get_total_emission_month()
-        get_total_emission_year()
-      }
-      async function get_total_emission_month(){
-        await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
-          console.log(res.data)
-          console.log("연월"+year.value+month.value)
-          scope1.value = res.data.Scopes[0]
-          scope2.value = res.data.Scopes[1]
-          scope3.value = res.data.Scopes[2]
-          total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
-          store.commit("set_scopes",res.data.Scopes);
-          store.commit("SetDetailEmission",res.data.EmissionList);
-        })
-        .catch(error => {
-          console.log(error)
-        })
-        .finally(() => {
-          rerender_signal.value +=1
-        })
-      }
-      async function get_total_emission_year(){
-        await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-12-28",config).then(res => {
-          console.log(res.data)
-          console.log("연월"+year.value)
-          scope1.value = res.data.Scopes[0]
-          scope2.value = res.data.Scopes[1]
-          scope3.value = res.data.Scopes[2]
-          total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
-          store.commit("set_scopes",res.data.Scopes);
-          store.commit("SetDetailEmission",res.data.EmissionList);
-         })
-         .catch(error => {
-          console.log(error)
-        })
-        .finally(() => {
-          rerender_signal.value +=1
-        })
-      }
-
       var standardInfo = computed(()=>store.state.infopage)
             
+      function change_company(){
+        store.commit("insight_select_company",selected_company.value)
+      }
+
       return{
-        group_list, selected_company, change_company, standardInfo
+        group_list, selected_company, standardInfo
       }
     }
   }
