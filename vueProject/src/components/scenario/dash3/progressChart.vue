@@ -1,7 +1,7 @@
 <template>
     <div> 
         <div class="title-border-scenario">진행상황 및 기대효과</div>
-        <div class="scenario-title">총 탄소량 대비 감축된 탄소량</div>
+        <router-link to="/nature/progress" style="text-decoration: none;"><div class="scenario-title">총 탄소량 대비 감축된 탄소량</div></router-link>
         <div class="scenario-frame">
             <div class="dash-text-middle" style="font-size:1.8em">〈 {{year}}년 〉</div>
             <div style="padding-top: 3vh">

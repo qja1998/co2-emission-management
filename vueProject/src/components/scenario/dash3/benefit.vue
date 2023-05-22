@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <div class="scenario-title">탄소 배출권 기대효과</div>
+        <router-link to="/nature/progress" style="text-decoration: none;"><div class="scenario-title">탄소 배출권 기대효과</div></router-link>
         <div class="scenario-frame" >
             <div>
                 <img style="padding-top: 3vh; height: 16vh; margin: auto; display: block;" src="@/assets/money.png">

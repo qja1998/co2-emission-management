@@ -1,10 +1,17 @@
 <template>
     <div> 
         <div class="title-border-scenario">감축 목표</div>
-        <div class="scenario-title">현재 설정한 감축 목표</div>
-        <div class="scenario-frame">
+        <router-link to="/nature/target" style="text-decoration: none;"><div class="scenario-title">현재 설정한 감축 목표</div></router-link>
+        <div class="scenario-frame" style="height: 103vh;">
             <div>
-                데이터베이스에 저장된 리스트 업로드
+                <div style="padding-top: 3vh; font-size: 2.5vh; font-weight: bold; color: #163945;">전환</div>
+                <ul>
+                    <li v-for="(list, i) in targetList" :key="i" style="padding-top: 1vh; font-size: 2vh;">
+                        <span v-if="list.listkind === 1">{{ list.category }}의 {{ list.percentage }}%를 감축</span>
+                        <span v-else>{{ list.category }}의 {{ list.percentage }}%를 {{ list.target }}로 전환</span>
+                    </li>
+                </ul>
+                <div style="padding-top: 3vh; font-size: 2.5vh; font-weight: bold; color: #163945;">감축</div>
             </div>
         </div>
     </div>
@@ -13,7 +20,14 @@
 </template>
 
 <style>
-
+li {
+    padding: 1vh 0 1vh 2vw;
+    list-style: none;
+    background-image: url('@/assets/check.png');
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: 2.5vh;
+}
 </style>
 
 
@@ -22,6 +36,39 @@
         name :"predict_dash1",
         components:{
         
+        },
+        setup(){
+
+            // 서버
+            var targetList = [
+                {
+                    listkind: 1,
+                    index: 0,
+                    id: '',
+                    category: '고정연소',
+                    percentage: 30,
+                    target: null,
+                },
+                {
+                    listkind: 0,
+                    index: 1,
+                    id: '',
+                    category: '전력 사용',
+                    percentage: 20,
+                    target: '태양열 에너지',
+                },
+                {
+                    listkind: 0,
+                    index: 0,
+                    id: '',
+                    category: '고정연소',
+                    percentage: 40,
+                    target: '풍력 에너지',
+                },
+            ]
+            return{
+                targetList
+            }
         }
     }
 </script>
