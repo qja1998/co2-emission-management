@@ -3,7 +3,7 @@
         <div class="title-border-scenario">탄소 배출량 확인</div>
         <div class="scenario-title">총 탄소 배출량</div>
         <div class="scenario-frame">
-            <div class="scenario-text">1,241
+            <div class="scenario-text">1,241 
                 <span style="color: #5A5A5A; font-size: 1rem;">kgCO2eq</span>   
             </div>
         </div>
