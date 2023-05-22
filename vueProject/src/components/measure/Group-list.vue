@@ -249,23 +249,23 @@ import { ref,computed } from "vue"
             }
           }
             
-
-            async function title_get_list_(){
-                console.log("dawdaw")
-                await axios.get("Company/Organization/Simple/samsung",config).then(res => {
-                    console.log(res.data)
-                    this.list_category =  res.data
-                    for(let i=0;i<res.data.length;i++){
-                        this.list_category[i].image =  this.list_category[i].name[0]
-                    }
-                })
-                .catch(error => {
-                    alert("로그인 시간이 만료되었습니다.")
-                    console.log(error)
-                    router.push('/');
-                })
-                .finally(() => {})
-            }
+          var user_group = computed(()=> store.state.user_group)
+        async function title_get_list_(){
+            console.log("dawdaw")
+            await axios.get("Company/Organization/Simple/" + user_group.value ,config).then(res => {
+                console.log(res.data)
+                this.list_category =  res.data
+                for(let i=0;i<res.data.length;i++){
+                    this.list_category[i].image =  this.list_category[i].name[0]
+                }
+            })
+            .catch(error => {
+                alert("로그인 시간이 만료되었습니다.")
+                console.log(error)
+                router.push('/');
+            })
+            .finally(() => {})
+        }
 
             
             

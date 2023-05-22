@@ -49,8 +49,28 @@ export default defineComponent({
     
   },
   setup(props) {
+
+    //날짜 
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+    var month = now.getMonth() //월
+    console.log(month)
+    // x범위 만들기
+    var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
+    var x_legend =['']
+
+    for(var i = 0; i< month_Eng.length; i++){
+      if(month-6+i < 0){
+          x_legend[i] = month_Eng[month_Eng.length + (month-6+i)]
+          console.log(x_legend)
+      }
+      else{
+        x_legend[i] = month_Eng[month-6+i]
+      }
+    }
+
     const chartData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      labels: x_legend,
       datasets: [
         {
             label:'수도',
@@ -63,7 +83,7 @@ export default defineComponent({
     function chooseColor(){
       var color : string[] = []
       for (var i=0;  i<=12; i++){
-        if (i >= 9) {
+        if (i > month+1) {
           color.push('#BFBFBF')
         } else {
           color.push('#FF3B3B')

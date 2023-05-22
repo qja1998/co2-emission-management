@@ -35,7 +35,7 @@ export default createStore({
         selected_row:"",
         table_kind:"",
         group_name: "", //저장 필요
-
+        user_group:"", //로그인 한 유저의 조직명
         //토큰 관련 
         accessToken: null,
         refreshToken: null,
@@ -80,6 +80,12 @@ export default createStore({
     } 
     //상태 접근 (변경)
     ,mutations:{
+
+        //로그인 한 유저의 그룹명
+        setGroupName(state,name){
+            state.user_group = name
+        },
+
         set_scopes(state,arr){
             state.scopes=arr
         },

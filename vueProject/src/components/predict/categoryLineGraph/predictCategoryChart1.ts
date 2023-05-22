@@ -1,7 +1,7 @@
 import { defineComponent, h, PropType } from 'vue'
 import { Line } from 'vue-chartjs'
-import {ref} from 'vue'
- 
+import {ref,computed} from 'vue'
+import {useStore} from 'vuex'
 
 import {
   Chart as ChartJS,
@@ -30,7 +30,29 @@ export default defineComponent({
     Line
   },
   setup(props) {
-    const dash=(ctx,value) => ctx.p0DataIndex > 5 ? value:[1,0]
+    const dash=(ctx,value) => ctx.p0DataIndex > 4 ? value:[1,0]
+    var store = useStore()
+
+    //그룹명
+    var user_group = computed(()=> store.state.user_group)
+    //날짜 
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+    var month = now.getMonth() //월
+    console.log(month)
+    // x범위 만들기
+    var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
+    var x_legend =['']
+
+    for(var i = 0; i< month_Eng.length; i++){
+      if(month-6+i < 0){
+          x_legend[i] = month_Eng[month_Eng.length + (month-6+i)]
+          console.log(x_legend)
+      }
+      else{
+        x_legend[i] = month_Eng[month-6+i]
+      }
+    }
     //서버 
     var server_category_predict_data = [
       [820, 760, 758, 770, 758, 762],
@@ -64,7 +86,7 @@ export default defineComponent({
 
 
     const chartData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      labels: x_legend,
       datasets: [
         {
           label: '고정연소',

@@ -73,11 +73,20 @@
 
 
 <script>
-import {ref } from 'vue';
+import {ref,computed } from 'vue';
+import {useStore} from 'vuex'
 
     export default {
         name :"predict_dash2",
         setup(){
+
+            //그룹명, 날짜
+            var user_group = computed(()=> store.state.user_group)
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = ref(now.getFullYear())	// 년도
+            var month = ref(now.getMonth())//월
+
+            //서버
             var server_category = [
                 {name:'고정 연소',data:210, predictData: 304},
                 {name:'이동 연소', data:130, predictData: 120},

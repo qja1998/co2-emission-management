@@ -2,7 +2,7 @@
     <div> 
         <div class="title-border">조직명</div>
         <div class="frame">
-            <h1 class="dash-text">경상대학교</h1>
+            <h1 class="dash-text">{{user_group}}</h1>
             <!-- 기관종류(ex: 교육기관) -->
             <div class="group-info" style=" margin-top: 2vh; font-size: 2vh; color:black;">
                 <img style="vertical-align: middle; width:2.2vh;" src="@/assets/share.png" alt="">
@@ -47,10 +47,18 @@
 
 
 <script>
+import {useStore} from 'vuex'
+import {ref,computed} from 'vue'
     export default {
         name :"predict_dash1",
         components:{
         
+        },
+        setup(){
+            var store = useStore()
+
+            var user_group = computed(()=> store.state.user_group)
+            return{user_group}
         }
     }
 </script>

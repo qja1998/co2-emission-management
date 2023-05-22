@@ -2,7 +2,7 @@
     <div style="">
         <div class="title-border">총 탄소 배출량 예측 그래프</div>
         <div class="frame" id="frame-dash3">
-            <div class="dash-text">2023년 8월 시점</div>
+            <div class="dash-text">{{year}}년 {{month}}월 시점</div>
             <predict_chart3 style="height:62vh;"/>
         </div>
         
@@ -29,6 +29,13 @@ import predict_chart3 from './predictChart3.ts'
         name :"predict_dash3",
         components:{
             predict_chart3 
+        },
+        setup(){
+
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = now.getFullYear()	// 년도
+            var month = now.getMonth()//월
+            return{year,month}
         }
     }
 </script>

@@ -26,13 +26,15 @@ export default{
       const store = useStore();
       const router = useRouter();
 
-      var ID = 'gpal6072@naver.com'
-      var PW = '123';
+      var ID = 'test@naver.com'
+      var PW = '1234';
       async function Confirm(){
         await axios.post("User/Login",{'Email':this.ID,'password':this.PW})
           .then((res) => {
             alert("로그인에 성공했습니다.");
             store.commit("loginToken",res.data.AccessToken)
+            store.commit("setGroupName",res.data.RootCom)
+            console.log(res.data.RootCom)
             console.log(JSON.stringify(res.data))
             router.push('/group');
           })

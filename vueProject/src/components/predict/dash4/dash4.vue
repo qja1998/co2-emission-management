@@ -41,11 +41,20 @@
 
 
 <script>
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
+import {useStore} from 'vuex'
 
     export default {
         name :"predict_dash4",
         setup(){
+            var store = useStore()
+            //그룹명, 날짜
+            var user_group = computed(()=> store.state.user_group)
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = now.getFullYear()	// 년도
+            var month = now.getMonth() //월
+
+            //서버
             var server_total_data = [152,120,123,130,128,136,139,150,130]
             var server_predict_total_data = [160,60,40,20,30,40]
 

@@ -1,6 +1,6 @@
 <template>
     <div id="frame-category-lineChart">
-        <div class="title-chart">2023년 8월 시점</div>
+        <div class="title-chart">{{year}}년 {{month}}월 시점</div>
         <predict_chart id="category-lineGraph"/>
     </div>
 </template>
@@ -46,7 +46,12 @@ export default {
         predict_chart
     },
     setup(){
+        var now = new Date();	// 현재 날짜 및 시간
+        var year = now.getFullYear()	// 년도
+        var month = now.getMonth()
         return{
+            year,
+            month
         }
     }
 
