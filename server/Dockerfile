@@ -19,7 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends; \
     pip install gunicorn;\
     pip install drf_yasg;\
     pip install tzdata;\
-    pip install djangorestframework-simplejwt
+    pip install djangorestframework-simplejwt;\
+    pip install python-dateutil
 
 CMD cd /; . /venv/bin/activate;\
     cd /; cd /home;\
