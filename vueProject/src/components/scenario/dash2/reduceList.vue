@@ -2,19 +2,24 @@
     <div> 
         <div class="title-border-scenario">감축 목표</div>
         <router-link to="/nature/target" style="text-decoration: none;"><div class="scenario-title">현재 설정한 감축 목표</div></router-link>
-        <div class="scenario-frame" style="height: 103vh;">
+        <div class="scenario-frame">
             <div>
                 <div style="padding-top: 3vh; font-size: 2.5vh; font-weight: bold; color: #163945;">전환</div>
-                <ul>
-                    <li v-for="(list, i) in targetList" :key="i" style="padding-top: 1vh; font-size: 2vh;">
-                        <span v-if="list.listkind === 1">{{ list.category }}의 {{ list.percentage }}%를 감축</span>
-                        <span v-else>{{ list.category }}의 {{ list.percentage }}%를 {{ list.target }}로 전환</span>
-                    </li>
-                </ul>
+                <div v-for="(list, i) in targetList" :key="i" style="padding-top: 1vh; font-size: 2vh;">
+                    <span v-if="list.listkind == 0">
+                        <li>{{ list.category }}의 {{ list.percentage }}%를 {{ list.target }}로 전환</li>
+                    </span>
+                </div>
                 <div style="padding-top: 3vh; font-size: 2.5vh; font-weight: bold; color: #163945;">감축</div>
+                <div v-for="(list, i) in targetList" :key="i" style="padding-top: 1vh; font-size: 2vh;">
+                    <span v-if="list.listkind == 1">
+                        <li>{{ list.category }}의 {{ list.percentage }}%를 감축</li>
+                    </span>
+                </div>
             </div>
         </div>
     </div>
+
         
 
 </template>
