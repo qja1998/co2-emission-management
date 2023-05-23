@@ -24,6 +24,10 @@
             <img src="@/assets/carbonNatural.png" alt="" class="menu-icon">
             <a>탄소 중립</a>
         </div>
+        <div class="menu" style=" cursor: pointer;" onclick="location.href='/scenario';">
+            <img src="@/assets/carbonNatural.png" alt="" class="menu-icon">
+            <a>탄소 시나리오</a>
+        </div>
         <div class="menu" style=" cursor: pointer;" onclick="location.href='/survey';">
             <img src="@/assets/survey.png" alt="" class="menu-icon">
             <a>서베이 요청</a>
