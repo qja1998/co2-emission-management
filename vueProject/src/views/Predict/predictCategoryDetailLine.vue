@@ -80,6 +80,7 @@ export default {
   },
 
   setup(){
+    
     var kindOfGraph = ref('line')
     const clickLine = () => {
       kindOfGraph.value='line'

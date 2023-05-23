@@ -4,6 +4,9 @@
         <div class="contents">
             <nature_header/>
             <div class="background">
+                <select class="select_group" v-model="selected_company" @change="change_company(selected_company)">
+                  <option v-for="item in group_list" :key="item">{{ item }}</option>
+                </select>
                 <div class="header-page">탄소 배출량 감축 목표 설정</div>
                 <div class="dash">
                     <target_dash1 id = "target_dash1"></target_dash1>
@@ -39,10 +42,20 @@ export default {
     },
     setup() {
         const store = useStore()
+
+        var group_list = computed(() => store.state.group_list).value
+        var selected_company =  group_list[0]
+        store.commit("insight_select_company", selected_company)
         var targetPopup = computed(() => store.state.CarbonCategories)
 
+        function change_company(){
+            store.commit("insight_select_company", selected_company.value)
+        }
         return{
-            targetPopup
+            targetPopup,
+            selected_company,
+            group_list,
+            change_company
         }
     }
 }

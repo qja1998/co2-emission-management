@@ -32,6 +32,8 @@ export default defineComponent({
   },
   setup(props) {
     var store = useStore()
+    //그룹명
+    var selected_company = computed(()=> store.state.insight_selected_company)
     var user_group = computed(()=> store.state.user_group)
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간

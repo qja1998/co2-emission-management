@@ -1,7 +1,8 @@
 import { defineComponent, h, PropType } from 'vue'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import { Bar, Line } from 'vue-chartjs'
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
+import {useStore} from 'vuex'
 import {
   Chart as ChartJS,
   Title,
@@ -49,6 +50,14 @@ export default defineComponent({
     
   },
   setup(props) {
+    var store = useStore()
+    //날짜, 그룹명
+    var group_name = computed(()=> store.state.insight_selected_company)
+    var user_group = computed(()=> store.state.user_group)
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = ref(now.getFullYear())	// 년도
+    
+    //서버
     var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
 

@@ -6,7 +6,7 @@
                 <img class="nonData-img" src="@/assets/evaluationGraph/NonData.png" alt="기준 연도를 입력해주세요.">
             </div>
             <div v-else-if = "standardData == true">
-                <div class="dash-text" style="text-align: center; height:10vh; line-height: 10vh;">2022년 탄소 배출량 평가</div>
+                <div class="dash-text" style="text-align: center; height:10vh; line-height: 10vh;">{{year-1}}년 탄소 배출량 평가</div>
                 <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
             </div>
             <div class="measure" >
@@ -80,7 +80,7 @@
 <script>
 import evaluationDonutGraph from './evaluationDonutGraph.ts';
 import evaluationStickGraph from './evaluationStickGraph';
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
 
   export default {
       name :"dashboard1_evaluation",
@@ -90,6 +90,13 @@ import {ref} from 'vue'
     evaluationStickGraph
 },
       setup() {
+
+        //그룹명, 날짜
+        var user_group = computed(()=> store.state.user_group)
+        var group_name = computed(()=> store.state.insight_selected_company)
+        var now = new Date();	// 현재 날짜 및 시간
+        var year = ref(now.getFullYear())	// 년도
+
         const standardData = ref(true) //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
         const realData = ref(20) // 작년 탄소 배출량(%)
 
@@ -114,7 +121,7 @@ import {ref} from 'vue'
 
        
          return{
-            standardData, realData
+            standardData, realData,year
          }
         }
   }

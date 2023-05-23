@@ -89,6 +89,7 @@ import {useStore} from 'vuex'
         setup(){
             var store = useStore()
             //날짜 및 그룹명
+            var selected_company = computed(()=> store.state.insight_selected_company)
             var user_group = computed(()=> store.state.user_group)
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear())	// 년도

@@ -77,6 +77,8 @@ import { computed , ref} from "vue";
       },
       setup() {
 
+        var group_name = computed(()=> store.state.insight_selected_company)
+
         const store = useStore()
         var picked= ref('')
         var standardYear= ref(0)
@@ -91,15 +93,13 @@ import { computed , ref} from "vue";
             BaseEmissions:0
         })
 
-       
-        var group_name = '경상국립대학교'//computed(() => store.state.insight_selected_company).value
 
         function close(){
             store.commit('OffGroupInfo')
         }
     
         function saveBaseEmission(){
-            server_EmissionInfo.value.groupName = '경상국립대학교'
+            server_EmissionInfo.value.groupName = group_name.value
             server_EmissionInfo.value.BaseYear = standardYear.value
             server_EmissionInfo.value.BaseEmissions = parseInt((standardEmission1.value+standardEmission2.value+standardEmission3.value)/3) + standardEmission.value
             console.log(server_EmissionInfo.value)

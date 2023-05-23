@@ -5,8 +5,8 @@
             <div style="margin: 1.8vh 0 0 1.5vw;">
                 <!-- 회사명(ex:경상대학교) -->
                 <br>
-                <span style ="color:#5A5A5A; font-weight:bold; font-size: 1.5vw;">경상국립대학교</span>
-                <span style="margin-left: 13vw;">
+                <span style ="color:#5A5A5A; font-weight:bold; display:inline-block; width:22vw; font-size: 1.5vw;">{{group_name}}</span>
+                <span style="margin-left: 2vw;">
                     <button class="input-button" @click="open_popup()" type="button">기준 입력하기</button>
                 </span>
                 <div style="float: left; margin-top: 3vh;">
@@ -58,12 +58,12 @@ import popup_inputStandardVue from './popup_inputStandard.vue';
       },
       setup() {
         const store = useStore();
+        var group_name = computed(()=> store.state.insight_selected_company)
         //서버
-        var server_evaluation={BaseYear:2019, BaseEmissions:60520}
+        var server_evaluation={BaseYear:2019, BaseEmissions:2650}
  
         var baseYear = server_evaluation.BaseYear
         var baseEmissions = server_evaluation.BaseEmissions
-        var group_name = '경상대학교'//computed(() => store.state.insight_selected_company).value // 나중에 바꾸기
         var 기관명 = '기업'
         var  위치 =  '경남 진주시'
         var  scope1 = 123.4

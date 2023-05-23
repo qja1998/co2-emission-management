@@ -34,6 +34,7 @@ export default{
             alert("로그인에 성공했습니다.");
             store.commit("loginToken",res.data.AccessToken)
             store.commit("setGroupName",res.data.RootCom)
+            store.commit("insight_select_company",res.data.RootCom)
             console.log(res.data.RootCom)
             console.log(JSON.stringify(res.data))
             router.push('/group');

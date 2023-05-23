@@ -99,14 +99,16 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var rerender_signal = ref(0)
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
+      store.commit("insight_select_company",selected_company.value)
+      
       var standardInfo = computed(()=>store.state.infopage)
-            
+
       function change_company(){
         store.commit("insight_select_company",selected_company.value)
       }
 
       return{
-        group_list, selected_company, standardInfo
+        group_list, selected_company, standardInfo,change_company
       }
     }
   }

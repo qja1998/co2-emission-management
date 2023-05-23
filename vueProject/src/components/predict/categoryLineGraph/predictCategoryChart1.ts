@@ -35,6 +35,8 @@ export default defineComponent({
 
     //그룹명
     var user_group = computed(()=> store.state.user_group)
+    var selected_company = computed(()=> store.state.insight_selected_company)
+    console.log('선 그래프 선택 그룹',selected_company.value)
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간
     var year = now.getFullYear()	// 년도

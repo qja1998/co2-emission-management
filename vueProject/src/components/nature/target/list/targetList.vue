@@ -100,8 +100,16 @@ import {computed, ref} from 'vue'
         },
         setup(){
             const store = useStore();
-            var editContent = ref(false); //리스트 변경사항이 있는지 확인하는 변수
 
+            //날짜 그룹명
+            var user_group = computed(()=> store.state.user_group)
+            var selected_company = computed(()=> store.state.insight_selected_company)
+            var now = new Date();
+            var year_now = now.getFullYear()	
+
+            //수정, 삭제, 추가에 대한 변수
+            var editContent = ref(false); //리스트 변경사항이 있는지 확인하는 변수
+            var del_id = []; 
             var edit = ref([false, -1]); 
             var del = ref([false, -1]);
             var add = ref([false,-1])
@@ -116,33 +124,33 @@ import {computed, ref} from 'vue'
             var category =ref('고정연소')
             var transEnargy =ref('태양열 에너지')
 
-            //사용자의 전환, 감축 목표 리스트
+            //서버, 사용자의 전환, 감축 목표 리스트
             var targetList=[
-                    {
-                        listkind:1, 
-                        index:0, 
-                        id:'',
-                        category:'고정연소', 
-                        percentage:30, 
-                        target: null,
-                        
-                    },
-                    {
-                        listkind:0, 
-                        index:1, 
-                        id:'',
-                        category:'고정연소', 
-                        percentage: 20, 
-                        target: '태양열 에너지',
-                    },
-                    {
-                        listkind:0, 
-                        index:2, 
-                        id:'',
-                        category:'고정연소', 
-                        percentage: 20, 
-                        target: '태양열 에너지',
-                    },
+                {
+                    listkind:1, 
+                    index:0, 
+                    id:'241',
+                    category:'고정연소', 
+                    percentage:30, 
+                    target: null,
+                    
+                },
+                {
+                    listkind:0, 
+                    index:1, 
+                    id:'5042',
+                    category:'고정연소', 
+                    percentage: 20, 
+                    target: '태양열 에너지',
+                },
+                {
+                    listkind:0, 
+                    index:2, 
+                    id:'45678',
+                    category:'고정연소', 
+                    percentage: 20, 
+                    target: '태양열 에너지',
+                },
             ]
 
             //각각의 리스트 내용의 개수를 나타내는 변수
@@ -188,6 +196,7 @@ import {computed, ref} from 'vue'
                     targetList.push({
                         listkind:0, 
                         index:addIndex, 
+                        id:'',
                         category:category.value, 
                         percentage: document.getElementById('transPercent').value,
                         target: transEnargy.value
@@ -200,6 +209,7 @@ import {computed, ref} from 'vue'
                     targetList.push({
                         listkind:1, 
                         index:addIndex, 
+                        id:'',
                         category:category.value, 
                         percentage: document.getElementById('increasPercent').value, 
                         target: null
@@ -221,6 +231,7 @@ import {computed, ref} from 'vue'
                     targetList[list.index] = {
                         listkind:list.listkind, 
                         index:list.index, 
+                        id:'',
                         category:category.value, 
                         percentage: document.getElementById('transPercent').value,
                         target: transEnargy.value
@@ -229,7 +240,8 @@ import {computed, ref} from 'vue'
                 else{
                     targetList[list.index] = {
                         listkind:list.listkind, 
-                        index:list.index, 
+                        index:list.index,
+                        id:'', 
                         category:category.value, 
                         percentage: document.getElementById('increasPercent').value,
                         target: null
@@ -243,6 +255,11 @@ import {computed, ref} from 'vue'
 
             //리스트 삭제 함수
             function clickDeleteTarget(list){
+                //서버에 저장되어있던 감축 목표가 삭제 되었을 때만 id를 저장
+                if(list.id != ''){
+                    del_id.push(list.id)
+                }
+           
                 targetList.splice(list.index, 1);
                 editContent.value=true
 
@@ -256,8 +273,23 @@ import {computed, ref} from 'vue'
 
             //서버에 저장
             function clickSaveTarget(){
-                console.log('저장')
                 editContent.value=false
+                
+                var server_add_list = []
+                for (var i=0; i < targetList.length; i++){
+                    if(targetList[i].id ==''){
+                        server_add_list.push(targetList[i])
+                    }                
+                }  
+                var post_targetList = {
+                    groupName : selected_company.value,
+                    year : year_now,
+                    tList:server_add_list
+                }
+
+                console.log('서버 저장',post_targetList)
+
+                console.log('서버 감축 목표 리스트 삭제',del_id)
             }
 
             return{

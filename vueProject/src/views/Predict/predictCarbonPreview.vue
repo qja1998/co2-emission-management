@@ -5,9 +5,12 @@
           <predict_header/>
           <div class="background">
             <div style="height:140vh;">
-                <p class="header-page" style="margin:0">탄소 배출량 예측 전체보기<br>
+                <select class="select_group" v-model="selected_company" @change="change_company(selected_company)">
+                  <option v-for="item in group_list" :key="item">{{ item }}</option>
+                </select>
+                <span class="header-page" style="margin:0">탄소 배출량 예측 전체보기<br>
                     <span class="subHeader-page">Predicted Carbon emission Overview</span>
-                </p>
+                </span>
                 <div id="wrap1">
                     <div style="height:15vh"><predict_dash1 class="dash"/></div>
                     <predict_dash2 class="dash" id="dash2"/>
@@ -78,6 +81,8 @@ import predict_dash2 from "@/components/predict/dash2/dash2.vue"
 import predict_dash3 from "@/components/predict/dash3/dash3.vue"
 import predict_dash4 from "@/components/predict/dash4/dash4.vue"
 import predict_dash5 from "@/components/predict/dash5/dash5.vue"
+import {useStore} from 'vuex'
+import {ref, computed} from 'vue'
 
   export default {
       name :"predict",
@@ -91,6 +96,19 @@ import predict_dash5 from "@/components/predict/dash5/dash5.vue"
           predict_dash5,
       },
       setup() {
+        var store = useStore()
+        var group_list = computed(() => store.state.group_list).value
+        var selected_company = ref(group_list[0])
+        store.commit("insight_select_company",selected_company.value)
+
+        function change_company(){
+            store.commit("insight_select_company",selected_company.value)
+        }
+        return{
+            group_list,
+            selected_company,
+            change_company
+        }
       }
   }
 </script>

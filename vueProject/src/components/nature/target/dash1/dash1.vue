@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
+import {useStore} from 'vuex'
 import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
     export default {
         name :"target_dash1",
@@ -25,20 +26,48 @@ import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
             targetdonut
         },
         setup(){
+            var store = useStore()
+            //그룹명
+            var group_name = computed(()=> store.state.insight_selected_company)
+            var user_group = computed(()=> store.state.user_group)
+
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear()-1)	// 년도
+            //서버
+            var server_category_data = [
+                [580, 590, 640, 575, 573, 680, 250,502,600,500,120,130],
+                [530, 495, 486, 570, 573, 664, 250,502,600,500,120,130],
+                [495, 397, 480, 390, 475, 510, 250,502,600,500,120,130],
+                [498, 401, 420, 297, 361, 483, 250,502,600,500,120,130],
+                [381, 363, 321, 350, 348, 371, 250,502,600,500,120,130],
+                [140, 143, 184, 123, 120, 212, 250,502,600,500,120,130],
+                [208, 175, 143, 167, 160, 220, 250,502,600,500,120,130],
+                [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
+                [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
+                [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
+                [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
+            ]
+            var sum_total_category_data = ref([]) //카테고리별 일년치 데이터
+
+            for(var i=0; i<server_category_data.length; i++){
+                var sum = ref(0)
+                for(var j =0; j<server_category_data[i].length; j++){
+                    sum.value = server_category_data[i][j] + sum.value
+                }    
+                sum_total_category_data.value.push(sum.value)
+            }
             var categoryLastEmission = [
-                {category:'고정연소', emission:2000 },
-                {category:'이동연소', emission:1800 },
-                {category:'탈루배출', emission:1500 },
-                {category:'폐기물 처리시설', emission:1600 },
-                {category:'비료사용', emission:1000 },
-                {category:'대학동물소유', emission:1200 },
-                {category:'산림에의한흡수', emission:680 },
-                {category:'전력', emission:820 },
-                {category:'열', emission:760 },
-                {category:'수도', emission:758 },
-                {category:'폐기물', emission:100 },
+                {category:'고정연소', emission:sum_total_category_data.value[0] },
+                {category:'이동연소', emission:sum_total_category_data.value[1] },
+                {category:'탈루배출', emission:sum_total_category_data.value[2] },
+                {category:'폐기물 처리시설', emission:sum_total_category_data.value[3] },
+                {category:'비료사용', emission:sum_total_category_data.value[4] },
+                {category:'대학동물소유', emission:sum_total_category_data.value[5] },
+                {category:'산림에의한흡수', emission:sum_total_category_data.value[6] },
+                {category:'전력', emission:sum_total_category_data.value[7] },
+                {category:'열', emission:sum_total_category_data.value[8] },
+                {category:'수도', emission:sum_total_category_data.value[9] },
+                {category:'폐기물', emission:sum_total_category_data.value[10] },
             ]
             var activeColor = [
                 '#9FD72A',

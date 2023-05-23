@@ -4,6 +4,9 @@
         <div class="contents" style="height:145vh">
             <nature_header/>
             <div class="background">
+                <select class="select_group" v-model="selected_company" @change="change_company(selected_company)">
+                  <option v-for="item in group_list" :key="item">{{ item }}</option>
+                </select>
                 <div class="header-page">탄소 배출량 감축 진행상황</div>
                 <div class ="dash">
                     <progress_dash1 id="progress-dash1"></progress_dash1>
@@ -41,7 +44,20 @@ export default {
         progress_dash4,
     },
     setup() {
+        var store = useStore()
+        var group_list = computed(() => store.state.group_list).value
+        var selected_company = ref(group_list[0])
+        store.commit("insight_select_company",selected_company.value)
+        
+        var standardInfo = computed(()=>store.state.infopage)
+
+        function change_company(){
+            store.commit("insight_select_company",selected_company.value)
+      }
         return{
+            group_list,
+            change_company,
+            selected_company
         }
     }
 }

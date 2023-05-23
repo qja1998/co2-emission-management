@@ -79,9 +79,11 @@ import {useStore} from 'vuex'
     export default {
         name :"predict_dash2",
         setup(){
-
+            var store=useStore()
             //그룹명, 날짜
             var user_group = computed(()=> store.state.user_group)
+            var selected_company = ref(computed(()=> store.state.insight_selected_company))
+
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear())	// 년도
             var month = ref(now.getMonth())//월
@@ -145,6 +147,7 @@ import {useStore} from 'vuex'
         },
         components:{
         
-        }
+        },
+        
     }
 </script>
