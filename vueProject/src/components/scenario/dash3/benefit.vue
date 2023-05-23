@@ -18,16 +18,34 @@
 
 
 <script>
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
+import { useStore } from 'vuex'
     export default {
         name :"benefit",
         components:{
             
         },
         setup(){
-            var carbonMoney = ref(0)
-            var increaseEmissionOfBase = ref(0)
-            var profitMoney = ref(0)
+            var store =useStore()
+            //날짜 그룹명
+            var user_group = computed(()=> store.state.user_group)
+            var selected_company = computed(()=> store.state.insight_selected_company)
+
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = now.getFullYear()	// 년도
+            var month = now.getMonth()
+
+            //서버
+            var server_targetTotal_data = 570
+            var server_EmissionInfo = {
+                groupName:'경상국립대학교',
+                BaseYear:2019,
+                BaseEmissions:2650
+            }
+
+            var carbonMoney = ref(1500)
+            var increaseEmissionOfBase = server_EmissionInfo.BaseEmissions - server_targetTotal_data
+            var profitMoney = ref(carbonMoney.value*increaseEmissionOfBase)
 
             function getAmount(){
                 console.log('새로 고침')
