@@ -17,7 +17,7 @@
                 <div class="target-block" style="margin-bottom:4vh">
                     <div v-for="(list, i) in targetList" :key="i" style="padding-bottom: 2vh; font-size: 1.7vh;">
                         <span v-if="list.listkind == 1">
-                            <li>{{ list.category }}의 {{ list.percentage }}%를 감축</li>
+                            <li id="scenario_li">{{ list.category }}의 {{ list.percentage }}%를 감축</li>
                         </span>
                     </div>
                 </div>
@@ -116,7 +116,7 @@ import {ref, computed} from 'vue'
 </script>
 
 <style>
-    li {
+    #scenario_li {
         padding: 1vh 0 1vh 2vw;
         list-style: none;
         background-image: url('@/assets/check.png');
