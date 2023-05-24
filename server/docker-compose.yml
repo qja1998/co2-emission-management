@@ -22,7 +22,7 @@ services:
     networks:
       - default
       - carbon
-    container_name: CarbonAppServerHyemi
+    container_name: CarbonAppServer
     depends_on:
       - carbon_mysql
     restart: always
