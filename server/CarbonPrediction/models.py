@@ -1,6 +1,6 @@
 from django.db import models
 
-class CarbonPredict(models.Model):
+class CarbonPrediction(models.Model):
     Com_id = models.ForeignKey(
 			"Company.Company",
             #related_name="ID",

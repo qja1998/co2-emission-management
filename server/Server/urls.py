@@ -58,4 +58,6 @@ urlpatterns = [
     path("User/", include("Human.urls")),
     path("CarbonEmission/", include("Carbon.urls")),
     path("Company/", include("Company.urls")),
+    path("CarbonNature/", include("CarbonNature.urls")),
+    path("CarbonPrediction/", include("CarbonPrediction.urls")),
 ]

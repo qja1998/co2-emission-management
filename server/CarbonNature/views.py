@@ -58,17 +58,6 @@ class EvaluationView(APIView):
         serializer = EvaluationSerializer(result).values('BaseYear', 'BaseEmissions')
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class GoalView(APIView):
-    @swagger_auto_schema(
-        operation_summary="탄소 배출량 감축 목표에 관한 데이터를 반환하는 Api",
-        responses={200: "API가 정상적으로 실행 됨"},
-    )
-    def get(self, request, cate_id, format=None):
-        #ComId = ComModel.Company.objects.get(ComName=CompanyName) # 만약 이름으로 쿼리를 한다면
-        result = Goal.objects.get(Cate_id=cate_id)
-        serializer = GoalSerializer(result)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    
 class MethodView(APIView):
 
     permission_classes = (IsAuthenticated,)  # 로그인 검증
@@ -91,7 +80,7 @@ class CompanyGoalView(APIView):
         operation_summary="특정 기업의 탄소 배출량 목표에 관한 데이터를 반환하는 Api",
         responses={200: "API가 정상적으로 실행 됨"},
     )
-    def get(self, request, com_id, goal_id format=None):
+    def get(self, request, com_id, goal_id, format=None):
         result = CompanyGoal.objects.get(Com_id=com_id, Goal_id=goal_id)
         serializer = CompanyGoalSerializer(result)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -165,7 +154,7 @@ class CarbonYearQuery(APIView):
             goal_carbon_category.append(goal_with_cate)
             server_targetTotal_data += goal_with_cate
         
-        if is_category:
+        if bool(is_category):
             return Response(goal_carbon_category, status=status.HTTP_200_OK)
         else:
             return Response(server_targetTotal_data, status=status.HTTP_200_OK)
@@ -182,17 +171,17 @@ class TargetListQuery(APIView):
         responses={404: "입력한 회사가 존재하지 않음", 200: "API가 정상적으로 실행 됨"},
     )
 
-    def get(self, request, Depart, year, is_category, format=None):
+    def get(self, request, depart_name, year, format=None):
 
         UserRoot = func.GetUserRoot(request)
         
         try:  # 요청받은 회사가 루트가 아닌 경우
             Root = Department.objects.get(
-                DepartmentName=Depart, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
             )
         except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
             try:
-                Root = Company.objects.get(ComName=Depart)
+                Root = Company.objects.get(ComName=depart_name)
             except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
                 return Response(
                     "This Company/Department doesn't exist.",

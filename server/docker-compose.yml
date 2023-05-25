@@ -5,7 +5,7 @@ networks:
     driver: bridge
 
 volumes:
-  CarbonVolHyemi:
+  CarbonVol:
     external: true
 
 services:
@@ -22,7 +22,7 @@ services:
     networks:
       - default
       - carbon
-    container_name: CarbonAppServer
+    container_name: CarbonAppServerHyemi
     depends_on:
       - carbon_mysql
     restart: always

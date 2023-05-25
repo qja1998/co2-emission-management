@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     "Carbon.apps.CarbonConfig",
     "Human.apps.HumanConfig",
     "Company.apps.CompanyConfig",
+    "CarbonNature.apps.CarbonnatureConfig",
+    "CarbonPrediction.apps.CarbonpredictionConfig",
     # 로그인 라이브러리
     "rest_framework_simplejwt",
     "rest_framework.authtoken",

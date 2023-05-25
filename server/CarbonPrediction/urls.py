@@ -1,12 +1,17 @@
-# from django.urls import path
+from django.urls import path
 
-# from . import views
+from . import views
 
-# app_name = "CarbonPrecition"
-# urlpatterns = [
-#     path(
-#         "Organization/CarbonPrediction/<str:CompanyName>/<str:CategoryName>",
-#         views.CarbonPredictionQuery.as_view(),
-#         name="CarbonPredictionGet",
-#     ),
-# ]
+app_name = "CarbonPrecition"
+urlpatterns = [
+    path(
+        "CarbonPrediction/<str:depart_name>",
+        views.CarbonPredictionView.as_view(),
+        name="CarbonPredictionGet",
+    ),
+    path(
+        "CarbonPartQuery/<str:depart_name>/<int:is_category>",
+        views.CarbonPartQuery.as_view(),
+        name="CarbonPartQuery",
+    ),
+]
