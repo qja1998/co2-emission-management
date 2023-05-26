@@ -49,7 +49,7 @@
   </template>
   
   <script>
-  import { XlsxRead, XlsxTable, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from "/home/hyemi/carbon/co2-emission-management/vueProject/node_modules/vue3-xlsx"
+  import { XlsxRead, XlsxTable, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue3-xlsx"
   import {useStore} from 'vuex'
   import {ref} from 'vue'
   export default {
