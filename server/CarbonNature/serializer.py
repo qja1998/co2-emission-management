@@ -8,7 +8,7 @@ class EvaluationSerializer(serializers.ModelSerializer):
         model = models.Evaluation
         fields = "__all__"
 
-class EmissionInfo(serializers.ModelSerializer):
+class EmissionInfoSerializer(serializers.ModelSerializer):
     GroupName = serializers.SerializerMethodField()
     class Meta:
         model = models.Evaluation

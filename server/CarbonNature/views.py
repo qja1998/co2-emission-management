@@ -18,7 +18,7 @@ from drf_yasg import openapi
 
 from .models import Evaluation, Goal, Method, CompanyGoal
 from .serializer import (EvaluationSerializer,
-                         EmissionInfo,
+                         EmissionInfoSerializer,
                          GoalSerializer,
                          MethodSerializer,
                          CompanyGoalSerializer)
@@ -53,9 +53,9 @@ class EvaluationView(APIView):
                     "This Company/Department doesn't exist.",
                     status=status.HTTP_404_NOT_FOUND,
                 )
+        base_year, base_emission = Evaluation.objects.get(Com_id=Root.pk).values('BaseYear', 'BaseEmissions')
+        serializer = EmissionInfoSerializer(GruopName=depart_name, BaseYear=base_year, BaseEmissions=base_emission)
 
-        result = Evaluation.objects.get(Com_id=Root.pk)
-        serializer = EvaluationSerializer(result).values('BaseYear', 'BaseEmissions')
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class MethodView(APIView):
