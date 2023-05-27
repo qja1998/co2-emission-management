@@ -91,7 +91,7 @@ class EmissionInfoView(APIView):
     permission_classes = (IsAuthenticated,)  # 로그인 검증
 
     @swagger_auto_schema(
-        operation_summary="기준년도와 기준량을 정하는 Api", request_body=EmissionInfo,
+        operation_summary="기준년도와 기준량을 정하는 Api", request_body=EmissionInfoSerializer,
         resposes={400: "입력한 group name이 이미 존재함", 201: "API가 정상적으로 실행 됨"}
     )
     def post(self, request, formant=None):
