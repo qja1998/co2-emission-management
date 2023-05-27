@@ -64,7 +64,10 @@ export default defineComponent({
       [365, 362, 384, 391, 342, 370],
       [213, 310, 300, 512, 320, 430],
       [198, 194, 222, 270, 200, 315],
-      [300, 298, 350, 380, 290, 420]
+      [300, 298, 350, 380, 290, 420],
+      [380, 250, 400, 302, 500, 450],
+      [250, 158, 333, 278, 400, 510],
+      [401, 280, 300, 470, 400, 388]
     ]
 
     var server_category_data = [
@@ -75,7 +78,10 @@ export default defineComponent({
       [381, 363, 321, 350, 348, 371],
       [140, 143, 184, 123, 120, 212],
       [208, 175, 143, 167, 160, 220],
-      [312, 274, 250, 280, 278, 320]
+      [312, 274, 250, 280, 278, 320],
+      [100, 130, 250, 287, 325, 400],
+      [333, 240, 258, 300, 320, 298],
+      [80, 100, 147, 300, 400, 425]
     ]
 
     var category_data = ref(server_category_data)
@@ -109,7 +115,7 @@ export default defineComponent({
           }
         },
         {
-          label: '임직원 출퇴근',
+          label: '탈루 배출',
           backgroundColor: '#49C5E0',
           data:  category_data.value[2],
           borderColor: '#49C5E0',
@@ -118,10 +124,37 @@ export default defineComponent({
           }
         },
         {
-          label: '수도',
-          backgroundColor: '#FF3B3B',
+          label: '폐기물 처리시설',
+          backgroundColor: '#B67FBF',
           data:  category_data.value[3],
-          borderColor: '#FF3B3B',
+          borderColor: '#B67FBF',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '비료 사용',
+          backgroundColor: '#CA985E',
+          data:  category_data.value[4],
+          borderColor: '#CA985E',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '대학동물 소유',
+          backgroundColor: '#F6DD00',
+          data:  category_data.value[5],
+          borderColor: '#F6DD00',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '산림에 의한 흡수',
+          backgroundColor: '#3E9B96',
+          data:  category_data.value[6],
+          borderColor: '#3E9B96',
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
@@ -129,35 +162,35 @@ export default defineComponent({
         {
           label: '전력',
           backgroundColor: '#5E8CFF',
-          data:  category_data.value[4],
+          data:  category_data.value[7],
           borderColor: '#5E8CFF',
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
         },
         {
-          label: '비료사용',
-          backgroundColor: '#904E00',
-          data:  category_data.value[5],
-          borderColor: '#904E00',
+          label: '스팀',
+          backgroundColor: '#FF7D7D',
+          data:  category_data.value[8],
+          borderColor: '#FF7D7D',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '수도',
+          backgroundColor: '#088AA6',
+          data:  category_data.value[9],
+          borderColor: '#088AA6',
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
         },
         {
           label: '폐기물',
-          backgroundColor: '#ED86EF',
-          data:  category_data.value[6],
-          borderColor: '#ED86EF',
-          segment:{
-            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
-          }
-        },
-        {
-          label: '산림에 의한 흡수',
-          backgroundColor: '#FF1686',
-          data:  category_data.value[7],
-          borderColor: '#FF1686',
+          backgroundColor: '#475674',
+          data:  category_data.value[10],
+          borderColor: '#475674',
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }

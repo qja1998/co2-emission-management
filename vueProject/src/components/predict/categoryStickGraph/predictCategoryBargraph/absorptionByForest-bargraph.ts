@@ -12,7 +12,6 @@ import {
   LinearScale,
   Plugin
 } from 'chart.js'
-import chart from '@/components/measure/input1/chart'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
@@ -50,18 +49,20 @@ export default defineComponent({
     
   },
   setup(props) {
-    //서버
+    //서버 
     var server_category_predict_data = [
-        [580, 590, 640, 575, 573, 680, 680, 820, 760, 758, 770, 758, 762],
-        [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-        [495, 397, 480, 390, 475, 510, 550, 587, 590, 723, 640, 743],
-        [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
-        [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
-        [140, 143, 184, 123, 120, 212, 213, 310, 300, 512, 320, 430],
-        [208, 175, 143, 167, 160, 220, 198, 194, 222, 270, 200, 315],
-        [312, 274, 250, 280, 278, 320, 300, 298, 350, 380, 290, 420]
+      [580, 590, 640, 575, 573, 680, 820, 760, 758, 770, 758, 762],
+      [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
+      [495, 397, 480, 390, 475, 510, 550, 587, 590, 723, 640, 743],
+      [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
+      [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
+      [140, 143, 184, 123, 120, 212, 213, 310, 300, 512, 320, 430],
+      [208, 175, 143, 167, 160, 220, 198, 194, 222, 270, 200, 315],
+      [312, 274, 250, 280, 278, 320, 300, 298, 350, 380, 290, 420],
+      [100, 130, 250, 287, 325, 400, 380, 250, 400, 302, 500, 450],
+      [333, 240, 258, 300, 320, 298, 250, 158, 333, 278, 400, 510],
+      [80, 100, 147, 300, 400, 425, 401, 280, 300, 470, 400, 388]
     ]
-
 
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간
@@ -86,26 +87,24 @@ export default defineComponent({
       labels: x_legend,
       datasets: [
         {
-            label:'임직원 출퇴근',
-            data: server_category_predict_data[0],
+            label:'산림에 의한 흡수',
+            data: server_category_predict_data[6],
             backgroundColor : chooseColor(),
             barThickness: 20,
-          }
+        }
       ]
     }
-
     function chooseColor(){
       var color : string[] = []
       for (var i=0;  i<=12; i++){
         if (i > month+1) {
           color.push('#BFBFBF')
         } else {
-          color.push('#49C5E0')
+          color.push('#3E9B96')
         }
       }
       return color
     }
-
     const chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
@@ -118,7 +117,7 @@ export default defineComponent({
         x:{
           grid:{
             display:false
-          }
+          },
         },
         y:{
           stacked:true,
