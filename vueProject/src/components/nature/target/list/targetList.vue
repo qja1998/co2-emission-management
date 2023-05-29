@@ -34,7 +34,7 @@
                     <div class='list-content' v-if="add[0]==true && add[1]==0">
                         <span class="list-content-text" v-on:keyup.enter="submitAdd()">
                             <select v-model="category" class="box drop-box" >
-                                <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
+                                <option>전력 사용</option>
                             </select> 의 <input class="box input-box " id="transPercent" placeholder='30'> %를
                             <select v-model="transEnargy" class="box drop-box" >
                                 <option :value=trans v-for="trans in transEnargyList">{{trans}}</option >
@@ -94,6 +94,7 @@
 <script>
 import { useStore } from 'vuex'
 import {computed, ref} from 'vue'
+import axios from "axios";
     export default {
         name :"target_dash1",
         components:{
@@ -103,9 +104,10 @@ import {computed, ref} from 'vue'
 
             //날짜 그룹명
             var user_group = computed(()=> store.state.user_group)
-            var selected_company = computed(()=> store.state.insight_selected_company)
+            var selected_company = computed(()=> store.state.selected_company)
             var now = new Date();
-            var year_now = now.getFullYear()	
+            var year_now = now.getFullYear()
+            var month_now = now.getMonth()
 
             //수정, 삭제, 추가에 대한 변수
             var editContent = ref(false); //리스트 변경사항이 있는지 확인하는 변수
@@ -117,7 +119,6 @@ import {computed, ref} from 'vue'
             //수정과 추가시 선택하는데 필요한 리스트
             var categoryList= computed(() => store.state.CarbonCategories)
             var transEnargyList = [
-                '태양열 에너지',
                 '풍력 에너지',
                 '태양광 에너지'
             ]
@@ -125,6 +126,26 @@ import {computed, ref} from 'vue'
             var transEnargy =ref('태양열 에너지')
 
             //서버, 사용자의 전환, 감축 목표 리스트
+            async function get_total_emission_year(){
+              await axios.get("Company/Preview/"+selected_company.value+"/"+year_now+"-01-01/"+year_now + month_now+"-12-31",config).then(res => {
+                    console.log(res.data)
+                    console.log("연월"+year.value)
+                    scope1.value = res.data.Scopes[0]
+                    scope2.value = res.data.Scopes[1]
+                    scope3.value = res.data.Scopes[2]
+                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+                    store.commit("set_scopes",res.data.Scopes);
+                    store.commit("SetDetailEmission",res.data.EmissionList);
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                  rerender_signal.value +=1
+                })
+            }
+            var power = computed(()=>store.state.EmissionList[7])
+            var transPower = ref('')
             var targetList=[
                 {
                     listkind:1, 

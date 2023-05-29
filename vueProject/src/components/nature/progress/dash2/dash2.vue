@@ -22,6 +22,7 @@
 <script>
 import {ref, computed} from 'vue'
 import { useStore } from 'vuex'
+import axios from "axios";
     export default {
         name :"progress_dash2",
         components:{
@@ -44,6 +45,26 @@ import { useStore } from 'vuex'
                 BaseYear:2019,
                 BaseEmissions:2650
             }
+            const config = {
+                headers:{
+                Authorization:"Bearer"+" "+store.state.accessToken,
+                "Content-Type": "text/html; charset=utf-8",
+                }
+            }
+            async function getcarbonEmissionRights(){
+                console.log("dawdaw")
+                await axios.get("https://api.odcloud.kr/api/15102705/v1/uddi:64ea07ee-be47-40c9-bc23-ff901cfbdfe6&_returnType=json" ,config).then(res => {
+                    var a = res.data.data.filter('연도' == year)
+                    console.log(res.data.data.filter('연도' == year))
+                })
+                .catch(error => {
+                    alert("로그인 시간이 만료되었습니다.")
+                    console.log(error)
+                    router.push('/');
+                })
+                .finally(() => {})
+            }
+            getcarbonEmissionRights()
 
             var carbonMoney = ref(1500)
             var increaseEmissionOfBase = server_EmissionInfo.BaseEmissions - server_targetTotal_data
