@@ -1,14 +1,14 @@
 from django.db import models
 
 class CarbonPrediction(models.Model):
-    Com_id = models.ForeignKey(
+    Com = models.ForeignKey(
 			"Company.Company",
-            #related_name="ID",
+            related_name="PredCom",
 			on_delete=models.CASCADE,
 		)
-    Cate_id = models.ForeignKey(
+    Cate = models.ForeignKey(
 			"Carbon.Category",
-            related_name="ID",
+            related_name="PredCate",
 			on_delete = models.CASCADE,
 		)
     PredCarbonData= models.FloatField() #카테고리별 예측 사용량

@@ -17,13 +17,3 @@ class CarbonSerializer(serializers.ModelSerializer):  # carbon 모델을 json으
     class Meta:
         model = models.Carbon
         exclude = ["RootCom", "BelongDepart"]
-
-
-class CarbonTotalSerializer(serializers.ModelSerializer):
-    CarbonInfo = CarbonInfoSerializer()
-    RootCom = ComSerial.CompanySerializer()
-    BelongCom = ComSerial.CompanySerializer()
-
-    class Meta:
-        model = models.Carbon
-        fields = "__all__"

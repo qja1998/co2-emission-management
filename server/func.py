@@ -5,8 +5,13 @@ from rest_framework_simplejwt.tokens import AccessToken
 from Company import models as ComModel
 from Human import models as HuModel
 from Carbon import models as CarModel
+from CarbonNature import models as CNModel
 from Company import serializer
 from CarbonConstant import CarbonDef
+
+from collections import defaultdict
+import datetime
+from dateutil.relativedelta import relativedelta
 
 
 # 조직 구조를 반환하는 함수
@@ -158,6 +163,36 @@ def CreateEmployee(EmployeeData, RootCom, BelongCom):
     )
 
     return Employee
+
+def get_base_emission(year, com_id, chief):
+        start_date = datetime.datetime.strptime(f"{year}-01-01", '%Y-%m-%d')
+        end_date = datetime.datetime.strptime(f"{year}-12-31", '%Y-%m-%d')
+
+        cate_total_emissions = defaultdict(int)
+
+        while start_date < end_date:
+            total_data = 0
+            categories = CarModel.Category.objects.values('Category')
+            for cate in categories:
+                cate = cate['Category']
+                next_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
+
+                carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date,
+                                                                EndDate=next_date,
+                                                                Chief=chief,
+                                                                Category=cate)
+                for dp in ComModel.Department.objects.filter(RootCom=com_id).all():
+                    carbon_data = CarModel.Carbon.objects.filter(RootCom=com_id,
+                                                        BelongDepart=dp,
+                                                        CarbonInfo__in = carbon_info).values('CarbonData')
+                    if carbon_data:
+                        cate_total_emissions[cate] += carbon_data[0]['CarbonData']
+                    
+                if not carbon_data:
+                    continue
+
+            start_date += relativedelta(months=1)
+        return cate_total_emissions
 
 
 def DivideByMonthOrYear(Start, End, data, MorY):

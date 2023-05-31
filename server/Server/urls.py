@@ -54,7 +54,7 @@ urlpatterns = [
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),
     # api의 url
-    path("admin", admin.site.urls),
+    path("admin/", admin.site.urls),
     path("User/", include("Human.urls")),
     path("CarbonEmission/", include("Carbon.urls")),
     path("Company/", include("Company.urls")),

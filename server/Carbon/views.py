@@ -3,7 +3,7 @@ import datetime
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from drf_yasg.utils import swagger_auto_schema
@@ -379,50 +379,71 @@ class CarbonPartQuery(APIView):
 
     @swagger_auto_schema(
         operation_summary="요청한 조직에서 발생한 특정 기간의 탄소 배출량을 반환하는 Api",
-        responses={404: "입력한 회사가 존재하지 않음", 201: "API가 정상적으로 실행 됨"},
+        responses={404: "입력한 회사가 존재하지 않음", 200: "API가 정상적으로 실행 됨"},
     )
-
-    def get(self, request, Depart, start_date, end_date, is_cartegory, format=None):
-
-        UserRoot = func.GetUserRoot(request)
+    def get(self, request, depart_name, start_date, end_date, is_category, format=None):
         
+        '''
+        is_category는 1 또는 0
+        1: categorical, 0: total
+
+        date 값들은 "YYYY-MM-DD" 형식으로 입력
+        '''
+        UserRoot = func.GetUserRoot(request)
+
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Root = ComModel.Department.objects.get(
-                DepartmentName=Depart, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            Root_id = ComModel.Department.objects.get(
+                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
             )
         except ComModel.Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
             try:
-                Root = ComModel.Company.objects.get(ComName=Depart)
+                Root_id = ComModel.Company.objects.get(ComName=depart_name)
             except ComModel.Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
                 return Response(
                     "This Company/Department doesn't exist.",
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
+        start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
         start_date = start_date.replace(day=1)
-        end_date = (end_date + relativedelta(month=1)).replace(day=1) + relativedelta(day=-1)
+        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = (end_date + relativedelta(months=1)).replace(day=1) - datetime.timedelta(days=1)
         server_category_data = []
         server_total_data = []
 
         while start_date < end_date:    
             cate_data = []
             total_data = 0
-            categories = CarModel.Category.objects.values_list('Category')
+            categories = CarModel.Category.objects.values('Category')
             for cate in categories:
+                cate = cate['Category']
+                tmp_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
+                next_date = tmp_date if tmp_date < end_date else end_date
+                print(start_date, next_date)
                 carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date,
-                                                                EndtDate=start_date + relativedelta(month=1),
-                                                                Chief=Root.Chief,
+                                                                EndDate=next_date,
+                                                                Chief=UserRoot.Chief,
                                                                 Category=cate)
-                carbon_data = CarModel.Carbon.objects.filter(RootCom=Root.RootCom,
-                                                             BelongDepart=Root.BelongCom,
-                                                             CarbonInfo=carbon_info.pk)
+                
+                carbon_data = CarModel.Carbon.objects.filter(RootCom=Root_id.RootCom,
+                                                             BelongDepart=Root_id,
+                                                             CarbonInfo__in = carbon_info,).values('CarbonData')
+                if not carbon_data:
+                    continue
+
+                carbon_data = carbon_data[0]['CarbonData']
+                #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
+                print(carbon_data)
                 cate_data.append(carbon_data)
                 total_data += carbon_data
-            server_category_data.append(cate_data)
-            server_total_data.append(sum(total_data))
-            start_date += relativedelta(month=1)
+            if is_category:
+                server_category_data.append(cate_data)
+            else:
+                #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
+                server_total_data.append(total_data)
+            start_date += relativedelta(months=1)
         
-        if is_cartegory:
-            return Response(server_category_data, status=status.HTTP_201_CREATED)
+        if is_category:
+            return JsonResponse(server_category_data, safe=False, status=status.HTTP_200_OK)
         else:
-            return Response(server_total_data, status=status.HTTP_201_CREATED)
+            return JsonResponse(server_total_data, safe=False, status=status.HTTP_200_OK)
