@@ -101,9 +101,29 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var selected_company = ref(group_list[0])
       store.commit("insight_select_company",selected_company.value)
       
+      async function get_total_emission_month(){
+        await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
+              console.log(res.data)
+              console.log("연월"+year.value+month.value)
+              scope1.value = res.data.Scopes[0]
+              scope2.value = res.data.Scopes[1]
+              scope3.value = res.data.Scopes[2]
+              total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+              store.commit("set_scopes",res.data.Scopes);
+              store.commit("SetDetailEmission",res.data.EmissionList);
+          })
+          .catch(error => {
+              console.log(error)
+          })
+          .finally(() => {
+            rerender_signal.value +=1
+          })
+      }
+
       var standardInfo = computed(()=>store.state.infopage)
 
       function change_company(){
+        get_total_emission_month()
         store.commit("insight_select_company",selected_company.value)
       }
 

@@ -247,9 +247,9 @@ import { ref,computed } from "vue"
               Authorization:"Bearer"+" "+store.state.accessToken,
               "Content-Type": "text/html; charset=utf-8",
             }
-          }
+        }
             
-          var user_group = computed(()=> store.state.user_group)
+        var user_group = computed(()=> store.state.user_group)
         async function title_get_list_(){
             console.log("dawdaw")
             await axios.get("Company/Organization/Simple/" + user_group.value ,config).then(res => {
