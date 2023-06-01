@@ -141,8 +141,7 @@ import {ref, computed} from 'vue'
                 info_list.CarbonActivity = document.getElementById('carbon_emissions_content_filling').value
                 info_list.data =  usage_input+"/"+"ton"
                 info_list.emissions = usage_input+4
-                info_list.StartDate = document.getElementById('start_data').value+'-01'+'-01'
-                //info_list.EndDate = document.getElementById('end_data').value
+                info_list.StartDate = document.getElementById('start_data').value+'-01'
                 
                 store.commit("SetTableContent",info_list)
             }

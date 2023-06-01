@@ -12,7 +12,6 @@
         </div> 
         <div style="margin-top:30px">기간 설정
             <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true" style="margin-left:80px">
-            <input class = "date_btn" id = "end_data" type="month">
         </div>
         <div style="margin-top:4vh">구분</div>
         <div class="add_info_divide" id="building_name_text" style="margin-top:2vh">건물명 / 배출 시설명
@@ -90,7 +89,7 @@ import {ref} from 'vue'
                 info_list.data =  usage_input+"/"+"m3"
                 info_list.emissions = usage_input + 4 + "kg" //탄소 배출량 계산식
                 info_list.StartDate = document.getElementById('start_data').value+'-01'
-                info_list.EndDate = document.getElementById('end_data').value+'-01'
+                info_list.EndDate = document.getElementById('start_data').value+'-28'
                 info_list.Division.운영주체 = main_agent.value
                 info_list.Division.건물명 = document.getElementById('building_name_text').value
                 info_list.Division.공급처 = 공급처.value

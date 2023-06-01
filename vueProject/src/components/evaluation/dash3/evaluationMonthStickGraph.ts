@@ -58,7 +58,7 @@ export default defineComponent({
     var year = ref(now.getFullYear())	// 년도
     
     //서버
-    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+    var server_total_data = ref(computed(()=> store.state.getTotalCategoryData))
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
 
     var month_baseemissions = server_evaluation.BaseEmissions/12
@@ -69,7 +69,7 @@ export default defineComponent({
       datasets: [
         {
           label:'총 탄소 배출량',
-          data: server_total_data,
+          data: server_total_data.value,
           backgroundColor : '#3DC984',
           barThickness: 30,
         },

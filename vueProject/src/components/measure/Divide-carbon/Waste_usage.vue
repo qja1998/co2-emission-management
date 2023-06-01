@@ -10,7 +10,6 @@
     </div> 
     <div style="margin-top:30px">기간 설정
         <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true" style="margin-left:80px;">
-        <input class = "date_btn" id = "end_data" type="month">
     </div>
     <div style="margin-top:4vh">구분</div>
     <div class="add_info_divide" id="building_name_text" style="margin-top:2vh">건물명 / 배출 시설명
@@ -122,7 +121,7 @@ import {ref} from 'vue'
                 info_list.data =  usage_input+"/"+"ton"
                 info_list.emissions = usage_input+4
                 info_list.StartDate = document.getElementById('start_data').value+'-01'
-                info_list.EndDate = document.getElementById('end_data').value+'-01'
+                info_list.EndDate = document.getElementById('start_data').value+'-28'
                 if (waste_treatment.value == '하폐수'){
                     info_list.DetailType = unit_value.value
                 }

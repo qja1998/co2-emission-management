@@ -7,7 +7,10 @@
             </div>
             <div v-else-if = "standardData == true">
                 <div class="dash-text" style="text-align: center; height:10vh; line-height: 10vh;">{{year-1}}년 탄소 배출량 평가</div>
-                <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
+                <Suspense>
+                    <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
+                </Suspense>
+
             </div>
             <div class="measure" >
                 <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 0">나쁨</span>
@@ -81,7 +84,7 @@
 import evaluationDonutGraph from './evaluationDonutGraph.ts';
 import evaluationStickGraph from './evaluationStickGraph';
 import {ref,computed} from 'vue'
-
+import {useStore} from 'vuex'
   export default {
       name :"dashboard1_evaluation",
       components:{
@@ -96,18 +99,22 @@ import {ref,computed} from 'vue'
         var group_name = computed(()=> store.state.insight_selected_company)
         var now = new Date();	// 현재 날짜 및 시간
         var year = ref(now.getFullYear())	// 년도
-
+        var store = useStore()
         const standardData = ref(true) //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
         const realData = ref(20) // 작년 탄소 배출량(%)
 
         //서버
-        var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+        var server_total_data = computed(()=> store.state.getTotalCategoryData)
         var sum =ref(0)
         for(var i=0; i<server_total_data.length; i++){
             sum.value = server_total_data[i] + sum.value
         }
-
-        var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+        var server_evaluation = {
+            BaseYear:0, 
+            BaseEmissions:0
+        }
+        server_evaluation.BaseYear= computed(()=>store.state.baseYear).value
+        server_evaluation.BaseEmissions= computed(()=>store.state.baseData).value
 
         realData.value = (server_evaluation.BaseEmissions-sum.value)/(server_evaluation.BaseEmissions) *100
 

@@ -10,7 +10,6 @@
     </div> 
     <div style="margin-top:30px">기간 설정
         <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true">
-        <input class = "date_btn" id = "end_data" type="month">
     </div>
 
     <div class="add_info_divide" id="building_name_text" style="margin-top:4vh">비료 사용 위치
@@ -87,7 +86,7 @@ import {ref,computed} from 'vue'
                 info_list.data =  usage_input+"/ton"
                 info_list.emissions = usage_input+4
                 info_list.StartDate = document.getElementById('start_data').value+'-01'
-                info_list.EndDate = document.getElementById('end_data').value+'-01'
+                info_list.EndDate = document.getElementById('start_data').value+'-28'
                 info_list.DetailType = fertilzer.value
                 info_list.kind = kind.value
                 info_list.Division.비료사용위치= document.getElementById('building_name_input').value

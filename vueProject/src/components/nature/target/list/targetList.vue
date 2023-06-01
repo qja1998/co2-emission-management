@@ -34,7 +34,7 @@
                     <div class='list-content' v-if="add[0]==true && add[1]==0">
                         <span class="list-content-text" v-on:keyup.enter="submitAdd()">
                             <select v-model="category" class="box drop-box" >
-                                <option>전력 사용</option>
+                                <option>전력</option>
                             </select> 의 <input class="box input-box " id="transPercent" placeholder='30'> %를
                             <select v-model="transEnargy" class="box drop-box" >
                                 <option :value=trans v-for="trans in transEnargyList">{{trans}}</option >
@@ -103,8 +103,14 @@ import axios from "axios";
             const store = useStore();
 
             //날짜 그룹명
+            var config = {
+                headers:{
+                "Authorization":"Bearer"+" "+store.state.accessToken
+                }
+            }
             var user_group = computed(()=> store.state.user_group)
-            var selected_company = computed(()=> store.state.selected_company)
+            var selected_company = computed(()=> store.state.insight_selected_company)
+            console.log('그룹명', selected_company.value)
             var now = new Date();
             var year_now = now.getFullYear()
             var month_now = now.getMonth()
@@ -126,64 +132,37 @@ import axios from "axios";
             var transEnargy =ref('태양열 에너지')
 
             //서버, 사용자의 전환, 감축 목표 리스트
-            async function get_total_emission_year(){
-              await axios.get("Company/Preview/"+selected_company.value+"/"+year_now+"-01-01/"+year_now + month_now+"-12-31",config).then(res => {
-                    console.log(res.data)
-                    console.log("연월"+year.value)
-                    scope1.value = res.data.Scopes[0]
-                    scope2.value = res.data.Scopes[1]
-                    scope3.value = res.data.Scopes[2]
-                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
-                    store.commit("set_scopes",res.data.Scopes);
-                    store.commit("SetDetailEmission",res.data.EmissionList);
+
+            var power = computed(()=>store.state.EmissionList[7])
+            var transPower = ref('')
+
+            var targetList = []
+
+            async function get_target_list(){
+                var url = "/CarbonNature/TargetList/"+selected_company.value+"/"+year_now
+                console.log(url)
+                axios.get(url,config).then(res=>{
+                    console.log('dddd')
+                    for(var i=0 ;i<res.data.length;i++){
+                        targetList.push(res.data[i])
+                    }
                 })
                 .catch(error => {
                     console.log(error)
                 })
-                .finally(() => {
-                  rerender_signal.value +=1
+                .finally(()=>{
                 })
+                
             }
-            var power = computed(()=>store.state.EmissionList[7])
-            var transPower = ref('')
-            var targetList=[
-                {
-                    listkind:1, 
-                    index:0, 
-                    id:'241',
-                    category:'고정연소', 
-                    percentage:30, 
-                    target: null,
-                    
-                },
-                {
-                    listkind:0, 
-                    index:1, 
-                    id:'5042',
-                    category:'고정연소', 
-                    percentage: 20, 
-                    target: '태양열 에너지',
-                },
-                {
-                    listkind:0, 
-                    index:2, 
-                    id:'45678',
-                    category:'고정연소', 
-                    percentage: 20, 
-                    target: '태양열 에너지',
-                },
-            ]
+            
+            get_target_list()
+            
+            console.log('sss',targetList)
 
             //각각의 리스트 내용의 개수를 나타내는 변수
             var transListNum = ref(targetList.filter(list => list.listkind === 0).length) 
             var increasListNum = ref(targetList.filter(list => list.listkind === 1).length)
 
-            console.log(targetList)
-            // 내용 추가 팝업창 여는 함수
-            // const clickOpenAddTarget = () => {
-            //     store.commit('openAddTarget')
-            //     console.log('open')
-            // }
 
             var select =ref(-1) // 마우스가 가리키고있는 리스트 내용
 
@@ -217,9 +196,9 @@ import axios from "axios";
                     targetList.push({
                         listkind:0, 
                         index:addIndex, 
-                        id:'',
+                        i:'',
                         category:category.value, 
-                        percentage: document.getElementById('transPercent').value,
+                        percentage: parseInt(document.getElementById('transPercent').value),
                         target: transEnargy.value
                     })
                     
@@ -230,9 +209,9 @@ import axios from "axios";
                     targetList.push({
                         listkind:1, 
                         index:addIndex, 
-                        id:'',
+                        i:'',
                         category:category.value, 
-                        percentage: document.getElementById('increasPercent').value, 
+                        percentage: parseInt(document.getElementById('increasPercent').value), 
                         target: null
                     })
                     editContent.value = true
@@ -252,9 +231,9 @@ import axios from "axios";
                     targetList[list.index] = {
                         listkind:list.listkind, 
                         index:list.index, 
-                        id:'',
+                        i:'',
                         category:category.value, 
-                        percentage: document.getElementById('transPercent').value,
+                        percentage: parseInt(document.getElementById('transPercent').value),
                         target: transEnargy.value
                     }
                 }
@@ -262,9 +241,9 @@ import axios from "axios";
                     targetList[list.index] = {
                         listkind:list.listkind, 
                         index:list.index,
-                        id:'', 
+                        i:'', 
                         category:category.value, 
-                        percentage: document.getElementById('increasPercent').value,
+                        percentage: parseInt(document.getElementById('increasPercent').value),
                         target: null
                     }
                 }
@@ -277,8 +256,8 @@ import axios from "axios";
             //리스트 삭제 함수
             function clickDeleteTarget(list){
                 //서버에 저장되어있던 감축 목표가 삭제 되었을 때만 id를 저장
-                if(list.id != ''){
-                    del_id.push(list.id)
+                if(list.i != ''){
+                    del_id.push(list.i)
                 }
            
                 targetList.splice(list.index, 1);
@@ -298,9 +277,9 @@ import axios from "axios";
                 
                 var server_add_list = []
                 for (var i=0; i < targetList.length; i++){
-                    if(targetList[i].id ==''){
+                    if(targetList[i].i ==''){
                         server_add_list.push(targetList[i])
-                    }                
+                    }               
                 }  
                 var post_targetList = {
                     groupName : selected_company.value,
@@ -308,10 +287,29 @@ import axios from "axios";
                     tList:server_add_list
                 }
 
+                set_target_list(post_targetList)
                 console.log('서버 저장',post_targetList)
 
                 console.log('서버 감축 목표 리스트 삭제',del_id)
             }
+
+       
+
+            async function set_target_list(list){
+                var url = "/CarbonNature/TargetList"
+                
+                console.log(store.state.accessToken)
+                axios.post(url,list,config).then(res=>{
+                    console.log('기준년도 입력',sumfun(res.data))
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(()=>{
+                })
+            }
+            
+
 
             return{
                 targetList,

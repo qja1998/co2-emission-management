@@ -68,6 +68,7 @@ input::-webkit-inner-spin-button {
 <script>
 import {useStore} from 'vuex'
 import { computed , ref} from "vue";
+import axios from "axios"
 
     export default {
       name :"popup_inputStandard",
@@ -76,10 +77,8 @@ import { computed , ref} from "vue";
       components:{
       },
       setup() {
-
-        var group_name = computed(()=> store.state.insight_selected_company)
-
         const store = useStore()
+        var group_name = computed(()=> store.state.group_name)
         var picked= ref('')
         var standardYear= ref(0)
         var standardEmission= ref(0)
@@ -97,12 +96,32 @@ import { computed , ref} from "vue";
         function close(){
             store.commit('OffGroupInfo')
         }
-    
+
+        var config = {
+            headers:{
+            "Authorization":"Bearer"+" "+store.state.accessToken
+            }
+        }
+
+        async function set_base_info(list){
+            var url = "/CarbonNature/EvaluationInfo"
+            
+            console.log(store.state.accessToken)
+            axios.post(url,list,config).then(res=>{
+            console.log('기준년도 입력',sumfun(res.data))
+            })
+            .catch(error => {
+            console.log(error)
+            })
+            .finally(()=>{
+            })
+        }
         function saveBaseEmission(){
+            console.log()
             server_EmissionInfo.value.groupName = group_name.value
             server_EmissionInfo.value.BaseYear = standardYear.value
             server_EmissionInfo.value.BaseEmissions = parseInt((standardEmission1.value+standardEmission2.value+standardEmission3.value)/3) + standardEmission.value
-            console.log(server_EmissionInfo.value)
+            set_base_info(server_EmissionInfo.value)
             close()
         }
         return{

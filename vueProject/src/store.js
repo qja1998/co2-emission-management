@@ -65,7 +65,14 @@ export default createStore({
             "폐기물처리시설(폐수)"
         ],
         //탄소 중립
-        targetPopup:false
+        targetPopup:false,
+        lastTotalEmissions: 0,
+        baseYear : 0,
+        baseData : 0,
+        getTotalLastData:0,
+        getTotalLastDataList:[],
+        getTotalCategoryDataList: [],
+        getTotalCategoryData: []
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -242,7 +249,32 @@ export default createStore({
         },
         closeAddTarget(state){
             state.targetPopup = false
+        },
+
+        //탄소 배출량 평가
+        getTotalLastData(state, data){
+            state.getTotalLastData = data
+        },
+        getTotalLastDataList(state, data){
+            state.getTotalLastDataList = data
+        },
+        getBaseYear(state,year){
+            state.baseYear = year
+        },
+        getBaseData(state,data){
+            state.baseData = data
+        },
+        getCategoryTotalData(state,datas){
+            state.getTotalCategoryData = datas
+        },
+        getCategoryTotalData(state,data){
+            state.getTotalCategoryData = data
+        },
+        getCategoryTotalList(state,datas){
+            state.getTotalCategoryDataList = datas
         }
+        
+
     },
     //전처리 후 Mutations에 데이터 전달
     actions:{

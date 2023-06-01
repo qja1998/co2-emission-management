@@ -11,7 +11,6 @@
         </div> 
         <div style="margin-top:30px">기간 설정
             <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true">
-            <input class = "date_btn" id = "end_data" type="month">
         </div>
         <div style="margin-top:4vh">구분</div>
         <div class="add_info_divide" id="building_name_text" style="margin-top:2vh">동물 사육 위치
@@ -124,7 +123,7 @@ import {computed ,ref} from "vue"
                 info_list.data = document.getElementById('usage_input').value+"/마리" 
                 info_list.emissions= usage_input+4 // 계산된 탄소 배출량
                 info_list.StartDate = document.getElementById('start_data').value+'-01' // 시작날짜
-                info_list.EndDate = document.getElementById('end_data').value+'-01' //종료 날짜
+                info_list.EndDate = document.getElementById('start_data').value+'-28' //종료 날짜
                 info_list.kind = care.value //동물 관리 방법
                 info_list.Division.동물사육위치 = document.getElementById('building_name_input').value // 동물 사육 위치
                 info_list.DetailType = detail.value

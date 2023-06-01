@@ -53,60 +53,10 @@ export default defineComponent({
   async setup(props, { expose }) {
     var store = useStore()
     //날짜, 그룹명
-    var group_name = computed(()=> store.state.insight_selected_company)
-    var user_group = computed(()=> store.state.user_group)
-    var now = new Date();	// 현재 날짜 및 시간
-    var lastyear = ref(now.getFullYear()-1)	// 년도
-    console.log(group_name.value)
-    var server_total_data = ref([20,50,60,40,20,30,50,50,40,20,30,60])
-
-    const config = {
-      headers:{
-        Authorization:"Bearer"+" "+store.state.accessToken,
-        "Content-Type": "text/html; charset=utf-8",
-      }
-    }
-    
-    // 작년 총 탄소 배출량
-    async function get_total_data(){
-      console.log(store.state.accessToken)
-      var url = "/CarbonEmission/PartEmission/"+group_name.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-31/0"
-      console.log(url)
-      axios.get(url,config).then(res=>{
-        server_total_data.value = res.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(()=>{
-
-      })
-    }
-    await get_total_data()
-
-    async function base_emissions(){
-      console.log(store.state.accessToken)
-      var url = "/CarbonNature/Evaluation/"+group_name.value
-      console.log(url)
-      axios.get(url,config).then(res=>{
-        console.log(res.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-      .finally(()=>{
-
-      })
-    }
-    await base_emissions()
-    
-
-    var sum =ref(0)
-    for(var i=0; i<server_total_data.value.length; i++){
-        sum.value = server_total_data[i] + sum.value
-    }
+    var sum = ref(store.state.getTotalLastData)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
-    
+    server_evaluation.BaseYear= computed(()=>store.state.baseYear).value
+    server_evaluation.BaseEmissions= computed(()=>store.state.baseData).value
 
     const chartData = {
       labels: ['기준량 대비 총 탄소배출량', '기준량'],
@@ -119,18 +69,6 @@ export default defineComponent({
         }
       ]
     }
-
-    // function chooseColor(){
-    //   const color: string[] = []
-    //   if (chartData.datasets[0].data[0] > 1){  실제 데이터로 해야할듯.
-    //     color.push('#FF7E7E')
-    //     color.push('#EFEFEF')
-    //   }
-    //   else{
-    //     color.push('#3DC984')
-    //     color.push('#EFEFEF')
-    //   }
-    // }
 
     const chartOptions = {
       responsive: true,

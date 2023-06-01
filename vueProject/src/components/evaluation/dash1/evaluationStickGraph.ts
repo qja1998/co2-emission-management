@@ -51,18 +51,11 @@ export default defineComponent({
   setup(props) {
     var store = useStore()
     //날짜, 그룹명
-    var group_name = computed(()=> store.state.insight_selected_company)
-    var user_group = computed(()=> store.state.user_group)
-    var now = new Date();	// 현재 날짜 및 시간
-    var year = ref(now.getFullYear())	// 년도
-    
-    //ㅅㅓ버
-    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
-    var sum =ref(0)
-    for(var i=0; i<server_total_data.length; i++){
-        sum.value = server_total_data[i] + sum.value
-    }
+    var sum = ref(store.state.getTotalLastData)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+    server_evaluation.BaseYear= computed(()=>store.state.baseYear).value
+    server_evaluation.BaseEmissions= computed(()=>store.state.baseData).value
+
     var realData = (server_evaluation.BaseEmissions-sum.value)/(server_evaluation.BaseEmissions) *100
 
     const chartData = {

@@ -38,29 +38,18 @@ export default defineComponent({
     var month = now.getMonth() //월
 
     //서버
-    var server_category_data = [
-      [580, 590, 640, 575, 573, 680, 250,502,600,500,120,130],
-      [530, 495, 486, 570, 573, 664, 250,502,600,500,120,130],
-      [495, 397, 480, 390, 475, 510, 250,502,600,500,120,130],
-      [498, 401, 420, 297, 361, 483, 250,502,600,500,120,130],
-      [381, 363, 321, 350, 348, 371, 250,502,600,500,120,130],
-      [140, 143, 184, 123, 120, 212, 250,502,600,500,120,130],
-      [208, 175, 143, 167, 160, 220, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-  ]
+    var server_category_data = computed(()=> store.state.getTotalCategoryDataList).value
+    console.log(server_category_data)
     var sum_total_category_data = ref([0]) //카테고리별 일년치 데이터
 
     for(var i=0; i<server_category_data.length; i++){
         var sum = ref(0)
         for(var j =0; j<server_category_data[i].length; j++){
             sum.value = server_category_data[i][j] + sum.value
-        }    
-        sum_total_category_data.value.push(sum.value)
+        }
+        sum_total_category_data.value[i] = sum.value
     }
-
+    console.log('합계 카테고리',sum_total_category_data.value)
     const chartData = {
       labels: [
         '고정연소', 

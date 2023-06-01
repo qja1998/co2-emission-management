@@ -12,18 +12,18 @@
                 <span class="header-page">탄소 배출량 평가</span><br>
                 <span class="subHeader-page">Carbon Emissions Evaluation</span>
                 <div>
-                    <span><evaluation_dash1/></span>
+                    <span><evaluation_dash1 :key="rerender_signal"/></span>
                     <span>
                       <evaluation_dash2 style="margin-left: 3vw;"></evaluation_dash2>
                     </span>
                     <div>
-                      <evaluation_dash3 style="margin-left: 3vw"></evaluation_dash3>
+                      <evaluation_dash3 :key="rerender_signal" style="margin-left: 3vw"></evaluation_dash3>
                     </div>
                 </div>
                 <div style="display: inline-block;">
-                  <evaluation_decreaseList />
-                  <evaluation_progress style="margin-left: 1.4vw"/>
-                  <evaluation_scenario style="margin-left: 1.4vw"/>
+                  <evaluation_decreaseList :key="rerender_signal" />
+                  <evaluation_progress :key="rerender_signal" style="margin-left: 1.4vw"/>
+                  <evaluation_scenario :key="rerender_signal" style="margin-left: 1.4vw"/>
                 </div>
               </div>
             </div>
@@ -90,46 +90,80 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
     },
     setup() {
       const store = useStore();
-      var month = computed(() => store.state.insight_month+1);
-      var year = computed(() => store.state.insight_year);
-      var scope1 = ref(0)
-      var scope2 = ref(0)
-      var scope3 = ref(0)
-      var total_emission = ref(0)
-      var rerender_signal = ref(0)
+      var now = new Date();	// 현재 날짜 및 시간
+      var lastyear = ref(now.getFullYear())	// 년도
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
-      store.commit("insight_select_company",selected_company.value)
+      store.commit("SetName",selected_company.value)
+      var standardInfo = computed(()=>store.state.infopage)
+      var rerender_signal = ref(0)
+
       
-      async function get_total_emission_month(){
-        await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
-              console.log(res.data)
-              console.log("연월"+year.value+month.value)
-              scope1.value = res.data.Scopes[0]
-              scope2.value = res.data.Scopes[1]
-              scope3.value = res.data.Scopes[2]
-              total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
-              store.commit("set_scopes",res.data.Scopes);
-              store.commit("SetDetailEmission",res.data.EmissionList);
-          })
-          .catch(error => {
-              console.log(error)
-          })
-          .finally(() => {
-            rerender_signal.value +=1
-          })
+      const config = {
+          headers:{
+              Authorization:"Bearer"+" "+store.state.accessToken,
+              "Content-Type": "text/html; charset=euc-kr",
+          }
       }
 
-      var standardInfo = computed(()=>store.state.infopage)
+      // 해당 조직의 작년 총 탄소 배출량
+      async function get_total_data(){
+        var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
+        console.log(url)
+        axios.get(url,config).then(res=>{
+          console.log('ddd',res.data)
+          store.commit('getTotalLastData',sumfun(res.data))
+          store.commit('getTotalLastDataList',res.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .finally(()=>{
+          rerender_signal.value +=1
+        })
+      }
+
+      async function get_Base_Info(){
+        var url = "/CarbonNature/Evaluation/"+selected_company.value
+        console.log(url)
+        axios.get(url,config).then(res=>{
+          console.log('기준년도',res.data)
+          store.commit('getBaseYear',res.data.BaseYear)
+          store.commit('getBaseData',res.data.BaseEmissions)
+        })
+        .catch(error => {
+          console.log(error)
+          store.commit('getBaseYear',0)
+          store.commit('getBaseData',0)
+        })
+        .finally(()=>{
+          rerender_signal.value +=1
+        })
+      }
+
+      get_total_data()
+      get_Base_Info()
+      //합산 함수
+      function sumfun(list){
+        var sum =ref(0)
+        for(var i=0; i<list.length; i++){
+            sum.value = list[i] + sum.value
+        }
+        return sum.value
+      }
 
       function change_company(){
-        get_total_emission_month()
-        store.commit("insight_select_company",selected_company.value)
+        get_total_data()
+        get_Base_Info()
+        store.commit("SetName",selected_company.value)
       }
 
       return{
         group_list, selected_company, standardInfo,change_company
       }
-    }
+    },
+    mounted(){
+        this.rerender_signal +=1
+      }
   }
  </script>
