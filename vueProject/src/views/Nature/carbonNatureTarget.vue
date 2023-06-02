@@ -48,17 +48,20 @@ export default {
         store.commit("insight_select_company",selected_company.value)
         var now = new Date();	// 현재 날짜 및 시간
         var lastyear = ref(now.getFullYear()-1)	// 년도
-        
-
-        store.commit("insight_select_company", selected_company)
+    
         var targetPopup = computed(() => store.state.CarbonCategories)
 
+        var rerender_signal = ref(0)
+        
+        const config = {
+            headers:{
+                Authorization:"Bearer"+" "+store.state.accessToken,
+            }
+        }
 
         async function get_total_category_data(){
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/1"
-            console.log(url)
             axios.get(url,config).then(res=>{
-                console.log('totalcategory',res.data)
                 store.commit('getCategoryTotalList',res.data)
                 })
                 .catch(error => {
@@ -69,16 +72,10 @@ export default {
             })
         }
 
-        const config = {
-            headers:{
-                Authorization:"Bearer"+" "+store.state.accessToken,
-            }
-        }
+
         async function get_total_data(){
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
-            console.log(url)
             axios.get(url,config).then(res=>{
-                console.log('ddd',res.data)
                 store.commit('getTotalLastData',sumfun(res.data))
                 store.commit('getTotalLastDataList',res.data)
                 })

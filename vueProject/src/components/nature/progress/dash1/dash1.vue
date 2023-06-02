@@ -25,6 +25,7 @@
 import progressDonutGraph from './progressDonutGraph';
 import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
+import axios from 'axios'
     export default {
         name :"progress_dash1",
         components:{
@@ -32,25 +33,13 @@ import {useStore} from 'vuex'
         },
         setup(){
             var store =useStore()
-            //날짜 그룹명
-            var user_group = computed(()=> store.state.user_group)
-            var selected_company = computed(()=> store.state.insight_selected_company)
 
             var now = new Date();	// 현재 날짜 및 시간
-            var year = now.getFullYear()	// 년도
-
-            //서버
-            var server_total_data = [20,10,30,50,40,20,20,40,10,60,20,50]
-            var server_targetTotal_data = 570
-            var sum =ref(0) //작년 총 탄소 배출량
-
-            for(var i=0; i<server_total_data.length; i++){
-                sum.value = server_total_data[i] + sum.value
-            }
-
+            var year = ref(now.getFullYear())	// 년도
             
-            var carbonEmissions =sum
-            var carbonEmissionsGoal = server_targetTotal_data
+            //서버
+            var carbonEmissions =computed(()=> store.state.getTotalLastData)
+            var carbonEmissionsGoal = computed(()=> store.state.getTargetData)
 
             return{
                 carbonEmissions,

@@ -94,40 +94,17 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var lastyear = ref(now.getFullYear())	// 년도
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
-      store.commit("SetName",selected_company.value)
-      var standardInfo = computed(()=>store.state.infopage)
-      var rerender_signal = ref(0)
 
-      
+      store.commit("SetName",selected_company.value)
       const config = {
           headers:{
               Authorization:"Bearer"+" "+store.state.accessToken,
-              "Content-Type": "text/html; charset=euc-kr",
+              "Content-Type": "text/html; charset=utf-8",
           }
       }
-
-      // 해당 조직의 작년 총 탄소 배출량
-      async function get_total_data(){
-        var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
-        console.log(url)
-        axios.get(url,config).then(res=>{
-          console.log('ddd',res.data)
-          store.commit('getTotalLastData',sumfun(res.data))
-          store.commit('getTotalLastDataList',res.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-        .finally(()=>{
-          rerender_signal.value +=1
-        })
-      }
-
       async function get_Base_Info(){
         var url = "/CarbonNature/Evaluation/"+selected_company.value
-        console.log(url)
         axios.get(url,config).then(res=>{
-          console.log('기준년도',res.data)
           store.commit('getBaseYear',res.data.BaseYear)
           store.commit('getBaseData',res.data.BaseEmissions)
         })
@@ -141,8 +118,33 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
         })
       }
 
-      get_total_data()
       get_Base_Info()
+
+      var standardInfo = computed(()=>store.state.infopage)
+      var rerender_signal = ref(0)
+
+      
+      
+
+
+      // 해당 조직의 작년 총 탄소 배출량
+      async function get_total_data(){
+        var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
+        axios.get(url,config).then(res=>{
+          store.commit('getTotalLastData',sumfun(res.data))
+          store.commit('getTotalLastDataList',res.data)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        .finally(()=>{
+          rerender_signal.value +=1
+        })
+      }
+
+
+
+      
       //합산 함수
       function sumfun(list){
         var sum =ref(0)
@@ -159,11 +161,14 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       }
 
       return{
-        group_list, selected_company, standardInfo,change_company
+        group_list, selected_company, standardInfo,change_company,get_total_data,get_Base_Info
       }
     },
     mounted(){
         this.rerender_signal +=1
+        this.get_total_data(),
+        this.get_Base_Info()
+
       }
   }
  </script>

@@ -13,15 +13,11 @@
 
             </div>
             <div class="measure" >
-                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 0">나쁨</span>
-                <span id="measure-issue" style="background-color: white;" v-else>나쁨</span>
-                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 10">미흡</span>
-                <span id="measure-issue" style="background-color: white;" v-else>미흡</span>
-                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData < 30">양호</span>
-                <span id="measure-issue" style="background-color: white;" v-else>양호</span>
-                <span id="measure-issue" style="background-color: #3DC984; color: white;" v-if="realData >= 30">좋음</span>
-                <span id="measure-issue" style="background-color: white;" v-else>좋음</span>
-
+                
+                <span :class="{'measureissue': realData>=0,'activMeasure' : realData<0}" >나쁨</span>
+                <span :class="{'measureissue': realData<0 || realData >=10,'activMeasure' : 0<=realData && realData<10}" >미흡</span>
+                <span :class="{'measureissue': realData<10 || realData >=30,'activMeasure' : 10<=realData && realData <30}" >양호</span>
+                <span :class="{'measureissue': realData<10,'activMeasure' : 30<=realData}" >좋음</span>
             </div>
             <div class = "stick">
                 <evaluationStickGraph style="height: 8vh"></evaluationStickGraph>
@@ -58,7 +54,7 @@
     margin-left: 4%;
 }
 
-#measure-issue {
+.measureissue {
     width: 21.5%;
     height: 100%;
 
@@ -69,6 +65,19 @@
     margin-left: 0.4vw;
     border: 1px solid #D0D0D0;
     border-radius: 5px;
+    background:white;
+}
+.activMeasure{
+    width: 21.5%;
+    height: 100%;
+    display: inline-block;
+    text-align: left;
+    text-indent: 1vw;
+    line-height: 5vh;
+    margin-left: 0.4vw;
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+    background:#3DC984;
 }
 
 .notice {
@@ -85,6 +94,7 @@ import evaluationDonutGraph from './evaluationDonutGraph.ts';
 import evaluationStickGraph from './evaluationStickGraph';
 import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
+import {axios} from 'axios'
   export default {
       name :"dashboard1_evaluation",
       components:{
@@ -95,40 +105,46 @@ import {useStore} from 'vuex'
       setup() {
 
         //그룹명, 날짜
-        var user_group = computed(()=> store.state.user_group)
-        var group_name = computed(()=> store.state.insight_selected_company)
         var now = new Date();	// 현재 날짜 및 시간
         var year = ref(now.getFullYear())	// 년도
         var store = useStore()
         const standardData = ref(true) //기준량 여기로 받아오기. (기준량 > 작년 탄소배출량 : evaluationDecreaseGraph, 기준량 < 작년 탄소 배출량 : evaluationIncreaseGraph)
-        const realData = ref(20) // 작년 탄소 배출량(%)
+        const realData = ref(0) // 작년 탄소 배출량(%)
+
+        var baseYear = computed(()=> store.state.baseYear)
+        var baseEmissions = computed(()=> store.state.baseData)
 
         //서버
-        var server_total_data = computed(()=> store.state.getTotalCategoryData)
-        var sum =ref(0)
-        for(var i=0; i<server_total_data.length; i++){
-            sum.value = server_total_data[i] + sum.value
-        }
-        var server_evaluation = {
-            BaseYear:0, 
-            BaseEmissions:0
-        }
-        server_evaluation.BaseYear= computed(()=>store.state.baseYear).value
-        server_evaluation.BaseEmissions= computed(()=>store.state.baseData).value
 
-        realData.value = (server_evaluation.BaseEmissions-sum.value)/(server_evaluation.BaseEmissions) *100
+        var sum =computed(()=> store.state.getTotalLastData)
+        realData.value = (baseEmissions.value-sum.value)/(baseEmissions.value) *100
 
-        console.log(realData.value)
-        if(server_evaluation.BaseEmissions!=0){
+        async function get_Base_Info(){
+            var url = "/CarbonNature/Evaluation/"+selected_company.value
+                axios.get(url,config).then(res=>{
+                    baseYear.value = res.data.BaseYear
+                    baseEmissions.value = res.data.BaseEmissions
+            })
+            .catch(error => {
+            console.log(error)
+                store.commit('getBaseYear',0)
+                store.commit('getBaseData',0)
+            })
+            .finally(()=>{
+                rerender_signal.value +=1
+            })
+        }
+
+        console.log(baseYear.value,"d",baseEmissions.value)
+        if(baseEmissions.value!=0){
             standardData.value=true
         }
         else{
             standardData.value=false
         }
 
-       
          return{
-            standardData, realData,year
+            standardData, realData,year,baseYear,baseEmissions
          }
         }
   }

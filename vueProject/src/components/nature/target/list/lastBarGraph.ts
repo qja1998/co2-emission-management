@@ -1,7 +1,7 @@
 import { defineComponent, h, PropType, ref, computed } from 'vue'
 import {useStore} from 'vuex'
 import { Bar } from 'vue-chartjs'
-
+import axios from 'axios'
 import {
   Chart as ChartJS,
   Title,
@@ -66,6 +66,26 @@ export default defineComponent({
       sum.value = server_total_data[i] + sum.value
     }
 
+    const config = {
+        headers:{
+            Authorization:"Bearer"+" "+store.state.accessToken,
+            "Content-Type": "text/html; charset=euc-kr",
+        }
+    }
+    
+    async function set_target_list(list){
+      var url = "/CarbonNature/TargetList"
+      
+      console.log(list)
+      axios.post(url,list,config).then(res=>{
+          console.log('추가 성공')
+      })
+      .catch(error => {
+          console.log(error)
+      })
+      .finally(()=>{
+      })
+    }
 
     const chartData = {
       labels: [

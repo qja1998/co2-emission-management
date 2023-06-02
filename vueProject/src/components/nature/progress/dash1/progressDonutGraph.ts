@@ -53,16 +53,10 @@ export default defineComponent({
     var month = now.getMonth()
 
     //서버
-    var server_total_data = [20,10,30,50,40,20,20,40,10,60,20,50]
-    var server_targetTotal_data = 570
+    var server_total_data = computed(()=> store.state.getTotalLastData).value
+    var server_targetTotal_data = computed(()=> store.state.getTargetData).value
 
-
-    var sum =ref(0) //작년 총 탄소 배출량
-
-    for(var i=0; i<server_total_data.length; i++){
-        sum.value = server_total_data[i] + sum.value
-    }
-
+    console.log(server_total_data)
 
     const chartData = {
       labels: [
@@ -72,7 +66,7 @@ export default defineComponent({
         {
           label: '탄소 배출량 percent',
           backgroundColor: ['#3DC984','white'],
-          data: [sum.value,server_targetTotal_data-sum.value],
+          data: [server_total_data,server_targetTotal_data-server_total_data],
         },
       ],
     }

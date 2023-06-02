@@ -5,10 +5,10 @@
                 전환
                 <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList(0)">
                 <div class="list-content-group">
-                    <div id="default-translist" v-if="transListNum ==0 && add[1]!=0">
+                    <!-- <div id="default-translist" v-if="transListNum ==0 && add[1]!=0">
                         <img src="@/assets/exclamationMark.png" style="width:7vh; margin: 13vh 15.5vw 2vh 15.5vw">
                         <div style="text-align: center;">데이터를 추가해주세요</div>
-                    </div>
+                    </div> -->
                     <div class='list-content' v-for = "trans in targetList" v-on:mouseover="hoverTarget(trans)" v-on:mouseleave="leaveTarget()"> 
                         <span v-if="trans.listkind==0">
                             <span class="direction-icon">▶</span>
@@ -23,7 +23,7 @@
                         <!-- 리스트 수정 -->
                         <span class="list-content-text" v-if="edit[0]==true && edit[1]==trans.index &&trans.listkind==0" v-on:keyup.enter="submitEdit(trans)">
                             <select v-model="category" class="box drop-box" >
-                                <option :value="cate" v-for="cate in categoryList">{{ cate }}</option>
+                                <option>전력</option>
                             </select> 의 <input class="box input-box" id="transPercent" placeholder='30'> %를
                             <select v-model="transEnargy" class="box drop-box" >
                                 <option :value=trans v-for="trans in transEnargyList">{{trans}}</option >
@@ -48,10 +48,10 @@
                 감축
                 <img src="@/assets/addBtn2.png" class="icon add-icon" @click="addList(1)">
                 <div class="list-content-group">
-                    <div id="default-increaslist" v-if="increasListNum ==0 && add[1]!=1">
+                    <!-- <div id="default-increaslist" v-if="increasListNum ==0 && add[1]!=1">
                         <img src="@/assets/exclamationMark.png" style="width:7vh; margin: 13vh 13vw 2vh 13vw">
                         <div style="text-align: center;">데이터를 추가해주세요</div>
-                    </div>
+                    </div> -->
                     <div class ="list-content" v-for = "increas in targetList" v-on:mouseover="hoverTarget(increas)" v-on:mouseleave="leaveTarget()">
                         <span v-if="increas.listkind==1">
                             <span class="direction-icon">▶</span>
@@ -105,12 +105,11 @@ import axios from "axios";
             //날짜 그룹명
             var config = {
                 headers:{
-                "Authorization":"Bearer"+" "+store.state.accessToken
+                "Authorization":"Bearer"+" "+store.state.accessToken,
+                 "Content-Type": "text/html; charset=utf-8"
                 }
             }
-            var user_group = computed(()=> store.state.user_group)
             var selected_company = computed(()=> store.state.insight_selected_company)
-            console.log('그룹명', selected_company.value)
             var now = new Date();
             var year_now = now.getFullYear()
             var month_now = now.getMonth()
@@ -118,6 +117,7 @@ import axios from "axios";
             //수정, 삭제, 추가에 대한 변수
             var editContent = ref(false); //리스트 변경사항이 있는지 확인하는 변수
             var del_id = []; 
+            var edit_id = []; 
             var edit = ref([false, -1]); 
             var del = ref([false, -1]);
             var add = ref([false,-1])
@@ -136,16 +136,12 @@ import axios from "axios";
             var power = computed(()=>store.state.EmissionList[7])
             var transPower = ref('')
 
-            var targetList = []
+            
 
             async function get_target_list(){
                 var url = "/CarbonNature/TargetList/"+selected_company.value+"/"+year_now
-                console.log(url)
                 axios.get(url,config).then(res=>{
-                    console.log('dddd')
-                    for(var i=0 ;i<res.data.length;i++){
-                        targetList.push(res.data[i])
-                    }
+                    store.commit("getTargetList", res.data)
                 })
                 .catch(error => {
                     console.log(error)
@@ -154,14 +150,12 @@ import axios from "axios";
                 })
                 
             }
-            
             get_target_list()
-            
-            console.log('sss',targetList)
-
+            var targetList = computed(() => store.state.getTargetList)
+            console.log(targetList.value)
             //각각의 리스트 내용의 개수를 나타내는 변수
-            var transListNum = ref(targetList.filter(list => list.listkind === 0).length) 
-            var increasListNum = ref(targetList.filter(list => list.listkind === 1).length)
+            var transListNum = ref(targetList.value.filter(list => list.listkind === 0).length) 
+            var increasListNum = ref(targetList.value.filter(list => list.listkind === 1).length)
 
 
             var select =ref(-1) // 마우스가 가리키고있는 리스트 내용
@@ -190,10 +184,9 @@ import axios from "axios";
 
             //추가 완료후 리스트 업
             function submitAdd(){
-                var addIndex = targetList.length
-                console.log('엔터')
+                var addIndex = targetList.value.length
                 if(add.value[1]==0){
-                    targetList.push({
+                    targetList.value.push({
                         listkind:0, 
                         index:addIndex, 
                         i:'',
@@ -203,22 +196,20 @@ import axios from "axios";
                     })
                     
                     editContent.value = true
-                    transListNum.value = targetList.filter(list => list.listkind === 0).length
+                    transListNum.value = targetList.value.filter(list => list.listkind === 0).length
                 }
                 else{
-                    targetList.push({
+                    targetList.value.push({
                         listkind:1, 
                         index:addIndex, 
                         i:'',
                         category:category.value, 
                         percentage: parseInt(document.getElementById('increasPercent').value), 
-                        target: null
+                        target: ''
                     })
                     editContent.value = true
-                    increasListNum.value = targetList.filter(list => list.listkind === 1).length
+                    increasListNum.value = targetList.value.filter(list => list.listkind === 1).length
                 }
-                
-                console.log(targetList)
                 add.value[0]=false
                 add.value[1]=-1  
                 
@@ -226,31 +217,34 @@ import axios from "axios";
 
             //수정 완료후 리스트 업
             function submitEdit(list){
-                console.log('수정엔터')
                 if(list.listkind==0){
-                    targetList[list.index] = {
+                    targetList.value[list.index] = {
                         listkind:list.listkind, 
                         index:list.index, 
-                        i:'',
+                        i:list.id,
                         category:category.value, 
                         percentage: parseInt(document.getElementById('transPercent').value),
                         target: transEnargy.value
                     }
                 }
                 else{
-                    targetList[list.index] = {
+                    targetList.value[list.index] = {
                         listkind:list.listkind, 
                         index:list.index,
-                        i:'', 
+                        i:list.id, 
                         category:category.value, 
                         percentage: parseInt(document.getElementById('increasPercent').value),
-                        target: null
+                        target: ''
                     }
                 }
-                
+                if(list.i != ''){
+                    edit_id.push(list.i)
+                }
+ 
                 edit.value[0]=false
                 edit.value[1]=-1
                 editContent.value = true
+                console.log('수정완료',targetList.value)
             }
 
             //리스트 삭제 함수
@@ -260,14 +254,14 @@ import axios from "axios";
                     del_id.push(list.i)
                 }
            
-                targetList.splice(list.index, 1);
+                targetList.value.splice(list.index, 1);
                 editContent.value=true
 
-                for(var i=list.index; i<targetList.length; i++){
-                    targetList[i].index=targetList[i].index-1
+                for(var i=list.index; i<targetList.value.length; i++){
+                    targetList.value[i].index=targetList[i].index-1
                 }
-                transListNum.value = targetList.filter(list => list.listkind === 0).length
-                increasListNum.value = targetList.filter(list => list.listkind === 1).length
+                transListNum.value = targetList.value.filter(list => list.listkind === 0).length
+                increasListNum.value = targetList.value.filter(list => list.listkind === 1).length
                 console.log(transListNum.value)
             }
 
@@ -276,9 +270,9 @@ import axios from "axios";
                 editContent.value=false
                 
                 var server_add_list = []
-                for (var i=0; i < targetList.length; i++){
-                    if(targetList[i].i ==''){
-                        server_add_list.push(targetList[i])
+                for (var i=0; i < targetList.value.length; i++){
+                    if(targetList.value[i].i ==''){
+                        server_add_list.push(targetList.value[i])
                     }               
                 }  
                 var post_targetList = {
@@ -288,9 +282,6 @@ import axios from "axios";
                 }
 
                 set_target_list(post_targetList)
-                console.log('서버 저장',post_targetList)
-
-                console.log('서버 감축 목표 리스트 삭제',del_id)
             }
 
        
@@ -298,9 +289,9 @@ import axios from "axios";
             async function set_target_list(list){
                 var url = "/CarbonNature/TargetList"
                 
-                console.log(store.state.accessToken)
+                console.log(list)
                 axios.post(url,list,config).then(res=>{
-                    console.log('기준년도 입력',sumfun(res.data))
+                    console.log('추가 성공')
                 })
                 .catch(error => {
                     console.log(error)
@@ -313,8 +304,6 @@ import axios from "axios";
 
             return{
                 targetList,
-                // clickOpenAddTarget,
- 
                 hoverTarget,
                 leaveTarget,
                 clickSaveTarget,
@@ -332,9 +321,13 @@ import axios from "axios";
                 transEnargy,
                 transEnargyList,
                 transListNum,
-                increasListNum
+                increasListNum,
+                get_target_list
 
             }
+        },
+        mounted(){
+
         }
     }
 </script>

@@ -72,7 +72,10 @@ export default createStore({
         getTotalLastData:0,
         getTotalLastDataList:[],
         getTotalCategoryDataList: [],
-        getTotalCategoryData: []
+        getTotalCategoryData: [],
+
+        getTargetList: [],
+        getTargetData:1560
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -272,6 +275,11 @@ export default createStore({
         },
         getCategoryTotalList(state,datas){
             state.getTotalCategoryDataList = datas
+        },
+
+        //탄소 감축 목표
+        getTargetList(state, dates){
+            state.getTargetList = dates
         }
         
 
