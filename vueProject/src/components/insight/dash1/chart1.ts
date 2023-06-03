@@ -94,6 +94,7 @@ export default defineComponent({
       
       console.log("리렌ㅌ도ㅓ")
     }
+    
     await get_list()
     return () =>
       h(Doughnut, {

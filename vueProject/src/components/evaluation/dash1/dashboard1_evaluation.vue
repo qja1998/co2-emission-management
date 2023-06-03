@@ -14,7 +14,7 @@
             </div>
             <div class="measure" >
                 
-                <span :class="{'measureissue': realData>=0,'activMeasure' : realData<0}" >나쁨</span>
+                <span :class="{'measureissue': realData>=0,'activMeasure_red' : realData<0}" >나쁨</span>
                 <span :class="{'measureissue': realData<0 || realData >=10,'activMeasure' : 0<=realData && realData<10}" >미흡</span>
                 <span :class="{'measureissue': realData<10 || realData >=30,'activMeasure' : 10<=realData && realData <30}" >양호</span>
                 <span :class="{'measureissue': realData<10,'activMeasure' : 30<=realData}" >좋음</span>
@@ -67,6 +67,19 @@
     border-radius: 5px;
     background:white;
 }
+.activMeasure_red{
+    width: 21.5%;
+    height: 100%;
+
+    display: inline-block;
+    text-align: left;
+    text-indent: 1vw;
+    line-height: 5vh;
+    margin-left: 0.4vw;
+    border: 1px solid #D0D0D0;
+    border-radius: 5px;
+    background:#FF7E7E;
+}
 .activMeasure{
     width: 21.5%;
     height: 100%;
@@ -118,23 +131,7 @@ import {axios} from 'axios'
 
         var sum =computed(()=> store.state.getTotalLastData)
         realData.value = (baseEmissions.value-sum.value)/(baseEmissions.value) *100
-
-        async function get_Base_Info(){
-            var url = "/CarbonNature/Evaluation/"+selected_company.value
-                axios.get(url,config).then(res=>{
-                    baseYear.value = res.data.BaseYear
-                    baseEmissions.value = res.data.BaseEmissions
-            })
-            .catch(error => {
-            console.log(error)
-                store.commit('getBaseYear',0)
-                store.commit('getBaseData',0)
-            })
-            .finally(()=>{
-                rerender_signal.value +=1
-            })
-        }
-
+        
         console.log(baseYear.value,"d",baseEmissions.value)
         if(baseEmissions.value!=0){
             standardData.value=true

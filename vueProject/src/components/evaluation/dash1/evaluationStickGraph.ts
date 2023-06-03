@@ -64,7 +64,7 @@ export default defineComponent({
         {
           label : '기준량 대비 총 탄소 배출량',
           borderRadius:20,
-          backgroundColor: chooseColor(),
+          backgroundColor: chooseColor(realData),
           data: [realData], // 기준량 대비 총 탄소배출량(%)
           barThickness: 20,
           padding: 4,
@@ -73,8 +73,7 @@ export default defineComponent({
       indexAxis:'y'
     }
 
-    function chooseColor(){
-        const data = 80
+    function chooseColor(data){
         let color = '#eee'
         if (data > 0) {
             color = '#3DC984'

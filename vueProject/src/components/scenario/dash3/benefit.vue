@@ -43,8 +43,12 @@ import { useStore } from 'vuex'
                 BaseEmissions:2650
             }
 
-            var carbonMoney = ref(1500)
-            var increaseEmissionOfBase = server_EmissionInfo.BaseEmissions - server_targetTotal_data
+            var getTotalLastData =  computed(()=> store.state.getTotalLastData)
+            var server_targetTotal_data =  computed(()=> store.state.getTargetData)
+            var BaseEmissions = computed(()=> store.state.baseData)
+
+            var carbonMoney = ref(250)
+            var increaseEmissionOfBase = BaseEmissions.value - (getTotalLastData.value-server_targetTotal_data.value)
             var profitMoney = ref(carbonMoney.value*increaseEmissionOfBase)
 
             function getAmount(){

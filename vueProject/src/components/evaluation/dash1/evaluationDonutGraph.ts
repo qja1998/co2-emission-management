@@ -58,11 +58,20 @@ export default defineComponent({
     server_evaluation.BaseYear= computed(()=>store.state.baseYear).value
     server_evaluation.BaseEmissions= computed(()=>store.state.baseData).value
 
+    var evaluData = (server_evaluation.BaseEmissions - sum.value)/server_evaluation.BaseEmissions*100
+    var evalu_color = ref('#3DC984')
+
+    if(evaluData>0){
+      evalu_color.value = '#3DC984'
+    }
+    else{
+      evalu_color.value = '#FF7E7E'
+    }
     const chartData = {
       labels: ['기준량 대비 총 탄소배출량', '기준량'],
       datasets: [
         {
-          backgroundColor: ['#3DC984', '#EFEFEF'], 
+          backgroundColor: [evalu_color.value, '#EFEFEF'], 
           borderColor: "#eee",
           hoverBorderColor: "#eee",
           data: [(server_evaluation.BaseEmissions - sum.value)/server_evaluation.BaseEmissions*100, 100-((server_evaluation.BaseEmissions - sum.value)/server_evaluation.BaseEmissions*100)], //기준량 대비 총 탄소배출량 = 작년 탄소배출량/기준량*100 -> 작년탄소배출량이 기준량보다 많으면, 비율이 1 이상

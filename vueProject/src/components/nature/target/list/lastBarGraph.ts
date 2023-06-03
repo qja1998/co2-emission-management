@@ -74,7 +74,6 @@ export default defineComponent({
         }
     }
 
-    console.log('d',server_targetTotal_data)
     const chartData = {
       labels: [
         year-1+'년 총 탄소 배출량', year+'년 총 탄소 배출량',

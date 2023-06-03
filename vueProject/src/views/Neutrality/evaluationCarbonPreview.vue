@@ -94,6 +94,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var lastyear = ref(now.getFullYear()-1)	// 년도
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
+      var rerender_signal = ref(0)
 
       store.commit("SetName",selected_company.value)
       const config = {
@@ -121,7 +122,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       get_Base_Info()
 
       var standardInfo = computed(()=>store.state.infopage)
-      var rerender_signal = ref(0)
+
 
       
       

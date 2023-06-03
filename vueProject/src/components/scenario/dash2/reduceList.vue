@@ -3,7 +3,7 @@
         <div class="title-border-scenario">감축 목표</div>
         <router-link to="/nature/target" style="text-decoration: none;"><div class="scenario-title">현재 설정한 감축 목표</div></router-link>
         <div class="scenario-frame">
-            <div>
+            <div style="height:102.5vh">
                 <div style="padding-top: 3vh; font-size: 2.5vh; font-weight: bold; color: #163945;">전환</div>
                 <div class="target-block">
                     <div v-for="(list, i) in targetList" :key="i" style="padding-bottom: 2vh; font-size:  1.7vh;">
@@ -50,64 +50,8 @@ import {ref, computed} from 'vue'
             var year = now.getFullYear()	// 년도
 
             // 서버
-            var targetList = [
-                {
-                    listkind: 1,
-                    index: 0,
-                    id: '',
-                    category: '고정연소',
-                    percentage: 30,
-                    target: null,
-                },
-                {
-                    listkind: 0,
-                    index: 1,
-                    id: '',
-                    category: '전력 사용',
-                    percentage: 20,
-                    target: '태양열 에너지',
-                },
-                {
-                    listkind: 0,
-                    index: 0,
-                    id: '',
-                    category: '고정연소',
-                    percentage: 40,
-                    target: '풍력 에너지',
-                },
-                {
-                    listkind: 0,
-                    index: 1,
-                    id: '',
-                    category: '전력 사용',
-                    percentage: 20,
-                    target: '태양열 에너지',
-                },
-                {
-                    listkind: 0,
-                    index: 0,
-                    id: '',
-                    category: '고정연소',
-                    percentage: 40,
-                    target: '풍력 에너지',
-                },{
-                    listkind: 0,
-                    index: 1,
-                    id: '',
-                    category: '전력 사용',
-                    percentage: 20,
-                    target: '태양열 에너지',
-                },
-                {
-                    listkind: 0,
-                    index: 0,
-                    id: '',
-                    category: '고정연소',
-                    percentage: 40,
-                    target: '풍력 에너지',
-                },
-                
-            ]
+            var targetList = computed(()=>store.state.getTargetList).value
+            console.log('중ㅇ!!!!!!!!!!!!!', targetList)
             return{
                 targetList
             }
@@ -124,9 +68,9 @@ import {ref, computed} from 'vue'
         background-repeat: no-repeat;
         background-size: 2.5vh;
     }
-
     .target-block{
-        height:37vh;
+        min-height:20vh;
+        height:32vh;
         margin-top:4vh;
         overflow: auto;
 
