@@ -106,7 +106,6 @@ import axios from "axios";
             var config = {
                 headers:{
                 "Authorization":"Bearer"+" "+store.state.accessToken,
-                 "Content-Type": "text/html; charset=utf-8"
                 }
             }
             var selected_company = computed(()=> store.state.insight_selected_company)
@@ -132,11 +131,6 @@ import axios from "axios";
             var transEnargy =ref('태양열 에너지')
 
             //서버, 사용자의 전환, 감축 목표 리스트
-
-            var power = computed(()=>store.state.EmissionList[7])
-            var transPower = ref('')
-
-            
 
             async function get_target_list(){
                 var url = "/CarbonNature/TargetList/"+selected_company.value+"/"+year_now

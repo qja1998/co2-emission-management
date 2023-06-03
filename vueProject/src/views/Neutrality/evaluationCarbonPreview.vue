@@ -91,7 +91,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
     setup() {
       const store = useStore();
       var now = new Date();	// 현재 날짜 및 시간
-      var lastyear = ref(now.getFullYear())	// 년도
+      var lastyear = ref(now.getFullYear()-1)	// 년도
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
 

@@ -69,13 +69,19 @@ export default createStore({
         lastTotalEmissions: 0,
         baseYear : 0,
         baseData : 0,
+
         getTotalLastData:0,
         getTotalLastDataList:[],
+        getTotalLastCategoryDataList:[],
+
+        getTotalNowData:0,
+        getTotalNowCategoryData:[],
         getTotalCategoryDataList: [],
         getTotalCategoryData: [],
 
         getTargetList: [],
-        getTargetData:1560
+        getTargetData:200000,
+
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -255,20 +261,23 @@ export default createStore({
         },
 
         //탄소 배출량 평가
+        getTotalNowData(state, data){
+            state.getTotalNowData = data
+        },
         getTotalLastData(state, data){
             state.getTotalLastData = data
         },
         getTotalLastDataList(state, data){
             state.getTotalLastDataList = data
         },
+        getTotalLastCategoryDataList(state, data){
+            state.getTotalLastCategoryDataList = data
+        },
         getBaseYear(state,year){
             state.baseYear = year
         },
         getBaseData(state,data){
             state.baseData = data
-        },
-        getCategoryTotalData(state,datas){
-            state.getTotalCategoryData = datas
         },
         getCategoryTotalData(state,data){
             state.getTotalCategoryData = data
@@ -280,6 +289,9 @@ export default createStore({
         //탄소 감축 목표
         getTargetList(state, dates){
             state.getTargetList = dates
+        },
+        getTargetData(state, data){
+            state.getTargetData =data
         }
         
 

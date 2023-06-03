@@ -11,7 +11,7 @@
                     <div class="dash-text progress-dash1-emission-text">{{carbonEmissions}} <span>CO2eq</span></div>
                 </div>
                 <div class="dash-text-middle progress-dash1-text" style="margin-top:5vh;">감축 목표 탄소 배출량
-                    <div  class="dash-text progress-dash1-emission-text" id ="goal-text">{{carbonEmissionsGoal}} <span>CO2eq</span></div>
+                    <div  class="dash-text progress-dash1-emission-text" id ="goal-text">{{ carbonLastEmissions - carbonEmissionsGoal}} <span>CO2eq</span></div>
                 </div>
             </div>
             
@@ -38,12 +38,14 @@ import axios from 'axios'
             var year = ref(now.getFullYear())	// 년도
             
             //서버
-            var carbonEmissions =computed(()=> store.state.getTotalLastData)
+            var carbonLastEmissions = computed(()=>store.state.getTotalLastData) 
+            var carbonEmissions = computed(()=> store.state.getTotalNowData)
             var carbonEmissionsGoal = computed(()=> store.state.getTargetData)
 
             return{
                 carbonEmissions,
                 carbonEmissionsGoal,
+                carbonLastEmissions,
                 year
             }
         }

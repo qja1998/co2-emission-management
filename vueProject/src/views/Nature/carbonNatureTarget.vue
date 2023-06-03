@@ -87,6 +87,20 @@ export default {
             })
         }
 
+        async function get_total_target_data(){
+            var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+lastyear.value+1+"/0"
+            axios.get(url,config).then(res=>{
+                store.commit('getTargetData',res.data)
+                })
+                .catch(error => {
+                console.log(error)
+                })
+                .finally(()=>{
+                rerender_signal.value +=1
+            })
+        }
+     
+
         function sumfun(list){
             var sum =ref(0)
             for(var i=0; i<list.length; i++){
@@ -96,9 +110,14 @@ export default {
         }
         get_total_data()
         get_total_category_data()
+        get_total_target_data()
+
         var rerender_signal = ref(0)
+
         function change_company(){
             get_total_data()
+            get_total_category_data()
+            get_total_target_data()
             store.commit("insight_select_company", selected_company.value)
         }
         

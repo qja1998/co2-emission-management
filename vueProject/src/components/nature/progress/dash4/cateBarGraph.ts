@@ -60,29 +60,41 @@ export default defineComponent({
     var month = now.getMonth()
 
     //서버
-    var goalCarbonCategory = [7800,4680,7890,8950,4600,7890,7950,9720,8060,5020,6080]
-    var server_category_data = [
-      [580, 590, 640, 575, 573, 680, 250,502,600,500,120,130],
-      [530, 495, 486, 570, 573, 664, 250,502,600,500,120,130],
-      [495, 397, 480, 390, 475, 510, 250,502,600,500,120,130],
-      [498, 401, 420, 297, 361, 483, 250,502,600,500,120,130],
-      [381, 363, 321, 350, 348, 371, 250,502,600,500,120,130],
-      [140, 143, 184, 123, 120, 212, 250,502,600,500,120,130],
-      [208, 175, 143, 167, 160, 220, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-      [312, 274, 250, 280, 278, 320, 250,502,600,500,120,130],
-  ]
-  var sum_total_category_data: number[] = [] //카테고리별 일년치 데이터
-  for(var i=0; i<server_category_data.length; i++){
+    var goalCarbonCategory = computed(()=> store.state.getTargetList).value
+    var server_category_data = computed(()=> store.state.getTotalCategoryDataList).value
+    var categoryLastList = computed(()=> store.state.getTotalLastCategoryDataList).value
+    // console.log('막대 그래프 그룹',computed(()=>store.state.insight_selected_company).value)
+    // console.log('카테고리별 감축 목표데이터', goalCarbonCategory)
+    // console.log('카테고리별 현재 데이터', server_category_data)
+    // console.log('카테고리별 작년 데이터', categoryLastList)
+    var sum_total_category_data: number[] = [] //카테고리별 현재 데이터
+    var sum_last_category_data : number[] = []
+
+    var result_target_data : number[] = []
+
+    for(var i=0; i<server_category_data.length; i++){
+        var sum = ref(0)
+        for(var j =0; j<server_category_data[i].length; j++){
+            sum.value = server_category_data[i][j] + sum.value
+        }    
+        sum_total_category_data.push(sum.value)
+    }
+
+    
+    for(var i=0; i<categoryLastList.length; i++){
       var sum = ref(0)
-      for(var j =0; j<server_category_data[i].length; j++){
-          sum.value = server_category_data[i][j] + sum.value
+      for(var j =0; j<categoryLastList[i].length; j++){
+          sum.value = categoryLastList[i][j] + sum.value
       }    
-      sum_total_category_data.push(sum.value)
-  }
-  console.log(sum_total_category_data)
+      sum_last_category_data.push(sum.value)
+    }
+    console.log('작년 카테고리별 데이터 일년치',sum_last_category_data)
+    console.log('감축 목표 데이터 일년치',goalCarbonCategory)
+    for (var i=0; i<goalCarbonCategory.length; i++){
+        var data = sum_last_category_data[i] - goalCarbonCategory[i]
+        result_target_data.push(data)
+    }
+    console.log('감축 목표 카테고리 결과',result_target_data)
   const chartData = {
     labels: [
       '고정연소', 
@@ -101,7 +113,7 @@ export default defineComponent({
       {
         label : '탄소 감축 목표량',
         backgroundColor: ['#3DC984'],
-        data: goalCarbonCategory,
+        data: result_target_data,
         barThickness:27,
       },
       {

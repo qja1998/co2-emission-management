@@ -59,18 +59,12 @@ export default defineComponent({
     var year = now.getFullYear()	// 년도
 
     //서버
-    var server_EmissionInfo = {
-        groupName:'경상국립대학교',
-        BaseYear:2019,
-        BaseEmissions:2650
-    }
+    var BaseEmissions = computed(()=>store.state.baseData).value
 
-    var server_total_data = [20,80,30,80,40,90,120,160,10,60,20,80]
-    var server_targetTotal_data = 570
-    var sum =ref(0) 
-    for(var i=0; i<server_total_data.length; i++){
-        sum.value = server_total_data[i] + sum.value
-    }
+
+    var server_targetTotal_data = computed(()=>store.state.getTargetData).value
+    var sum = computed(()=>store.state.getTotalLastData).value
+
 
 
     const chartData = {
@@ -82,7 +76,7 @@ export default defineComponent({
           label : '총 탄소 배출량',
           backgroundColor: ['#777777', '#2A565B','#3DC984'],
           borderRadius:10,
-          data: [server_EmissionInfo.BaseEmissions,sum.value,server_targetTotal_data],
+          data: [BaseEmissions,sum,sum- server_targetTotal_data],
           barThickness:27,
         },
       ]

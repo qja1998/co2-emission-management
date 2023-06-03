@@ -59,11 +59,12 @@ export default defineComponent({
 
     //서버
     var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
-    var server_targetTotal_data = ref(0)
-    var sum = ref(store.state.getTotalLastData) //작년 총 탄소 배출량
+
+    var sum = computed(()=>store.state.getTotalLastData).value //작년 총 탄소 배출량
+    var server_targetTotal_data =computed(()=>store.state.getTargetData).value
 
     for(var i=0; i<server_total_data.length; i++){
-      sum.value = server_total_data[i] + sum.value
+      sum = server_total_data[i] + sum
     }
 
     const config = {
@@ -72,21 +73,8 @@ export default defineComponent({
             "Content-Type": "text/html; charset=euc-kr",
         }
     }
-    
-    async function set_target_list(list){
-      var url = "/CarbonNature/TargetList"
-      
-      console.log(list)
-      axios.post(url,list,config).then(res=>{
-          console.log('추가 성공')
-      })
-      .catch(error => {
-          console.log(error)
-      })
-      .finally(()=>{
-      })
-    }
 
+    console.log('d',server_targetTotal_data)
     const chartData = {
       labels: [
         year-1+'년 총 탄소 배출량', year+'년 총 탄소 배출량',
@@ -96,7 +84,7 @@ export default defineComponent({
           label : '총 탄소 배출량',
           backgroundColor: ['#2A565B','#3DC984'],
           borderRadius:10,
-          data: [sum.value,server_targetTotal_data.value],
+          data: [sum , sum - server_targetTotal_data],
           barThickness:20,
         },
       ]
