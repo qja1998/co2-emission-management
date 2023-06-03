@@ -156,9 +156,10 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       }
 
       function change_company(){
+        store.commit("SetName",selected_company.value)
         get_total_data()
         get_Base_Info()
-        store.commit("SetName",selected_company.value)
+
       }
 
       return{

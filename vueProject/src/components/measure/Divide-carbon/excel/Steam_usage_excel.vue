@@ -70,7 +70,7 @@
       var sheets=ref([
         { name: "열사용양식", 
           data: [
-            { 탄소배출내용: String, 시작날짜: Date, 종료날짜:Date, 배출시설명:null, 운영주체:null,공급처:null, 연료종류:null, 열사용량:Number}
+            { 탄소배출내용: String, 시작날짜: Date, 배출시설명:null, 운영주체:null,공급처:null, 연료종류:null, 열사용량:Number}
           ] 
         }
       ])
@@ -93,7 +93,7 @@
             Type:"8",
             DetailType:"열",
             StartDate: excelSerialDateToJSDate(sheets[i].시작날짜),
-            EndDate:excelSerialDateToJSDate(sheets[i].종료날짜),
+            EndDate:excelSerialDateToJSDate(sheets[i].시작날짜),
             Location:"",
             scope:2,
             data:sheets[i].열사용량+"/"+'kg',

@@ -274,7 +274,7 @@ import axios from "axios";
                     year : year_now,
                     tList:server_add_list
                 }
-
+                console.log('목표 리스트',post_targetList)
                 set_target_list(post_targetList)
             }
 
@@ -283,7 +283,7 @@ import axios from "axios";
             async function set_target_list(list){
                 var url = "/CarbonNature/TargetList"
                 
-                console.log(list)
+                console.log()
                 axios.post(url,list,config).then(res=>{
                     console.log('추가 성공')
                 })
@@ -291,6 +291,7 @@ import axios from "axios";
                     console.log(error)
                 })
                 .finally(()=>{
+                    console.log('추가 끝')
                 })
             }
             

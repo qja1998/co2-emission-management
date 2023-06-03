@@ -174,26 +174,24 @@ export default {
         }
 
         get_Base_Info()
-
-        get_total_target_data()
-        get_total_category_target_data()
-
         get_total_data()
         get_total_data_now()
         get_total_category_data()
         get_total_category_last_data()
+        get_total_target_data()
+        get_total_category_target_data()
+
+
         
         function change_company(){
             store.commit("insight_select_company",selected_company.value)
             get_Base_Info()
-            get_total_target_data()
-            get_total_category_target_data()
-            get_total_data_now()
             get_total_data()
+            get_total_data_now()
             get_total_category_data()
             get_total_category_last_data()
-
-            
+            get_total_target_data()
+            get_total_category_target_data()
       }
         return{
             group_list,
