@@ -52,8 +52,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends; \
 CMD cd /; . /venv/bin/activate;\
     cd /; cd /home;\
     sleep 10; \
-    python3 manage.py migrate CarbonNature zero ;\
     python3 manage.py makemigrations --noinput; \
-    python3 manage.py makemigrations CarbonNature; \
     python3 manage.py migrate; \
     python3 manage.py runserver 0.0.0.0:8000\ 

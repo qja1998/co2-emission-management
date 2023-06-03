@@ -51,7 +51,7 @@ class CarbonEmissionQuery(APIView):
                     "This Company/Department doesn't exist.",
                     status=status.HTTP_404_NOT_FOUND,
                 )
-
+            
         # 요청받은 회사가 루트인 경우
         if type(Root_id) == ComModel.Company:
 
@@ -292,6 +292,7 @@ class CarbonFixingQuery(APIView):
             return Response(
                 "Request Data Doesn't Exist", status=status.HTTP_404_NOT_FOUND
             )
+
         CarInfoId = CarInfo.id
         CarInfo.delete()  # CarbonInfo가 CASCADE가 아니므로 먼저 삭제
         CarModel.Carbon.objects.get(id=pk).delete()
@@ -390,14 +391,17 @@ class CarbonPartQuery(APIView):
         date 값들은 "YYYY-MM-DD" 형식으로 입력
         '''
         UserRoot = func.GetUserRoot(request)
+        
+        department = None
 
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Root_id = ComModel.Department.objects.get(
+            department = ComModel.Department.objects.get(
                 DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
             )
+            RootCom = department.RootCom
         except ComModel.Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
             try:
-                Root_id = ComModel.Company.objects.get(ComName=depart_name)
+                RootCom = ComModel.Company.objects.get(ComName=depart_name)
             except ComModel.Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
                 return Response(
                     "This Company/Department doesn't exist.",
@@ -406,41 +410,44 @@ class CarbonPartQuery(APIView):
 
         start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
         start_date = start_date.replace(day=1)
-        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-        end_date = (end_date + relativedelta(months=1)).replace(day=1) - datetime.timedelta(days=1)
-        server_category_data = []
-        server_total_data = []
+        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d') # ValueError: time data '2023-[object Object]-28' does not match format '%Y-%m-%d'
+        end_date = end_date.replace(day=28)# - datetime.timedelta(days=1)
+        categories = CarModel.Category.objects.all()
+        server_category_data = [[] for _ in categories]
+        server_total_data = [0 for _ in range(12)]
 
-        while start_date < end_date:    
+        while start_date < end_date:
             cate_data = []
             total_data = 0
-            categories = CarModel.Category.objects.values('Category')
             for cate in categories:
-                cate = cate['Category']
-                tmp_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
+                cate = cate.Category
+                tmp_date = start_date.replace(day=28)
                 next_date = tmp_date if tmp_date < end_date else end_date
-                print(start_date, next_date)
-                carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date,
-                                                                EndDate=next_date,
-                                                                Chief=UserRoot.Chief,
-                                                                Category=cate)
-                
-                carbon_data = CarModel.Carbon.objects.filter(RootCom=Root_id.RootCom,
-                                                             BelongDepart=Root_id,
-                                                             CarbonInfo__in = carbon_info,).values('CarbonData')
-                if not carbon_data:
+                try:
+                    carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
+                                                                    EndDate=next_date,
+                                                                    Chief=UserRoot.Chief,
+                                                                    Category=cate)
+                except Exception as e:
                     continue
-
+                if department != None:
+                    carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
+                                                                 BelongDepart=department,
+                                                                 CarbonInfo=carbon_info).values('CarbonData')
+                    
+                    if not carbon_data:
+                        continue
+                else:
+                    carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
+                                                                 CarbonInfo=carbon_info).values('CarbonData')
                 carbon_data = carbon_data[0]['CarbonData']
                 #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
-                print(carbon_data)
                 cate_data.append(carbon_data)
-                total_data += carbon_data
-            if is_category:
-                server_category_data.append(cate_data)
-            else:
-                #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
-                server_total_data.append(total_data)
+                if is_category:
+                    server_category_data[cate].append(carbon_data)
+                else:
+                    #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
+                    server_total_data[start_date.month - 1] += carbon_data
             start_date += relativedelta(months=1)
         
         if is_category:

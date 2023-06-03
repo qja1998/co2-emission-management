@@ -14,6 +14,11 @@ import datetime
 from dateutil.relativedelta import relativedelta
 
 
+# import sys
+# limit_number = 15000
+# sys.setrecursionlimit(limit_number)
+
+
 # 조직 구조를 반환하는 함수
 def getStruct(RootCom, HeadCom, result, TransData):
     data = ComModel.Department.objects.filter(RootCom=RootCom, BelongCom=HeadCom)
@@ -164,7 +169,7 @@ def CreateEmployee(EmployeeData, RootCom, BelongCom):
 
     return Employee
 
-def get_base_emission(year, com_id, chief):
+def get_base_emission(year, com_id, root_id, chief):
         start_date = datetime.datetime.strptime(f"{year}-01-01", '%Y-%m-%d')
         end_date = datetime.datetime.strptime(f"{year}-12-31", '%Y-%m-%d')
 
@@ -175,21 +180,19 @@ def get_base_emission(year, com_id, chief):
             categories = CarModel.Category.objects.values('Category')
             for cate in categories:
                 cate = cate['Category']
-                next_date = start_date + relativedelta(months=1) - datetime.timedelta(days=1)
+                tmp_date = start_date.replace(day=28)
+                next_date = tmp_date if tmp_date < end_date else end_date
 
-                carbon_info = CarModel.CarbonInfo.objects.filter(StartDate=start_date,
-                                                                EndDate=next_date,
-                                                                Chief=chief,
-                                                                Category=cate)
-                for dp in ComModel.Department.objects.filter(RootCom=com_id).all():
-                    carbon_data = CarModel.Carbon.objects.filter(RootCom=com_id,
-                                                        BelongDepart=dp,
-                                                        CarbonInfo__in = carbon_info).values('CarbonData')
-                    if carbon_data:
-                        cate_total_emissions[cate] += carbon_data[0]['CarbonData']
-                    
-                if not carbon_data:
+                try:
+                    carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
+                                                                    EndDate=next_date,
+                                                                    Chief=chief,
+                                                                    Category=cate)
+                except Exception as e:
                     continue
+                carbon_data = CarModel.Carbon.objects.filter(RootCom=root_id,
+                                                            CarbonInfo=carbon_info).values('CarbonData')
+                cate_total_emissions[cate] += carbon_data[0]['CarbonData']
 
             start_date += relativedelta(months=1)
         return cate_total_emissions

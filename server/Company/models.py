@@ -33,18 +33,18 @@ class Company(models.Model):
 class Department(models.Model):
     DepartmentName = models.TextField(default=None)
     RootCom = models.ForeignKey(
-        "Company", related_name="RootCom", on_delete=models.CASCADE, null=True
+        "Company", related_name="root", on_delete=models.CASCADE, null=True, blank=True
     )  # root 노드
     BelongCom = models.ForeignKey(
         "Company",
-        related_name="BelongCom",
+        related_name="belong",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
     )  # 바로 위 노드
     SelfCom = models.ForeignKey(
         "Company",
-        related_name="SelfCom",
+        related_name="self",
         on_delete=models.CASCADE,
     )
     Depth = models.IntegerField()  # 깊이

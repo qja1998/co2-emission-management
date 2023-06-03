@@ -15,10 +15,10 @@ class EmissionInfoGetSerializer(serializers.ModelSerializer):
         fields = ('BaseYear', 'BaseEmissions')
 
 class EmissionInfoPostSerializer(serializers.ModelSerializer):
-    group_name = serializers.CharField()
+    groupName = serializers.CharField()
     class Meta:
         model = models.Evaluation
-        fields = ('group_name', 'BaseYear', 'BaseEmissions')
+        fields = ('groupName', 'BaseYear', 'BaseEmissions')
 
 
 class TListPostSerializer(serializers.Serializer):
@@ -27,17 +27,16 @@ class TListPostSerializer(serializers.Serializer):
             MinValueValidator(0)
         ])
     index = serializers.IntegerField()
+    i = serializers.IntegerField()
     category = serializers.CharField()
     percentage = serializers.IntegerField()
     target = serializers.CharField(required=False)
 
-class TargetListPostSerializer(serializers.ModelSerializer):
-    group_name = serializers.CharField()
+class TargetListPostSerializer(serializers.Serializer):
+    groupName = serializers.CharField()
+    year = serializers.IntegerField()
     tList = serializers.ListField(child=TListPostSerializer())
-    class Meta:
-        model = models.Evaluation
-        fields = ('group_name', 'BaseYear', 'tList')
-
+    
 class TargetListDeletSerializer(serializers.Serializer):
     id_list = serializers.ListField()
 

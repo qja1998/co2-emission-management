@@ -23,12 +23,6 @@ class Goal(models.Model):
 	DecrePercent = models.IntegerField()
 	DecreTotalEmission = models.IntegerField()
 
-
-#카테고리별 감축 방법을 저장하는 테이블
-class Method(models.Model):
-	Category = models.IntegerField()
-	DecreMethod = models.TextField(null=True, blank=True)
-
 #어떤 조직이 몇년도에 어떤 감축목표를 가지는지 저장하는 테이블
 class CompanyGoal(models.Model):
 	Com_id = models.ForeignKey( 
@@ -43,14 +37,7 @@ class CompanyGoal(models.Model):
 	) 
 	GoalDate = models.IntegerField() #감축 목표 년도
 
-class TListReturnModel(models.Model):
-	listkind = models.IntegerField()
-	index = models.IntegerField()
-	goal_id = models.ForeignKey( 
-		"CarbonNature.Goal",
-		related_name="TListGoal",
-		on_delete=models.CASCADE
-	)
-	category = models.TextField()
-	percentage = models.IntegerField()
-	target = models.TextField(null=True, blank=True)
+#카테고리별 감축 방법을 저장하는 테이블
+class Method(models.Model):
+	Category = models.IntegerField()
+	DecreMethod = models.TextField(null=True, blank=True)

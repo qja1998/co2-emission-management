@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import Http404, JsonResponse
@@ -39,20 +39,15 @@ class EvaluationView(APIView):
     )
     def get(self, request, depart_name, format=None):
 
-        UserRoot = func.GetUserRoot(request)
-
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Com_id = Department.objects.get(
-                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
-            ).RootCom
-        except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
-            try:
-                Com_id = Company.objects.get(ComName=depart_name)
-            except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
-                return Response(
-                    "This Company/Department doesn't exist.",
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            Com_id = Company.objects.get(
+                ComName=depart_name  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            )
+        except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+            return Response(
+                "This Company/Department doesn't exist.",
+                status=status.HTTP_404_NOT_FOUND,
+            )
         eval_info =  Evaluation.objects.get(Com_id=Com_id)
         serializer = EmissionInfoGetSerializer(eval_info)
 
@@ -99,22 +94,19 @@ class EvaluationInfoView(APIView):
     def post(self, request, formant=None):
         
         GroupData = request.data
-        depart_name = GroupData["group_name"]
+        depart_name = GroupData["groupName"]
 
         UserRoot = func.GetUserRoot(request)
 
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Com_id = Department.objects.get(
-                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            Com_id = Company.objects.get(
+                ComName=depart_name  # 로그인이 구현된 이후에는 사용자의 root와 비교
             )
-        except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
-            try:
-                Com_id = Company.objects.get(ComName=depart_name)
-            except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
-                return Response(
-                    "This Company/Department doesn't exist.",
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+        except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+            return Response(
+                "This Company/Department doesn't exist.",
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         try:
             Evaluation.objects.create(
@@ -153,30 +145,35 @@ class CarbonYearQuery(APIView):
         UserRoot = func.GetUserRoot(request)
 
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Com_id = Department.objects.get(
-                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
-            ).RootCom
-        except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
-            try:
-                Com_id = Company.objects.get(ComName=depart_name)
-            except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
-                return Response(
-                    "This Company/Department doesn't exist.",
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            Com_id = Company.objects.get(
+                ComName=depart_name  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            )
+        except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+            return Response(
+                "This Company/Department doesn't exist.",
+                status=status.HTTP_404_NOT_FOUND,
+            )
             
-        Goal_id = CompanyGoal.objects.filter(Com_id=Com_id, GoalDate=year)
+        try:
+            Goal_ids = CompanyGoal.objects.filter(Com_id=Com_id, GoalDate=year).values('Goal_id')
+        except Exception as e:
+            return Response(e, status=status.HTTP_404_NOT_FOUND)
         
-        goal_carbon_category = []
         server_targetTotal_data = 0
-
         categories = Category.objects.all()
-        for cate_id in categories:
+        goal_carbon_category = [0 for _ in categories]
+        
+        for goal_id in Goal_ids:
             try:
-                goal_with_cate = Goal.objects.filter(Cate_id=cate_id).values('DecreTotalEmission')[0]['DecreTotalEmission']
-            except:
+                goal_query = Goal.objects.filter(
+                    id=goal_id['Goal_id'],
+                    ).values('DecreTotalEmission','Cate_id')[0]
+                goal_with_cate = goal_query['DecreTotalEmission']
+                cate_id = goal_query['Cate_id']
+                cate = Category.objects.get(id=cate_id).Category
+            except Exception as e:
                 continue
-            goal_carbon_category.append(goal_with_cate)
+            goal_carbon_category[cate] = goal_with_cate
             server_targetTotal_data += goal_with_cate
         
         if bool(is_category):
@@ -198,41 +195,55 @@ class TargetListQuery(APIView):
         UserRoot = func.GetUserRoot(request)
 
         try:  # 요청받은 회사가 루트가 아닌 경우
-            Com_id = Department.objects.get(
-                DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
-            ).RootCom
-        except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
-            try:
-                Com_id = Company.objects.get(ComName=depart_name)
-            except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
-                return Response(
-                    "This Company/Department doesn't exist.",
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+            Com_id = Company.objects.get(
+                ComName=depart_name  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            )
+        except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+            return Response(
+                "This Company/Department doesn't exist.",
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        # try:  # 요청받은 회사가 루트가 아닌 경우
+        #     Com_id = Department.objects.get(
+        #         DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+        #     ).RootCom
+        # except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
+        #     try:
+        #         Com_id = Company.objects.get(ComName=depart_name)
+        #     except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+        #         return Response(
+        #             "This Company/Department doesn't exist.",
+        #             status=status.HTTP_404_NOT_FOUND,
+        #         )
             
 
         target_list = []
         categories = Category.objects.all()
-        for i, cate in enumerate(categories):
+        # for i, cate in enumerate(categories):
+        # try:
+        Goal_ids = CompanyGoal.objects.filter(Com_id=Com_id, GoalDate=year).values('Goal_id')
+        i = 0
+        for Goal_id in Goal_ids:
             try:
-                Goal_id = Goal.objects.get(Cate_id=cate)
-                goal_data = Goal.objects.filter(Cate_id=cate).values('IncreaseKind','DecrePercent', 'TransEnergy')[0]
+                Goal_id = Goal_id['Goal_id']
+                goal_data = Goal.objects.filter(id=Goal_id).values('Cate_id', 'IncreaseKind','DecrePercent', 'TransEnergy')[0]
                 IncreaseKind = goal_data['IncreaseKind']
                 DecrePercent = goal_data['DecrePercent']
                 TransEnergy = goal_data['TransEnergy']
-            except:
-                continue
-
-            target_list.append(
+                target_list.append(
                     {'listkind' : int(IncreaseKind),
                     'index' : i,
-                    'goal_id' : Goal_id.id,
-                    'category' : cate.CarbonUnit,
+                    'i' : Goal_id,
+                    'category' : Category.objects.filter(id=goal_data['Cate_id']).values('CarbonUnit')[0]['CarbonUnit'],
                     'percentage' : DecrePercent,
                     'target' : TransEnergy if not IncreaseKind else None}
                 )
+                i += 1
             
-        
+            except Exception as e:
+                continue
+
         return JsonResponse(target_list, safe=False, status=status.HTTP_200_OK)
 
 class TargetListPost(APIView):
@@ -248,32 +259,43 @@ class TargetListPost(APIView):
 
         UserRoot = func.GetUserRoot(request)
         request_data = request.data
-        group_name, year, GoalData = request_data['group_name'], request_data['BaseYear'], request_data['tList']
-        try:  # 요청받은 회사가 루트가 아닌 경우
-            Com_id = Department.objects.get(
-                DepartmentName=group_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+        group_name, year, GoalData = request_data['groupName'], request_data['year'], request_data['tList']
+        try:
+            Com_id = Company.objects.get(
+                ComName=group_name
             )
+        except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
+            return Response(
+                "This Company/Department doesn't exist.",
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        
+        try:  # 요청받은 회사가 루트가 아닌 경우
+            RootCom = Department.objects.get(
+                DepartmentName=group_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
+            ).RootCom
         except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
             try:
-                Com_id = Company.objects.get(ComName=group_name)
+                RootCom = Company.objects.get(ComName=group_name)
             except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
                 return Response(
                     "This Company/Department doesn't exist.",
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
-        total_emissions = func.get_base_emission(year, Com_id, UserRoot.Chief)
+        total_emissions = func.get_base_emission(year, Com_id, RootCom, UserRoot.Chief)
+        print('emission', total_emissions)
 
         try:
-
             for data in GoalData:
-                cate = Category.objects.filter(CarbonUnit = data['category']).values('Category')[0]['Category']
+                cate = Category.objects.get(CarbonUnit = data['category'])
+                print(cate.Category)
                 goal_obj = Goal.objects.create(
-                    Cate_id=Category.objects.get(Category=cate),
+                    Cate_id=cate,
                     IncreaseKind=data['listkind'],
                     TransEnergy=data['target'],
                     DecrePercent=data['percentage'],
-                    DecreTotalEmission=total_emissions[cate] * (1 - (data['percentage'] / 100))
+                    DecreTotalEmission=total_emissions[cate.Category] * (data['percentage'] / 100)
                 )
                 CompanyGoal.objects.create(
                     Com_id=Com_id,
@@ -285,6 +307,7 @@ class TargetListPost(APIView):
         
         # 이미 존재
         except Exception as e:
+            print('e', e)
             return Response(
                 f"{e}", status=status.HTTP_400_BAD_REQUEST
             )
@@ -293,14 +316,14 @@ class TargetListPost(APIView):
 class TargetListDelete(APIView):
     @swagger_auto_schema(
         operation_summary="goal id를 입력받아 그 데이터를 삭제하는 Api",
-        # request_body=TargetListDeletSerializer,
+        request_body=TargetListDeletSerializer,
         responses={404: "ERROR", 200: "API가 정상적으로 실행 됨"},
     )
     def delete(self, request, id, format=None):
         '''
         id는 int이며 '_'로 구분하여 여러개를 한 번에 입력할 수 있음
         '''
-        ids = id.split('_')
+        ids = list(map(int, id.split('_')))
         for i in ids:
             try:
                 Goal.objects.filter(id=i).delete()

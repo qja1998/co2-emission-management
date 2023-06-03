@@ -10,8 +10,8 @@ urlpatterns = [
         name="CategoryPredictionGet",
     ),
     path(
-        "CarbonPartPrediction/<str:depart_name>/<int:is_category>",
-        views.CarbonPartQuery.as_view(),
-        name="CarbonPartQuery",
+        "PartPrediction/<str:depart_name>/<int:is_category>",
+        views.PartPredictionQuery.as_view(),
+        name="PartPredictionQuery",
     ),
 ]
