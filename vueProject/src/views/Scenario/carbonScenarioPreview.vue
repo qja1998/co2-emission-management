@@ -64,7 +64,7 @@
             var group_list = computed(() => store.state.group_list).value
             var selected_company = ref(group_list[0])
             var rerender_signal = ref(0)
-
+            var total_emission = ref(0)
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear())
             var lastyear = ref(now.getFullYear()-1)
