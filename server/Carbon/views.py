@@ -421,33 +421,58 @@ class CarbonPartQuery(APIView):
             total_data = 0
             for cate in categories:
                 cate = cate.Category
-                tmp_date = start_date.replace(day=28)
-                next_date = tmp_date if tmp_date < end_date else end_date
                 try:
-                    carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
-                                                                    EndDate=next_date,
+                    pre_date = start_date
+                    next_month = (start_date + relativedelta(months=1)).replace(day=1)
+                    next_month = next_month if next_month < end_date else end_date
+                    while pre_date < next_month:
+                        carbon_info = CarModel.CarbonInfo.objects.get(StartDate=pre_date,
+                                                                    EndDate=pre_date,
                                                                     Chief=UserRoot.Chief,
                                                                     Category=cate)
-                except Exception as e:
-                    continue
-                if department != None:
-                    carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
-                                                                 BelongDepart=department,
+                        if department != None:
+                            carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
+                                                                    BelongDepart=department,
+                                                                    CarbonInfo=carbon_info).values('CarbonData')
+                        else:
+                            carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
                                                                  CarbonInfo=carbon_info).values('CarbonData')
-                    
-                    if not carbon_data:
+                        carbon_data = carbon_data[0]['CarbonData']
+                        cate_data.append(carbon_data)
+                        if is_category:
+                            server_category_data[cate].append(carbon_data)
+                        else:
+                            server_total_data[start_date.month - 1] += carbon_data
+                        pre_date += datetime.timedelta(days=1)
+                        
+                except:
+                    tmp_date = start_date.replace(day=28)
+                    next_date = tmp_date if tmp_date < end_date else end_date
+                    try:
+                        carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
+                                                                        EndDate=next_date,
+                                                                        Chief=UserRoot.Chief,
+                                                                        Category=cate)
+                    except Exception as e:
                         continue
-                else:
-                    carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
-                                                                 CarbonInfo=carbon_info).values('CarbonData')
-                carbon_data = carbon_data[0]['CarbonData']
-                #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
-                cate_data.append(carbon_data)
-                if is_category:
-                    server_category_data[cate].append(carbon_data)
-                else:
-                    #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
-                    server_total_data[start_date.month - 1] += carbon_data
+                    if department != None:
+                        carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
+                                                                    BelongDepart=department,
+                                                                    CarbonInfo=carbon_info).values('CarbonData')
+                        
+                        if not carbon_data:
+                            continue
+                    else:
+                        carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
+                                                                    CarbonInfo=carbon_info).values('CarbonData')
+                    carbon_data = carbon_data[0]['CarbonData']
+                    #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
+                    cate_data.append(carbon_data)
+                    if is_category:
+                        server_category_data[cate].append(carbon_data)
+                    else:
+                        #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
+                        server_total_data[start_date.month - 1] += carbon_data
             start_date += relativedelta(months=1)
         
         if is_category:

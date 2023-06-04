@@ -14,4 +14,9 @@ urlpatterns = [
         views.PartPredictionQuery.as_view(),
         name="PartPredictionQuery",
     ),
+    path(
+        "TestPrediction",
+        views.TestPredict.as_view(),
+        name="TestPredict",
+    ),
 ]

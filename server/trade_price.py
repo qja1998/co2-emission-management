@@ -1,15 +1,19 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import time
 
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
 
 def get_price():
 
-    driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options)
+    # driver = webdriver.Chrome("/usr/local/bin/chromedriver", chrome_options=chrome_options)
+    driver = webdriver.Remote(
+            command_executor='http://chrome:4444/wd/hub',
+            desired_capabilities=DesiredCapabilities.CHROME,
+        )
 
     # 배출권시장 정보플랫폼을 selenium으로 접속
     driver.get("https://ets.krx.co.kr/contents/ETS/03/03010000/ETS03010000.jsp")

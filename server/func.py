@@ -176,23 +176,39 @@ def get_base_emission(year, com_id, root_id, chief):
         cate_total_emissions = defaultdict(int)
 
         while start_date < end_date:
-            total_data = 0
             categories = CarModel.Category.objects.values('Category')
             for cate in categories:
                 cate = cate['Category']
-                tmp_date = start_date.replace(day=28)
-                next_date = tmp_date if tmp_date < end_date else end_date
-
                 try:
-                    carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
-                                                                    EndDate=next_date,
+                    pre_date = start_date
+                    next_month = (start_date + relativedelta(months=1)).replace(day=1)
+                    next_month = next_month if next_month < end_date else end_date
+
+                    while pre_date < next_month:
+                        print(1)
+                        carbon_info = CarModel.CarbonInfo.objects.get(StartDate=pre_date,
+                                                                    EndDate=pre_date,
                                                                     Chief=chief,
                                                                     Category=cate)
-                except Exception as e:
-                    continue
-                carbon_data = CarModel.Carbon.objects.filter(RootCom=root_id,
-                                                            CarbonInfo=carbon_info).values('CarbonData')
-                cate_total_emissions[cate] += carbon_data[0]['CarbonData']
+                        carbon_data = CarModel.Carbon.objects.filter(RootCom=root_id,
+                                                                 CarbonInfo=carbon_info).values('CarbonData')
+                        cate_total_emissions[cate] = carbon_data[0]['CarbonData']
+                        pre_date += datetime.timedelta(days=1)
+
+                except:
+                    tmp_date = start_date.replace(day=28)
+                    next_date = tmp_date if tmp_date < end_date else end_date
+
+                    try:
+                        carbon_info = CarModel.CarbonInfo.objects.get(StartDate=start_date,
+                                                                        EndDate=next_date,
+                                                                        Chief=chief,
+                                                                        Category=cate)
+                    except Exception as e:
+                        continue
+                    carbon_data = CarModel.Carbon.objects.filter(RootCom=root_id,
+                                                                CarbonInfo=carbon_info).values('CarbonData')
+                    cate_total_emissions[cate] += carbon_data[0]['CarbonData']
 
             start_date += relativedelta(months=1)
         return cate_total_emissions
@@ -220,3 +236,13 @@ def diff_month(d1, d2):
 # 유저의 권환을 확인하는 함수
 def CheckUserAuthorization(Authori):
     pass
+
+
+def make_random_values(total_month, last_day):
+    mean = total_month / last_day
+    from numpy import random, append, array
+    # 32080.026735458807 4686.484019639064
+    randoms = random.normal(loc=mean, scale=4686.484019639064, size=(last_day - 1))
+    randoms = append(randoms, array(total_month - randoms.sum()))
+
+    return list(randoms)

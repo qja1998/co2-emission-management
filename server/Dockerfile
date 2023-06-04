@@ -47,11 +47,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends; \
     pip install drf_yasg;\
     pip install tzdata;\
     pip install djangorestframework-simplejwt;\
-    pip install python-dateutil
+    pip install python-dateutil;\
+    pip3 install torch torchvision torchaudio;\
+    pip3 install numpy pandas;\
+    pip3 install scikit-learn
+
 
 CMD cd /; . /venv/bin/activate;\
     cd /; cd /home;\
     sleep 10; \
+    #python3 manage.py migrate CarbonNature zero; \
     python3 manage.py makemigrations --noinput; \
     python3 manage.py migrate; \
     python3 manage.py runserver 0.0.0.0:8000\ 

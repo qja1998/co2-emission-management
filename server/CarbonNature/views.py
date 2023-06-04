@@ -167,8 +167,8 @@ class CarbonYearQuery(APIView):
             try:
                 goal_query = Goal.objects.filter(
                     id=goal_id['Goal_id'],
-                    ).values('DecreTotalEmission','Cate_id')[0]
-                goal_with_cate = goal_query['DecreTotalEmission']
+                    ).values('DecreTotalEmission','Cate_id', 'IncreaseKind')[0]
+                goal_with_cate = goal_query['DecreTotalEmission'] if goal_query['IncreaseKind'] == 1 else goal_query['DecreTotalEmission'] * 0.45941
                 cate_id = goal_query['Cate_id']
                 cate = Category.objects.get(id=cate_id).Category
             except Exception as e:
@@ -290,12 +290,13 @@ class TargetListPost(APIView):
             for data in GoalData:
                 cate = Category.objects.get(CarbonUnit = data['category'])
                 print(cate.Category)
+                decre_total = total_emissions[cate.Category] * (data['percentage'] / 100)
                 goal_obj = Goal.objects.create(
                     Cate_id=cate,
                     IncreaseKind=data['listkind'],
                     TransEnergy=data['target'],
                     DecrePercent=data['percentage'],
-                    DecreTotalEmission=total_emissions[cate.Category] * (data['percentage'] / 100)
+                    DecreTotalEmission=decre_total
                 )
                 CompanyGoal.objects.create(
                     Com_id=Com_id,

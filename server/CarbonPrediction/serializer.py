@@ -13,11 +13,3 @@ class PartPredictionSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CarbonPrediction
         fields = ('PredictDate',)
-
-# class PartCatePredictionSerializer(serializers.ModelSerializer):
-# #    scores = serializers.ListField(
-# #    child=serializers.IntegerField(min_value=0, max_value=100)
-# #    )
-#     pred_list = serializers.ListField()
-#     class Meta:
-#         fields = ('pred_list',)
