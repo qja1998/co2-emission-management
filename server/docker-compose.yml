@@ -27,6 +27,8 @@ services:
       - carbon_mysql
     restart: always
 
+    # mem_limit: '8g'
+
   carbon_mysql:
     image: mysql
     volumes:
@@ -38,19 +40,3 @@ services:
       - carbon
     command: --default-authentication-plugin=mysql_native_password
     container_name: carbon_mysql_hyemi
-
-  chrome:
-    image: selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618 # vnc로 selenium 동작 확인가능 :7900 port
-    # image: selenium/standalone-chrome # vnc가 없는 이미지. 
-    expose:
-        - 4444
-
-    # vnc 미사용시 7900 포트 불필요
-    ports:
-        - 7900:7900
-
-    # 리소스 제한 시, 'docker-compose --compatibility up' 사용
-    # deploy:
-    #     resources:
-    #         limits:
-    #             cpus: '0.5'

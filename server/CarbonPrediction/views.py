@@ -67,6 +67,7 @@ class CategoryPredictionView(APIView):
         start_date = (CUR_TIME - relativedelta(months=6)).replace(day=1)
         end_date = CUR_TIME
         cur_carbon_list = {c.CarbonUnit:[] for c in categories}
+        cur_month_cate = {c.CarbonUnit:0 for c in categories}
 
         while start_date < end_date: # for while 바꾸기
             cur_total_data = 0
@@ -94,7 +95,10 @@ class CategoryPredictionView(APIView):
                         cur_carbon_list[cate_name].append(carbon_data)
                         pre_date += datetime.timedelta(days=1)
 
-                except:
+                        if next_month.month == end_date.month:
+                            cur_month_cate[cate_name] += carbon_data
+
+                except Exception as e:
                     tmp_date = start_date.replace(day=28)
                     next_date = tmp_date if tmp_date < end_date else end_date
                     try:
@@ -103,7 +107,7 @@ class CategoryPredictionView(APIView):
                                                                         Chief=UserRoot.Chief,
                                                                         Category=cate)
                     except Exception as e:
-                        print(cate, e)
+                        # print(cate, e)
                         continue
 
                     carbon_data = Carbon.objects.filter(RootCom=RootCom,
@@ -114,6 +118,8 @@ class CategoryPredictionView(APIView):
                     carbon_data = carbon_data[0]['CarbonData']
                     cur_carbon_list[cate_name] += func.make_random_values(carbon_data, MONTH_LAST[start_date.month])
                     #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
+                    if next_date.month == end_date.month:
+                        cur_month_cate[cate_name] += carbon_data
 
             start_date += relativedelta(months=1)
             start_date = start_date.replace(day=1)
@@ -125,17 +131,18 @@ class CategoryPredictionView(APIView):
         for cate in categories:
             cate_name = cate.CarbonUnit
             cate = cate.Category
+
             input_data = [[d] for d in cur_carbon_list[cate_name]]
             try:
-                pred_data = sum(get_prediction(input_data)[-180:-820 + MONTH_LAST[AFTER_MON.month]])
+                pred_data = sum(get_prediction(input_data)[-180:-180 + MONTH_LAST[AFTER_MON.month]])
             except Exception as e:
                 pred_data = 0
 
             category_server.append(
                 {
                     'name' : cate_name,
-                    'data' : cur_total_data,
-                    'predictData' : pred_data
+                    'data' : int(cur_month_cate[cate_name]),
+                    'predictData' : int(pred_data)
                 }
             )
         return JsonResponse(category_server, safe=False, status=status.HTTP_200_OK)
@@ -214,8 +221,10 @@ class PartPredictionQuery(APIView):
                         carbon_data = carbon_data[0]['CarbonData']
                         cur_carbon_list[cate_name].append(carbon_data)
                         pre_date += datetime.timedelta(days=1)
+                    print(cate_name, len(cur_carbon_list[cate_name]))
 
-                except:
+                except Exception as e:
+                    print('eeeee', cate, type(e), pre_date)
                     tmp_date = start_date.replace(day=28)
                     next_date = tmp_date if tmp_date < end_date else end_date
                     try:
@@ -224,8 +233,9 @@ class PartPredictionQuery(APIView):
                                                                         Chief=UserRoot.Chief,
                                                                         Category=cate)
                     except Exception as e:
-                        continue
                         print('eeeee', cate, e)
+                        continue
+                        
 
                     carbon_data = Carbon.objects.filter(RootCom=RootCom,
                                                         CarbonInfo=carbon_info).values('CarbonData')
@@ -249,7 +259,6 @@ class PartPredictionQuery(APIView):
                 preds_data = get_prediction(input_data)[120:]
             except Exception as e:
                 preds_data = [0]
-            print(len(preds_data))
 
             cur_mon = CUR_TIME.month
             end_mon = CUR_TIME.month + 6
@@ -257,9 +266,8 @@ class PartPredictionQuery(APIView):
             idx = 0
             while cur_mon < end_mon:
                 end_day = MONTH_LAST[cur_mon]
-                pred = sum(preds_data[i:i + end_day])
+                pred = int(sum(preds_data[i:i + end_day]))
                 server_predict_data[idx] += pred
-
                 server_category_predict_data[cate_name].append(pred)
 
                 i += end_day
@@ -267,9 +275,9 @@ class PartPredictionQuery(APIView):
                 idx += 1
 
         if bool(is_category):
-            return JsonResponse(server_category_predict_data, status=status.HTTP_200_OK)
+            return JsonResponse(server_category_predict_data, safe=False, status=status.HTTP_200_OK)
         else:
-            return JsonResponse(server_predict_data, status=status.HTTP_200_OK)
+            return JsonResponse(server_predict_data, safe=False, status=status.HTTP_200_OK)
         
 class TestPredict(APIView):
 

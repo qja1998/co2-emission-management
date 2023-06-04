@@ -411,17 +411,17 @@ class CarbonPartQuery(APIView):
         start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
         start_date = start_date.replace(day=1)
         end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d') # ValueError: time data '2023-[object Object]-28' does not match format '%Y-%m-%d'
+        month_diff = end_date.month - start_date.month + 1
         end_date = end_date.replace(day=28)# - datetime.timedelta(days=1)
         categories = CarModel.Category.objects.all()
-        server_category_data = [[] for _ in categories]
-        server_total_data = [0 for _ in range(12)]
+        server_category_data = [[0 for _ in range(month_diff)] for _ in categories]
+        server_total_data = [0 for _ in range(month_diff)]
 
         while start_date < end_date:
-            cate_data = []
-            total_data = 0
             for cate in categories:
                 cate = cate.Category
                 try:
+                    carbon_month = 0
                     pre_date = start_date
                     next_month = (start_date + relativedelta(months=1)).replace(day=1)
                     next_month = next_month if next_month < end_date else end_date
@@ -438,12 +438,13 @@ class CarbonPartQuery(APIView):
                             carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
                                                                  CarbonInfo=carbon_info).values('CarbonData')
                         carbon_data = carbon_data[0]['CarbonData']
-                        cate_data.append(carbon_data)
-                        if is_category:
-                            server_category_data[cate].append(carbon_data)
-                        else:
-                            server_total_data[start_date.month - 1] += carbon_data
+                        carbon_month += carbon_data
                         pre_date += datetime.timedelta(days=1)
+                    carbon_month = int(carbon_month)
+                    if is_category:
+                        server_category_data[cate][start_date.month - 1] = carbon_month
+                    else:
+                        server_total_data[start_date.month - 1] += carbon_month
                         
                 except:
                     tmp_date = start_date.replace(day=28)
@@ -465,9 +466,7 @@ class CarbonPartQuery(APIView):
                     else:
                         carbon_data = CarModel.Carbon.objects.filter(RootCom=RootCom,
                                                                     CarbonInfo=carbon_info).values('CarbonData')
-                    carbon_data = carbon_data[0]['CarbonData']
-                    #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
-                    cate_data.append(carbon_data)
+                    carbon_data = int(carbon_data[0]['CarbonData'])
                     if is_category:
                         server_category_data[cate].append(carbon_data)
                     else:

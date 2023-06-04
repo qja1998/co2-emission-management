@@ -27,7 +27,7 @@ from collections import defaultdict
 import datetime
 from dateutil.relativedelta import relativedelta
 
-import trade_price
+# import trade_price
 
 class EvaluationView(APIView):
 
@@ -173,6 +173,7 @@ class CarbonYearQuery(APIView):
                 cate = Category.objects.get(id=cate_id).Category
             except Exception as e:
                 continue
+            goal_with_cate = int(goal_with_cate)
             goal_carbon_category[cate] = goal_with_cate
             server_targetTotal_data += goal_with_cate
         
@@ -290,7 +291,7 @@ class TargetListPost(APIView):
             for data in GoalData:
                 cate = Category.objects.get(CarbonUnit = data['category'])
                 print(cate.Category)
-                decre_total = total_emissions[cate.Category] * (data['percentage'] / 100)
+                decre_total = int(total_emissions[cate.Category] * (data['percentage'] / 100))
                 goal_obj = Goal.objects.create(
                     Cate_id=cate,
                     IncreaseKind=data['listkind'],
@@ -332,7 +333,7 @@ class TargetListDelete(APIView):
                 return Response("Delete Error", status=status.HTTP_404_NOT_FOUND)
         
         return Response("Delete Complete", status=status.HTTP_200_OK)
-    
+import os
 class TradePriceGet(APIView):
 
     @swagger_auto_schema(
@@ -346,6 +347,9 @@ class TradePriceGet(APIView):
         에러 있음, 추후에 해결
         '''
 
-        price = TradePriceSerializer(trade_price.get_price())
+        # price = TradePriceSerializer(trade_price.get_price())
+        print(os.getcwd())
+        with open("./price.txt", 'r') as f:
+            price = int(f.read())
 
-        return Response(price.data, status=status.HTTP_200_OK)
+        return JsonResponse(price, safe=False, status=status.HTTP_200_OK)

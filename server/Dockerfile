@@ -1,31 +1,5 @@
 FROM ubuntu:20.04
 
-ARG DEBIAN_FRONTEND=noninteractive
-ENV TZ=Asia/Seoul
-
-RUN apt-get update \
-  && apt-get install -y python3-pip python3-dev \
-  && cd /usr/local/bin \
-  && ln -s /usr/bin/python3 python \
-  && pip3 install --upgrade pip
-
-# INSTALL DEPENDENCIES
-RUN apt-get install -y curl unzip openjdk-8-jre-headless xvfb libxi6 libgconf-2-4
-
-# INSTALL CHROME
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add \
-    && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
-    && apt-get -y update \
-    && apt-get -y install google-chrome-stable
-
-# INSTALL CHROMEDRIVER
-RUN wget -N https://chromedriver.storage.googleapis.com/113.0.5672.63/chromedriver_linux64.zip -P ~/ \
-    && unzip ~/chromedriver_linux64.zip -d ~/ \
-    && rm ~/chromedriver_linux64.zip \
-    && mv -f ~/chromedriver /usr/local/bin/chromedriver \
-    && chown root:root /usr/local/bin/chromedriver \
-    && chmod 0755 /usr/local/bin/chromedriver
-
 RUN apt-get update && apt-get install -y --no-install-recommends; \
     apt-get install -y python3;\
     apt-get install -y python3-pip;\
@@ -34,7 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends; \
     mkdir myproject;\
     virtualenv venv;\
     . venv/bin/activate;\
-    pip install selenium;\
     pip install django==4.1.4;\
     pip install djangorestframework==3.14.0;\
     pip install dj_rest_auth==2.2.5;\
@@ -59,4 +32,4 @@ CMD cd /; . /venv/bin/activate;\
     #python3 manage.py migrate CarbonNature zero; \
     python3 manage.py makemigrations --noinput; \
     python3 manage.py migrate; \
-    python3 manage.py runserver 0.0.0.0:8000\ 
+    python3 manage.py runserver 0.0.0.0:8000\

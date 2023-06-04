@@ -242,7 +242,8 @@ def make_random_values(total_month, last_day):
     mean = total_month / last_day
     from numpy import random, append, array
     # 32080.026735458807 4686.484019639064
-    randoms = random.normal(loc=mean, scale=4686.484019639064, size=(last_day - 1))
+    std = 4686.48401963906 / 32080.026735458807
+    randoms = random.normal(loc=mean, scale=std*mean, size=(last_day - 1))
     randoms = append(randoms, array(total_month - randoms.sum()))
 
     return list(randoms)
