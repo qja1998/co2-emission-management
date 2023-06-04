@@ -93,27 +93,25 @@
                 store.commit('getBaseData',0)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
                 })
             }
 
             //감축 목표 총 데이터
             async function get_total_target_data(){
                 var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+year.value+"/0"
-                axios.get(url,config).then(res=>{
+                await axios.get(url,config).then(res=>{
                     store.commit('getTargetData',res.data)
                     })
                     .catch(error => {
                     console.log(error)
                     })
                     .finally(()=>{
-                    rerender_signal.value +=1
                 })
             }
 
             async function get_target_list(){
                 var url = "/CarbonNature/TargetList/"+selected_company.value+"/"+year.value
-                axios.get(url,config).then(res=>{
+                await axios.get(url,config).then(res=>{
                     store.commit("getTargetList", res.data)
                 })
                 .catch(error => {
@@ -139,7 +137,7 @@
                     console.log(error)
                 })
                 .finally(() => {
-                  rerender_signal.value +=1
+
                 })
             }
 
@@ -147,7 +145,7 @@
             async function get_total_data_now(){
               var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28/0"
        
-              axios.get(url,config).then(res=>{
+              await axios.get(url,config).then(res=>{
                     store.commit('getTotalNowData',sumfun(res.data))
                   })
                   .catch(error => {
@@ -155,14 +153,14 @@
                     console.log(error)
                   })
                   .finally(()=>{
-                  rerender_signal.value +=1
+
               })
             }
 
             async function get_total_data(){
               var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+lastyear.value+"-01-01/"+lastyear.value+"-12-28/0"
-              console.log('sdㅏㅣㅓㄹㄴㅇ',url)
-              axios.get(url,config).then(res=>{
+    
+              await axios.get(url,config).then(res=>{
                   store.commit('getTotalLastData',sumfun(res.data))
                   })
                   .catch(error => {
@@ -196,6 +194,7 @@
                 get_Base_Info()
                 get_total_target_data()
                 get_total_data()
+                rerender_signal.value +=1
     
             }
             return{

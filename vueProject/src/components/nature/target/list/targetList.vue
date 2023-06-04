@@ -146,7 +146,7 @@ import axios from "axios";
             }
             get_target_list()
             var targetList = computed(() => store.state.getTargetList)
-            console.log(targetList.value)
+    
             //각각의 리스트 내용의 개수를 나타내는 변수
             var transListNum = ref(targetList.value.filter(list => list.listkind === 0).length) 
             var increasListNum = ref(targetList.value.filter(list => list.listkind === 1).length)
@@ -238,7 +238,7 @@ import axios from "axios";
                 edit.value[0]=false
                 edit.value[1]=-1
                 editContent.value = true
-                console.log('수정완료',targetList.value)
+  
             }
 
             //리스트 삭제 함수
@@ -252,11 +252,11 @@ import axios from "axios";
                 editContent.value=true
 
                 for(var i=list.index; i<targetList.value.length; i++){
-                    targetList.value[i].index=targetList[i].index-1
+                    targetList.value[i].index=targetList.value[i].index-1
                 }
                 transListNum.value = targetList.value.filter(list => list.listkind === 0).length
                 increasListNum.value = targetList.value.filter(list => list.listkind === 1).length
-                console.log(transListNum.value)
+                
             }
 
             //서버에 저장
@@ -274,7 +274,7 @@ import axios from "axios";
                     year : year_now,
                     tList:server_add_list
                 }
-                console.log('목표 리스트',post_targetList)
+          
                 set_target_list(post_targetList)
             }
 
@@ -282,8 +282,6 @@ import axios from "axios";
 
             async function set_target_list(list){
                 var url = "/CarbonNature/TargetList"
-                
-                console.log()
                 axios.post(url,list,config).then(res=>{
                     console.log('추가 성공')
                 })

@@ -132,9 +132,6 @@ import {axios} from 'axios'
 
         var sum =computed(()=> store.state.getTotalLastData)
         realData.value = (baseEmissions.value-sum.value)/(baseEmissions.value) *100
-        
-        console.log(baseYear.value,"d",baseEmissions.value)
-
          return{
             standardData, realData,year,baseYear,baseEmissions
          }

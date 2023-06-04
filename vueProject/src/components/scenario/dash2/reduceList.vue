@@ -51,7 +51,6 @@ import {ref, computed} from 'vue'
 
             // 서버
             var targetList = computed(()=>store.state.getTargetList).value
-            console.log('중ㅇ!!!!!!!!!!!!!', targetList)
             return{
                 targetList
             }
