@@ -70,7 +70,7 @@
       var sheets=ref([
         { name: "전력사용양식", 
           data: [
-            { 탄소배출내용: String, 시작날짜: Date, 종료날짜:Date, 배출시설명:null, 배출주체:null,공급처:null, 수도사용량:Number}
+            { 탄소배출내용: String, 시작날짜: Date, 배출시설명:null, 배출주체:null,공급처:null, 수도사용량:Number}
           ] 
         }
       ])
@@ -90,10 +90,10 @@
         for(i=0; i<sheets.length; i++){
           console.log(i)
           var info_list={
-            Type:"10",
+            Type:"9",
             DetailType:"수도",
             StartDate: excelSerialDateToJSDate(sheets[i].시작날짜),
-            EndDate:excelSerialDateToJSDate(sheets[i].종료날짜),
+            EndDate:excelSerialDateToJSDate(sheets[i].시작날짜),
             Location:"",
             scope:2,
             data:sheets[i].수도사용량+"/"+'kg',
