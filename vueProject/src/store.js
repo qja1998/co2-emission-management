@@ -82,6 +82,10 @@ export default createStore({
         getTargetList: [],
         getTargetData:200000,
 
+        //탄소 예측
+        getNextMonthcategory:[],
+        getPredictTotal:[],
+        getPredictCategory:[]
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -292,7 +296,19 @@ export default createStore({
         },
         getTargetData(state, data){
             state.getTargetData =data
+        },
+
+        //탄소 예측
+        getNextMonthcategory(state, datas){
+            state.getNextMonthcategory = datas
+        },
+        getPredictTotal(state,datas){
+            state.getPredictTotal = datas
+        },
+        getPredictCategory(state,datas){
+            state.getPredictCategory = datas
         }
+
         
 
     },
