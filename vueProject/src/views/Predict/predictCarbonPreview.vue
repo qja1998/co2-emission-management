@@ -13,15 +13,15 @@
                 </span>
                 <div id="wrap1">
                     <div style="height:15vh"><predict_dash1 class="dash"/></div>
-                    <predict_dash2 class="dash" id="dash2"/>
+                    <predict_dash2 :key="rerender_signal" class="dash" id="dash2"/>
                 </div>
                 
                 <div id="wrap2" style="margin-top:2vh">
-                    <predict_dash3 class="dash"/>
-                    <predict_dash4 class="dash" id="dash4"/>
+                    <predict_dash3 :key="rerender_signal" class="dash"/>
+                    <predict_dash4  :key="rerender_signal" class="dash" id="dash4"/>
                     
                 </div>
-                <predict_dash5 class="dash"  id="dash5"/></div>
+                <predict_dash5 :key="rerender_signal" class="dash"  id="dash5"/></div>
             </div>
         </div>
     </div>
@@ -83,6 +83,7 @@ import predict_dash4 from "@/components/predict/dash4/dash4.vue"
 import predict_dash5 from "@/components/predict/dash5/dash5.vue"
 import {useStore} from 'vuex'
 import {ref, computed} from 'vue'
+import axios from 'axios'
 
   export default {
       name :"predict",
@@ -100,15 +101,83 @@ import {ref, computed} from 'vue'
         var group_list = computed(() => store.state.group_list).value
         var selected_company = ref(group_list[0])
         store.commit("insight_select_company",selected_company.value)
+        
+        var now = new Date();	// 현재 날짜 및 시간
+        var year = ref(now.getFullYear())	// 년도
+        var month = ref(now.getMonth())//월
+        console.log('현재달',now,month.value)
+        var lastmonth= new Date(now)
+        lastmonth.setMonth(lastmonth.getMonth() - 5)
+
+        var rerender_signal = ref(0)
+
+        const config = {
+            headers:{
+                Authorization:"Bearer"+" "+store.state.accessToken,
+            }
+        }
+
+        //카테고리별 다음달 예측
+        async function get_predict_category_next_month(){
+            var url = "/CarbonPrediction/CategoryPrediction/"+selected_company.value
+            axios.get(url,config).then(res=>{
+                store.commit('getNextMonthcategory',res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            .finally(()=>{
+                rerender_signal.value +=1
+            })
+        }
+        //현재 총 데이터 url 하드코딩 해놓음
+        async function get_total_data_now(){
+            var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-"+"01"+"-01/"+year.value+"-"+"06"+"-28/0"
+            axios.get(url,config).then(res=>{
+                store.commit('getTotalLastDataList',res.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+            .finally(()=>{
+                rerender_signal.value +=1
+            })
+        }
+
+        //총 데이터 예측 url 하드코딩 해놓음
+        async function get_total_Predict_data_now(){
+            var url = "/CarbonPrediction/PartPrediction/"+selected_company.value+"/0"
+            axios.get(url,config).then(res=>{
+                store.commit('getPredictTotal',res.data)
+            })
+            .catch(error => {
+                console.log(error)
+                store.commit('getPredictTotal',[])
+            })
+            .finally(()=>{
+                rerender_signal.value +=1
+            })
+        }
+
+        get_predict_category_next_month()
+        get_total_data_now()
+        get_total_Predict_data_now()
 
         function change_company(){
             store.commit("insight_select_company",selected_company.value)
+            get_predict_category_next_month()
+            get_total_data_now()
+            get_total_Predict_data_now()
         }
         return{
             group_list,
             selected_company,
-            change_company
+            change_company,
+            rerender_signal
         }
+      },
+      mouted(){
+        this.rerender_signal +=1
       }
   }
 </script>

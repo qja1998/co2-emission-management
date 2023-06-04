@@ -9,10 +9,10 @@
             </div>
             <div style="margin: 5vh 0 3vh 3vw">
                 <div style="font-size: 1vw; font-weight: bold; color: #5A5A5A;">현재 총 탄소 배출량
-                    <div style="font-size: 1.5vw; color: #163945;">{{carbonEmissions}} <span>CO2eq</span></div>
+                    <div style="font-size: 1.5vw; color: #163945;">{{carbonEmissions}} <span>kgCO2eq</span></div>
                 </div>
                 <div style="margin-top:3vh; font-size: 1vw; font-weight: bold; color: #5A5A5A;">감축 목표 탄소 배출량
-                    <div style="font-size: 1.5vw; color: #3DC984;">{{ carbonLastEmissions - carbonEmissionsGoal}} <span>CO2eq</span></div>
+                    <div style="font-size: 1.5vw; color: #3DC984;">{{ carbonLastEmissions - carbonEmissionsGoal}} <span>kgCO2eq</span></div>
                 </div>
             </div>
         </div>
@@ -43,6 +43,7 @@ import {useStore} from 'vuex'
             var carbonEmissionsGoal = computed(()=> store.state.getTargetData)
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear())	// 년도
+
 
             return{
                 carbonEmissions,

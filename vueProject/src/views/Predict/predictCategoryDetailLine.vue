@@ -16,10 +16,10 @@
             <span class="subHeader-page">Predicted Carbon emission Overview</span>
             <div >  
               <span class="wrap" v-if="kindOfGraph == 'stick'">
-                <predict_categoryStickGraph class="categoryStickGraph"/>
+                <predict_categoryStickGraph :key="rerender_signal" class="categoryStickGraph"/>
               </span>
               <span class="wrap"  v-else-if="kindOfGraph == 'line'">
-                <predict_categoryLineGraph class="categoryLineGraph"/>
+                <predict_categoryLineGraph :key="rerender_signal" class="categoryLineGraph"/>
               </span>
             </div>
         </div>
@@ -68,8 +68,9 @@ import navigation from "@/components/Navigation.vue"
 import predict_header from "@/components/predict/Header.vue"
 import predict_categoryLineGraph from "@/components/predict/categoryLineGraph/categoryLineGraph.vue"
 import predict_categoryStickGraph from "@/components/predict/categoryStickGraph/categoryStickGraph.vue"
-import {ref } from 'vue';
-
+import {ref, computed } from 'vue';
+import {useStore} from 'vuex'
+import axios from 'axios'
 export default {
   name: "predict",
   components: {
@@ -80,19 +81,71 @@ export default {
   },
 
   setup(){
-    
+    var store = useStore()
     var kindOfGraph = ref('line')
+   //그룹명
+    var user_group = computed(()=> store.state.user_group)
+    var selected_company = computed(()=> store.state.insight_selected_company)
+    console.log('선 그래프 선택 그룹',selected_company.value)
+    //날짜 
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+    var month = now.getMonth()+1 //월
+    var rerender_signal = ref(0)
+        
+    const config = {
+      headers:{
+          Authorization:"Bearer"+" "+store.state.accessToken,
+      }
+    }
+
+    //카테고리별 예측 url
+    async function get_total_Predict_data_now(){
+      var url = "/CarbonPrediction/PartPrediction/"+selected_company.value+"/1"
+      axios.get(url,config).then(res=>{
+          store.commit('getPredictCategory',res.data)
+      })
+      .catch(error => {
+          console.log(error)
+      })
+      .finally(()=>{
+      })
+    }
+
+    //작년 카테고리별 데이터 하드코딩 해놓음
+    async function get_last_category_data(){
+      var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year+"-01-01/"+year+"-"+month+"-28/1"
+      axios.get(url,config).then(res=>{
+          store.commit('getTotalLastCategoryDataList',res.data)
+          })
+          .catch(error => {
+          console.log(error)
+          })
+          .finally(()=>{
+      })
+    }
+
+    get_total_Predict_data_now()
+    get_last_category_data()
+
     const clickLine = () => {
+      get_total_Predict_data_now()
+      get_last_category_data()
       kindOfGraph.value='line'
     }
     const clickBar = () => {
+      get_total_Predict_data_now()
+      get_last_category_data()
       kindOfGraph.value='stick'
       console.log(kindOfGraph)
     }
     return{
-      kindOfGraph,clickLine,clickBar
+      kindOfGraph,clickLine,clickBar,rerender_signal
     }
   },
+  mounted(){
+    this.rerender_signal =+1
+  }
   
 }
 </script>

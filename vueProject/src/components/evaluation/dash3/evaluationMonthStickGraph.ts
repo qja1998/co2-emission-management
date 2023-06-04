@@ -9,12 +9,13 @@ import {
   Tooltip,
   Legend,
   BarElement,
+  LineElement,
   CategoryScale,
   LinearScale,
-  Plugin
+  Plugin,
 } from 'chart.js'
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, annotationPlugin)
+ChartJS.register(Title, Tooltip, Legend, LineElement, BarElement, CategoryScale, LinearScale, annotationPlugin)
 
 export default defineComponent({
   name: 'BarChart',
@@ -22,10 +23,6 @@ export default defineComponent({
     Bar, Line
   },
   props: {
-    chartId: {
-      type: String,
-      default: 'bar-chart'
-    },
     width: {
       type: Number,
       default:300 
@@ -58,23 +55,22 @@ export default defineComponent({
     var year = ref(now.getFullYear())	// 년도
     
     //서버
-    var server_total_data = ref(computed(()=> store.state.getTotalLastDataList))
-    console.log(server_total_data.value)
+    var server_total_data = computed(()=> store.state.getTotalLastDataList)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
 
     var month_baseemissions = server_evaluation.BaseEmissions/12
 
     const chartData = {
-      type: "bar",
+      
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
+          type: "bar" as const,
           label:'총 탄소 배출량',
           data: server_total_data.value,
           backgroundColor : '#3DC984',
-          barThickness: 30,
+          // barThickness: 30,
         },
-  
       ]
     }
 
@@ -105,12 +101,7 @@ export default defineComponent({
       h(Bar, {
         chartData,
         chartOptions,
-        chartId: props.chartId,
-        width: props.width,
-        height: props.height,
-        cssClasses: props.cssClasses,
-        styles: props.styles,
-        plugins: props.plugins,
-      }, Line)
+      }, )
+  
   }
 })

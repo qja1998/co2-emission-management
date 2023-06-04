@@ -34,7 +34,7 @@ import predict_chart3 from './predictChart3.ts'
 
             var now = new Date();	// 현재 날짜 및 시간
             var year = now.getFullYear()	// 년도
-            var month = now.getMonth()//월
+            var month = now.getMonth()+1//월
             return{year,month}
         }
     }

@@ -48,12 +48,12 @@ export default {
     setup(){
         var now = new Date();	// 현재 날짜 및 시간
         var year = now.getFullYear()	// 년도
-        var month = now.getMonth()
+        var month = now.getMonth()+1
         return{
             year,
             month
         }
-    }
+    },
 
 }
 </script>

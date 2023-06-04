@@ -1,7 +1,8 @@
 import { defineComponent, h, PropType } from 'vue'
 
 import { Bar } from 'vue-chartjs'
-
+import { useStore } from 'vuex'
+import {ref, computed} from 'vue'
 import {
   Chart as ChartJS,
   Title,
@@ -50,19 +51,17 @@ export default defineComponent({
   },
   setup(props) {
     //서버 
-    var server_category_predict_data = [
-      [580, 590, 640, 575, 573, 680, 820, 760, 758, 770, 758, 762],
-      [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-      [495, 397, 480, 390, 475, 510, 550, 587, 590, 723, 640, 743],
-      [498, 401, 420, 297, 361, 483, 490, 564, 550, 701, 640, 738],
-      [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
-      [140, 143, 184, 123, 120, 212, 213, 310, 300, 512, 320, 430],
-      [208, 175, 143, 167, 160, 220, 198, 194, 222, 270, 200, 315],
-      [312, 274, 250, 280, 278, 320, 300, 298, 350, 380, 290, 420],
-      [100, 130, 250, 287, 325, 400, 380, 250, 400, 302, 500, 450],
-      [333, 240, 258, 300, 320, 298, 250, 158, 333, 278, 400, 510],
-      [80, 100, 147, 300, 400, 425, 401, 280, 300, 470, 400, 388]
-    ]
+    var store = useStore()
+
+    var server_category_data = computed(()=>store.state.getTotalLastCategoryDataList[9])
+    var server_category_predict_data = computed(()=>store.state.getPredictCategory['수도'])
+
+    var data = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+    for(var i=0; i<6; i++){
+      data[i]=server_category_data.value[i]
+      data[i+6] =server_category_predict_data.value[i]
+    }
 
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간
@@ -88,7 +87,7 @@ export default defineComponent({
       datasets: [
         {
             label:'수도',
-            data: server_category_predict_data[9],
+            data: data,
             backgroundColor : chooseColor(),
             barThickness: 20,
         }

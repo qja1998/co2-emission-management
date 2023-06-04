@@ -3,7 +3,9 @@
       <div class="dashboard" id="evaluation-dash3">
         <div class="evaluationDash3-title">2022년</div>
         <div style="margin: 3vh 2vw 0 2vw">
-            <evaluationMonthStickGraph style="height: 45vh;" />
+            
+            <evaluationMonthStickGraph style="height: 45vh; width:30vw; position:absolute" />
+            <evaluationBaseLine style="height: 45vh; width:25.45vw; margin-left:3.7vw; position:absolute"></evaluationBaseLine>
             <!-- <graph style="height: 45vh"/> -->
             <div class="notice_standard" >* 월별 기준량 = 탄소 배출 기준량 / 12</div>
         </div>
@@ -33,12 +35,14 @@
 
 <script>
 import evaluationMonthStickGraph from "./evaluationMonthStickGraph.ts"
+import evaluationBaseLine from "./evaluationBaseLine";
 import graph from "./graph.vue"
 
 export default {
     name: "evaluation_month_graph",
     components: {
         evaluationMonthStickGraph,
+        evaluationBaseLine,
         graph
     }
 }

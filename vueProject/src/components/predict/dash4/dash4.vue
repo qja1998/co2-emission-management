@@ -2,8 +2,17 @@
     <div style="">
         <div class="title-border">다음달 총 탄소 배출량 예측</div>
         <div class="frame" id="frame-dash4">
-            <div class="dash4-text">{{total_emission.predictData}}
-                <span>kgCO2eq</span>
+            <div class="dash4-text" v-if="mg == false">{{total_emission.predictData}}
+                <span>KgCO2eq</span>
+                <div>
+                    <span v-if="percent<0" style="color:#3DC984">↘{{-percent}}%</span>
+                    <span v-if="percent>0" style="color:#FF0000">↗{{percent}}%</span>
+                    <span>　vs last month</span>
+                </div>
+            </div>
+
+            <div class="dash4-text"  v-else-if="mg == true">{{total_emission.predictData}}
+                <span>MgCO2eq</span>
                 <div>
                     <span v-if="percent<0" style="color:#3DC984">↘{{-percent}}%</span>
                     <span v-if="percent>0" style="color:#FF0000">↗{{percent}}%</span>
@@ -56,16 +65,17 @@ import {useStore} from 'vuex'
             var month = now.getMonth() //월
 
             //서버
-            var server_total_data = [152,120,123,130,128,136,139,150,130]
-            var server_predict_total_data = [160,60,40,20,30,40]
+            var server_total_data = computed(()=> store.state.getTotalLastDataList)
+            var server_predict_total_data = computed(()=> store.state.getPredictTotal)
 
             var total_emission = ref({
                 data:0,
                 predictData:0
             })
 
-            total_emission.value.data = server_total_data[server_total_data.length-1]
-            total_emission.value.predictData = server_predict_total_data[0]
+            console.log(server_predict_total_data.value)
+            total_emission.value.data = server_total_data.value[month]
+            total_emission.value.predictData = server_predict_total_data.value[0]
 
             console.log(total_emission.value)
 
@@ -73,8 +83,14 @@ import {useStore} from 'vuex'
             function percentage(value){
                 return ((value.predictData-value.data)/value.data)*100
             }
-
-            return{total_emission,percent}
+            
+            var mg = ref(false)
+            
+            if(total_emission.value.predictData>1000){
+                mg.value = true
+                total_emission.value.predictData = (total_emission.value.predictData/1000).toFixed(1)
+            }
+            return{total_emission,percent,mg}
         },
         components:{
         

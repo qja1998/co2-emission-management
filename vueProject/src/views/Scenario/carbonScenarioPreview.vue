@@ -124,22 +124,23 @@
                 
             } 
 
-            async function get_total_emission_month(){
-              await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
-                console.log(res.data)
-                console.log("연월"+year.value+month.value)
-                scope1.value = res.data.Scopes[0]
-                scope2.value = res.data.Scopes[1]
-                scope3.value = res.data.Scopes[2]
-                store.commit("set_scopes",res.data.Scopes);
-                store.commit("SetDetailEmission",res.data.EmissionList);
-              })
-              .catch(error => {
-                console.log(error)
-              })
-              .finally(() => {
-                rerender_signal.value +=1
-              })
+            async function get_total_emission_year(){
+              await axios.get("Company/Preview/경상대학교/2023-01-01/2023-05-28",config).then(res => {
+                    console.log(res.data)
+                    console.log("연월"+year.value)
+                    scope1.value = res.data.Scopes[0]
+                    scope2.value = res.data.Scopes[1]
+                    scope3.value = res.data.Scopes[2]
+                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+                    store.commit("set_scopes",res.data.Scopes);
+                    store.commit("SetDetailEmission",res.data.EmissionList);
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                  rerender_signal.value +=1
+                })
             }
 
             //현재 총 데이터
@@ -180,7 +181,7 @@
                 return sum.value
             }
             
-            get_total_emission_month()
+            get_total_emission_year()
             get_total_data_now()
             get_target_list()
             get_Base_Info()
@@ -189,7 +190,7 @@
 
             function change_company(){
                 store.commit("insight_select_company", selected_company.value)
-                get_total_emission_month()
+                get_total_emission_year()
                 get_total_data_now()
                 get_target_list()
                 get_Base_Info()

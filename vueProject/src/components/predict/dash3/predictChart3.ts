@@ -38,7 +38,7 @@ export default defineComponent({
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간
     var year = now.getFullYear()	// 년도
-    var month = now.getMonth() //월
+    var month = now.getMonth()+1 //월
     console.log(month)
     // x범위 만들기
     var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
@@ -55,14 +55,19 @@ export default defineComponent({
     }
 
     //서버
-    var server_total_data = [152,120,123,130,128,136]
-    var server_predict_total_data = [50,60,40,20,30,40]
+    var total =  computed(()=> store.state.getTotalLastDataList)
+    var server_total_data = [0,0,0,0,0,0] 
+    
+    for(var i =0; i < 6; i++){
+      server_total_data[i]=total.value[i]
+    }
+    var server_predict_total_data = computed(()=> store.state.getPredictTotal)
     
     var server_predict_data = [NaN, NaN, NaN, NaN, NaN]
     server_predict_data.push(server_total_data[server_total_data.length - 1])
 
-    for(var i=0; i<server_predict_total_data.length; i++){
-      server_predict_data.push(server_predict_total_data[i])
+    for(var i=0; i<server_predict_total_data.value.length; i++){
+      server_predict_data.push(server_predict_total_data.value[i])
       
     }
     console.log(server_predict_data)
@@ -113,8 +118,9 @@ export default defineComponent({
         y:{
           display:true,
           grid:{
-            display:false
-          }
+            display:false,
+          },
+  
         },
       }
     }

@@ -2,7 +2,7 @@ import { defineComponent, h, PropType } from 'vue'
 import { Line } from 'vue-chartjs'
 import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
-
+import axios from 'axios'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,58 +40,34 @@ export default defineComponent({
     //날짜 
     var now = new Date();	// 현재 날짜 및 시간
     var year = now.getFullYear()	// 년도
-    var month = now.getMonth() //월
-    console.log(month)
+    var month = now.getMonth()+1 //월
     // x범위 만들기
     var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
     var x_legend =['']
 
+
     for(var i = 0; i< month_Eng.length; i++){
       if(month-6+i < 0){
           x_legend[i] = month_Eng[month_Eng.length + (month-6+i)]
-          console.log(x_legend)
       }
       else{
         x_legend[i] = month_Eng[month-6+i]
       }
     }
     //서버 
-    var server_category_predict_data = [
-      [820, 760, 758, 770, 758, 762],
-      [667, 663, 660, 670, 673, 750],
-      [550, 587, 590, 723, 640, 743],
-      [490, 564, 550, 701, 640, 738],
-      [365, 362, 384, 391, 342, 370],
-      [213, 310, 300, 512, 320, 430],
-      [198, 194, 222, 270, 200, 315],
-      [300, 298, 350, 380, 290, 420],
-      [380, 250, 400, 302, 500, 450],
-      [250, 158, 333, 278, 400, 510],
-      [401, 280, 300, 470, 400, 388]
-    ]
 
-    var server_category_data = [
-      [580, 590, 640, 575, 573, 680],
-      [530, 495, 486, 570, 573, 664],
-      [495, 397, 480, 390, 475, 510],
-      [498, 401, 420, 297, 361, 483],
-      [381, 363, 321, 350, 348, 371],
-      [140, 143, 184, 123, 120, 212],
-      [208, 175, 143, 167, 160, 220],
-      [312, 274, 250, 280, 278, 320],
-      [100, 130, 250, 287, 325, 400],
-      [333, 240, 258, 300, 320, 298],
-      [80, 100, 147, 300, 400, 425]
-    ]
+    var server_category_data = computed(()=>store.state.getTotalLastCategoryDataList)
+    var server_category_predict_data = computed(()=>store.state.getPredictCategory)
 
-    var category_data = ref(server_category_data)
 
-    for(var i=0; i<server_category_predict_data.length; i++){
-      category_data.value[i].push(...server_category_predict_data[i])
+    var category_data = ref(server_category_data.value)
+    var categoryList = ['고정연소','이동연소','탈루배출','폐기물처리시설','비료사용','대학소유동물','산림에의한흡수','전력','열','수도','폐기물']
+   
+
+    for(var i=0; i<11; i++){
+      category_data.value[i].push(...server_category_predict_data.value[categoryList[i]])
+
     }
-
-    console.log(category_data.value)
-
 
     const chartData = {
       labels: x_legend,

@@ -1,11 +1,12 @@
 <template>
     <div style="float:left; ">
         <div class="dash_title" >전년도 탄소 배출량 평가</div>
+
         <div class="dashboard" id="evaluation-dash1">
-            <div class = "dashFalse" v-if = "standardData == false">
+            <div class = "dashFalse" v-if = "baseEmissions == 0">
                 <img class="nonData-img" src="@/assets/evaluationGraph/NonData.png" alt="기준 연도를 입력해주세요.">
             </div>
-            <div v-else-if = "standardData == true">
+            <div v-else-if = "standardData !=0">
                 <div class="dash-text" style="text-align: center; height:10vh; line-height: 10vh;">{{year-1}}년 탄소 배출량 평가</div>
                 <Suspense>
                     <evaluationDonutGraph style="height: 50vh"></evaluationDonutGraph>
@@ -23,6 +24,7 @@
                 <evaluationStickGraph style="height: 8vh"></evaluationStickGraph>
             </div>
             <div class="notice">* 0% 이하 감소 : 나쁨 | 0~9% 감소 : 미흡 | 10~29% 감소 : 양호 | 30% 이상 감소 : 좋음</div>
+            
         </div>
     </div>
     
@@ -40,9 +42,8 @@
     margin: 0 auto;
 }
 .nonData-img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: inherit;
+    height: 84.3vh;
 }
 .stick{
     margin: 1.5vh 3% 0 3%;
@@ -111,10 +112,10 @@ import {axios} from 'axios'
   export default {
       name :"dashboard1_evaluation",
       components:{
-    // eslint-disable-next-line vue/no-unused-components
-    evaluationDonutGraph,
-    evaluationStickGraph
-},
+        // eslint-disable-next-line vue/no-unused-components
+        evaluationDonutGraph,
+        evaluationStickGraph,
+    },
       setup() {
 
         //그룹명, 날짜
@@ -133,12 +134,6 @@ import {axios} from 'axios'
         realData.value = (baseEmissions.value-sum.value)/(baseEmissions.value) *100
         
         console.log(baseYear.value,"d",baseEmissions.value)
-        if(baseEmissions.value!=0){
-            standardData.value=true
-        }
-        else{
-            standardData.value=false
-        }
 
          return{
             standardData, realData,year,baseYear,baseEmissions

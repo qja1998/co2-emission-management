@@ -4,7 +4,7 @@
         <div class="scenario-frame" >
             <div>
                 <img style="padding-top: 3vh; height: 16vh; margin: auto; display: block;" src="@/assets/money.png">
-                <div style="font-size: 3vh; font-weight: bold; text-align: center; color: #163945; padding-bottom: 3vh;">{{profitMoney}}<span>원 이득</span></div>
+                <div style="font-size: 3vh; font-weight: bold; text-align: center; color: #163945; padding-bottom: 3vh;">{{profitMoney/1000}}<span>천원 이득</span></div>
             </div>
         </div>
     </div>
