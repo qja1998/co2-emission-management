@@ -61,6 +61,7 @@ export default defineComponent({
     var evaluData = (server_evaluation.BaseEmissions - sum.value)/server_evaluation.BaseEmissions*100
     var evalu_color = ref('#3DC984')
 
+    console.log('총 탄소 배출량',sum.value)
     if(evaluData>0){
       evalu_color.value = '#3DC984'
     }

@@ -95,7 +95,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
       var rerender_signal = ref(0)
-
+      rerender_signal.value +=1
       store.commit("SetName",selected_company.value)
       const config = {
           headers:{
@@ -105,7 +105,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       }
       async function get_Base_Info(){
         var url = "/CarbonNature/Evaluation/"+selected_company.value
-        axios.get(url,config).then(res=>{
+        await axios.get(url,config).then(res=>{
           store.commit('getBaseYear',res.data.BaseYear)
           store.commit('getBaseData',res.data.BaseEmissions)
         })
@@ -131,7 +131,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       // 해당 조직의 작년 총 탄소 배출량
       async function get_total_data(){
         var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
-        axios.get(url,config).then(res=>{
+        await axios.get(url,config).then(res=>{
           store.commit('getTotalLastData',sumfun(res.data))
           store.commit('getTotalLastDataList',res.data)
         })
@@ -158,8 +158,8 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       function change_company(){
         store.commit("SetName",selected_company.value)
         get_total_data()
+        get_total_data()
         get_Base_Info()
-
       }
 
       return{
@@ -167,9 +167,10 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       }
     },
     mounted(){
-        this.rerender_signal +=1
         this.get_total_data(),
-        this.get_Base_Info()
+        this.get_Base_Info(),
+
+        this.rerender_signal +=1
 
       }
   }
