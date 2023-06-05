@@ -63,10 +63,6 @@ export default defineComponent({
     var goalCarbonCategory = computed(()=> store.state.getTargetList).value
     var server_category_data = computed(()=> store.state.getTotalCategoryDataList).value
     var categoryLastList = computed(()=> store.state.getTotalLastCategoryDataList).value
-    // console.log('막대 그래프 그룹',computed(()=>store.state.insight_selected_company).value)
-    // console.log('카테고리별 감축 목표데이터', goalCarbonCategory)
-    // console.log('카테고리별 현재 데이터', server_category_data)
-    // console.log('카테고리별 작년 데이터', categoryLastList)
     var sum_total_category_data: number[] = [] //카테고리별 현재 데이터
     var sum_last_category_data : number[] = []
 
@@ -88,13 +84,12 @@ export default defineComponent({
       }    
       sum_last_category_data.push(sum.value)
     }
-    console.log('작년 카테고리별 데이터 일년치',sum_last_category_data)
-    console.log('감축 목표 데이터 일년치',goalCarbonCategory)
+
     for (var i=0; i<goalCarbonCategory.length; i++){
         var data = sum_last_category_data[i] - goalCarbonCategory[i]
         result_target_data.push(data)
     }
-    console.log('감축 목표 카테고리 결과',result_target_data)
+
   const chartData = {
     labels: [
       '고정연소', 

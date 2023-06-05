@@ -65,7 +65,7 @@ export default defineComponent({
     var now = new Date();	// 현재 날짜 및 시간
     var year = now.getFullYear()	// 년도
     var month = now.getMonth() //월
-    console.log(month)
+
     // x범위 만들기
     var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
     var x_legend =['']
@@ -73,7 +73,7 @@ export default defineComponent({
     for(var i = 0; i< month_Eng.length; i++){
       if(month-6+i < 0){
           x_legend[i] = month_Eng[month_Eng.length + (month-6+i)]
-          console.log(x_legend)
+
       }
       else{
         x_legend[i] = month_Eng[month-6+i]

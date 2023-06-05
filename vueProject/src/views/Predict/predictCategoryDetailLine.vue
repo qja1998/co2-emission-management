@@ -2,7 +2,7 @@
   <div class="measure-main">
     <navigation class="navigation" />
     <div class="contents">
-      <predict_header />
+      <predict_header/>
       <div class="background">
           <div class="header-page">카테고리별 탄소배출량 예측 전체보기
             <span class="radio-group">

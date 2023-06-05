@@ -104,11 +104,8 @@ import axios from "axios"
         }
 
         async function set_base_info(list){
-            var url = "/CarbonNature/EvaluationInfo"
-            
-            console.log(store.state.accessToken)
+            var url = "/CarbonNature/EvaluationInfo"      
             axios.post(url,list,config).then(res=>{
-            console.log('기준년도 입력',sumfun(res.data))
             })
             .catch(error => {
             console.log(error)
@@ -117,7 +114,6 @@ import axios from "axios"
             })
         }
         function saveBaseEmission(){
-            console.log()
             server_EmissionInfo.value.groupName = group_name.value
             server_EmissionInfo.value.BaseYear = standardYear.value
             server_EmissionInfo.value.BaseEmissions = parseInt((standardEmission1.value+standardEmission2.value+standardEmission3.value)/3) + standardEmission.value

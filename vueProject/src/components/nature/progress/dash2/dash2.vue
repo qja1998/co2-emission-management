@@ -39,17 +39,41 @@ import axios from "axios";
             var month = now.getMonth()
 
             //서버
+            
+            const config = {
+                headers:{
+                    Authorization:"Bearer"+" "+store.state.accessToken,
+                }
+            }
+            
             var getTotalLastData =  computed(()=> store.state.getTotalLastData)
             var server_targetTotal_data =  computed(()=> store.state.getTargetData)
             var BaseEmissions = computed(()=> store.state.baseData)
 
             var carbonMoney = ref(250)
+            get_eimmision_now()
             var increaseEmissionOfBase = BaseEmissions.value - (getTotalLastData.value-server_targetTotal_data.value)
             var profitMoney = ref(carbonMoney.value*increaseEmissionOfBase)
 
             increaseEmissionOfBase = (increaseEmissionOfBase/1000).toFixed(0)
+
+            async function get_eimmision_now(){
+              var url = "/CarbonNature/TradePrice"
+       
+              await axios.get(url,config).then(res=>{
+                    carbonMoney.value = res.data
+                  })
+                  .catch(error => {
+
+                  })
+                  .finally(()=>{
+
+              })
+            }
+
             function getAmount(){
                 console.log('새로 고침')
+                get_eimmision_now()
             }
             return{
                 carbonMoney,

@@ -72,7 +72,6 @@ import { useStore } from 'vuex'
                 else{
                     listKind.value = 'trans'
                 }
-                console.log(listKind.value)
             }
             const leaveTarget=()=>{
                 select.value = -1
