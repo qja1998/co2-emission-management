@@ -54,6 +54,3 @@ class CompanyGoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CompanyGoal
         fields = "__all__"
-
-class TradePriceSerializer(serializers.Serializer):
-    trade_price = serializers.IntegerField()

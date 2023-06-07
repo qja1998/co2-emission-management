@@ -19,13 +19,10 @@ from drf_yasg import openapi
 from .models import *
 from .serializer import *
 from Company.models import Company, Department
-from Carbon.models import Carbon, Category, CarbonInfo
-from Swag import HuSwag
+from Carbon.models import Category
 import func
 
-from collections import defaultdict
 import datetime
-from dateutil.relativedelta import relativedelta
 
 # import trade_price
 
@@ -70,16 +67,7 @@ class MethodView(APIView):
                                   'content':method,
                                   'img':''})
         return JsonResponse(server_method, safe=False,status=status.HTTP_200_OK)
-    
-# class CompanyGoalView(APIView):
-#     @swagger_auto_schema(
-#         operation_summary="특정 기업의 탄소 배출량 목표에 관한 데이터를 반환하는 Api",
-#         responses={200: "API가 정상적으로 실행 됨"},
-#     )
-#     def get(self, request, com_id, goal_id, format=None):
-#         result = CompanyGoal.objects.get(Com_id=com_id, Goal_id=goal_id)
-#         serializer = CompanyGoalSerializer(result)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class EvaluationInfoView(APIView):
@@ -204,25 +192,10 @@ class TargetListQuery(APIView):
                 "This Company/Department doesn't exist.",
                 status=status.HTTP_404_NOT_FOUND,
             )
-        
-        # try:  # 요청받은 회사가 루트가 아닌 경우
-        #     Com_id = Department.objects.get(
-        #         DepartmentName=depart_name, RootCom=UserRoot  # 로그인이 구현된 이후에는 사용자의 root와 비교
-        #     ).RootCom
-        # except Department.DoesNotExist:  # 요청받은 회사가 루트인 경우
-        #     try:
-        #         Com_id = Company.objects.get(ComName=depart_name)
-        #     except Company.DoesNotExist:  # 요청받은 회사가 존재하지 않는 경우
-        #         return Response(
-        #             "This Company/Department doesn't exist.",
-        #             status=status.HTTP_404_NOT_FOUND,
-        #         )
-            
 
         target_list = []
         categories = Category.objects.all()
-        # for i, cate in enumerate(categories):
-        # try:
+
         Goal_ids = CompanyGoal.objects.filter(Com_id=Com_id, GoalDate=year).values('Goal_id')
         i = 0
         for Goal_id in Goal_ids:
@@ -344,11 +317,12 @@ class TradePriceGet(APIView):
     def get(self, request, format=None):
 
         '''
-        에러 있음, 추후에 해결
+        탄소배출권의 현재 가격을 가져오는 API
+        10분 간격으로 값을 변경
         '''
 
         # price = TradePriceSerializer(trade_price.get_price())
-        print(os.getcwd())
+    
         with open("./price.txt", 'r') as f:
             price = int(f.read())
 

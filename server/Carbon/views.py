@@ -390,6 +390,7 @@ class CarbonPartQuery(APIView):
 
         date 값들은 "YYYY-MM-DD" 형식으로 입력
         '''
+        print(depart_name)
         UserRoot = func.GetUserRoot(request)
         
         department = None
@@ -410,9 +411,9 @@ class CarbonPartQuery(APIView):
 
         start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
         start_date = start_date.replace(day=1)
-        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d') # ValueError: time data '2023-[object Object]-28' does not match format '%Y-%m-%d'
+        end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
         month_diff = end_date.month - start_date.month + 1
-        end_date = end_date.replace(day=28)# - datetime.timedelta(days=1)
+        end_date = end_date.replace(day=28)
         categories = CarModel.Category.objects.all()
         server_category_data = [[0 for _ in range(month_diff)] for _ in categories]
         server_total_data = [0 for _ in range(month_diff)]
@@ -470,7 +471,6 @@ class CarbonPartQuery(APIView):
                     if is_category:
                         server_category_data[cate].append(carbon_data)
                     else:
-                        #server_total_data.append(serializer.CarbonTotalSerializer(CarbonData=total_data))
                         server_total_data[start_date.month - 1] += carbon_data
             start_date += relativedelta(months=1)
         

@@ -3,16 +3,12 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import status
 from rest_framework.response import Response
-from .models import CarbonPrediction
 from django.http import JsonResponse
 from rest_framework.views import APIView
-from .serializer import CarbonPredictionSerializer
-from Swag import ComSwag
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.permissions import IsAuthenticated
 from Carbon.models import Carbon, CarbonInfo, Category
 from Company.models import Department, Company
-from .serializer import *
 
 import func
 import datetime
@@ -112,12 +108,9 @@ class CategoryPredictionView(APIView):
 
                     carbon_data = Carbon.objects.filter(RootCom=RootCom,
                                                                 CarbonInfo=carbon_info).values('CarbonData')
-                    # if not carbon_data:
-                    #     continue
 
                     carbon_data = carbon_data[0]['CarbonData']
                     cur_carbon_list[cate_name] += func.make_random_values(carbon_data, MONTH_LAST[start_date.month])
-                    #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
                     if next_date.month == end_date.month:
                         cur_month_cate[cate_name] += carbon_data
 
@@ -224,7 +217,7 @@ class PartPredictionQuery(APIView):
                     print(cate_name, len(cur_carbon_list[cate_name]))
 
                 except Exception as e:
-                    print('eeeee', cate, type(e), pre_date)
+                    print(cate, str(e), pre_date)
                     tmp_date = start_date.replace(day=28)
                     next_date = tmp_date if tmp_date < end_date else end_date
                     try:
@@ -233,18 +226,15 @@ class PartPredictionQuery(APIView):
                                                                         Chief=UserRoot.Chief,
                                                                         Category=cate)
                     except Exception as e:
-                        print('eeeee', cate, e)
+                        print('e', cate, e)
                         continue
                         
 
                     carbon_data = Carbon.objects.filter(RootCom=RootCom,
                                                         CarbonInfo=carbon_info).values('CarbonData')
-                    # if not carbon_data:
-                    #     continue
 
                     carbon_data = carbon_data[0]['CarbonData']
                     cur_carbon_list[cate_name] += func.make_random_values(carbon_data, MONTH_LAST[start_date.month])
-                    #cate_data.append(serializer.CarbonTotalSerializer(CarbonData=carbon_data))
 
             start_date += relativedelta(months=1)
             start_date = start_date.replace(day=1)

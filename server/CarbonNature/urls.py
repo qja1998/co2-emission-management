@@ -14,11 +14,6 @@ urlpatterns = [
         views.MethodView.as_view(),
         name="MethodGet",
     ),
-    # path(
-    #     "CompanyGoal",
-    #     views.CompanyGoalView.as_view(),
-    #     name="CompanyGoalGet",
-    # ),
     path(
         "EvaluationInfo",
         views.EvaluationInfoView.as_view(),
