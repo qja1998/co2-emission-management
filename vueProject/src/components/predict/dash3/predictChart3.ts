@@ -39,7 +39,6 @@ export default defineComponent({
     var now = new Date();	// 현재 날짜 및 시간
     var year = now.getFullYear()	// 년도
     var month = now.getMonth()+1 //월
-    console.log(month)
     // x범위 만들기
     var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
     var x_legend =['']
@@ -70,7 +69,6 @@ export default defineComponent({
       server_predict_data.push(server_predict_total_data.value[i])
       
     }
-    console.log(server_predict_data)
 
     //차트 데이터
     const chartData = {

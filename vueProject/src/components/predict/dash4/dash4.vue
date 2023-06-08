@@ -73,11 +73,8 @@ import {useStore} from 'vuex'
                 predictData:0
             })
 
-            console.log(server_predict_total_data.value)
             total_emission.value.data = server_total_data.value[month]
             total_emission.value.predictData = server_predict_total_data.value[0]
-
-            console.log(total_emission.value)
 
             var percent =Math.round(percentage(total_emission.value))
             function percentage(value){

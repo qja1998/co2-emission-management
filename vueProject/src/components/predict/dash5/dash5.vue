@@ -109,7 +109,6 @@ import {useStore} from 'vuex'
                     {img:require('@/assets/previewDetail/11.png'),name:'폐기물', data:server_category.value[10].data, predictData: server_category.value[10].predictData},
                 ]
             
-            console.log('값',category[7].predictData)
             var sortCategory = sort(category,11)
 
             function sort(arr,size){

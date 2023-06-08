@@ -83,7 +83,7 @@ export default createStore({
         getTargetData:200000,
 
         //탄소 예측
-        getNextMonthcategory:[],
+        getNextMonthcategory:[{name:'', data:0, predictData:0}],
         getPredictTotal:[],
         getPredictCategory:[]
     }

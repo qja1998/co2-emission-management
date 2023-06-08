@@ -1,5 +1,4 @@
 <template>
-
     <Suspense>
       <template #default>
         <div class="dashboard" id="dashboard2">

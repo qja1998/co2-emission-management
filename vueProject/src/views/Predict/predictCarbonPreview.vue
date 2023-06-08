@@ -11,6 +11,7 @@
                 <span class="header-page" style="margin:0">탄소 배출량 예측 전체보기<br>
                     <span class="subHeader-page">Predicted Carbon emission Overview</span>
                 </span>
+
                 <div id="wrap1">
                     <div style="height:15vh"><predict_dash1 class="dash"/></div>
                     <predict_dash2 :key="rerender_signal" class="dash" id="dash2"/>
@@ -21,7 +22,8 @@
                     <predict_dash4  :key="rerender_signal" class="dash" id="dash4"/>
                     
                 </div>
-                <predict_dash5 :key="rerender_signal" class="dash"  id="dash5"/></div>
+                <predict_dash5 :key="rerender_signal" class="dash"  id="dash5"/>
+              </div>
             </div>
         </div>
     </div>
@@ -104,7 +106,6 @@ import axios from 'axios'
         
         var now = new Date();	// 현재 날짜 및 시간
         var year = ref(now.getFullYear())	// 년도
-        var month = ref(now.getMonth())//월
         var lastmonth= new Date(now)
         lastmonth.setMonth(lastmonth.getMonth() - 5)
 
@@ -118,7 +119,9 @@ import axios from 'axios'
 
         //카테고리별 다음달 예측
         async function get_predict_category_next_month(){
- 
+
+            store.commit("insight_select_company",selected_company.value)
+
             var url = "/CarbonPrediction/CategoryPrediction/"+selected_company.value
             await axios.get(url,config).then(res=>{
                 store.commit('getNextMonthcategory',res.data)
@@ -127,12 +130,11 @@ import axios from 'axios'
                 console.log(error)
             })
             .finally(()=>{
+                rerender_signal.value +=1
             })
-        }
 
-        //현재 총 데이터 url 하드코딩 해놓음
-        async function get_total_data_now(){
-    
+
+            //현재 총 데이터 url 하드코딩 해놓음
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-"+"01"+"-01/"+year.value+"-"+"06"+"-28/0"
             await axios.get(url,config).then(res=>{
                 store.commit('getTotalLastDataList',res.data)
@@ -141,12 +143,10 @@ import axios from 'axios'
                 console.log(error)
             })
             .finally(()=>{
-
+                rerender_signal.value +=1
             })
-        }
-
-        //총 데이터 예측 url 하드코딩 해놓음
-        async function get_total_Predict_data_now(){
+            
+            //총 데이터 예측 url 하드코딩 해놓음
             var url = "/CarbonPrediction/PartPrediction/"+selected_company.value+"/0"
             await axios.get(url,config).then(res=>{
                 store.commit('getPredictTotal',res.data)
@@ -160,31 +160,56 @@ import axios from 'axios'
             })
         }
 
-        function start(){
-            get_predict_category_next_month()
-            get_total_data_now()
-            get_total_Predict_data_now()
-            rerender_signal.value +=1
-        }
+        
+        // async function get_total_data_now(){
+    
+        //     var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-"+"01"+"-01/"+year.value+"-"+"06"+"-28/0"
+        //     await axios.get(url,config).then(res=>{
+        //         store.commit('getTotalLastDataList',res.data)
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //     })
+        //     .finally(()=>{
+
+        //     })
+        // }
+
+        
+        // async function get_total_Predict_data_now(){
+        //     var url = "/CarbonPrediction/PartPrediction/"+selected_company.value+"/0"
+        //     await axios.get(url,config).then(res=>{
+        //         store.commit('getPredictTotal',res.data)
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //         store.commit('getPredictTotal',[])
+        //     })
+        //     .finally(()=>{
+        //         rerender_signal.value +=1
+        //     })
+        // }
+
         console.log('1', selected_company.value)
-        start()
+        get_predict_category_next_month()
 
         function change_company(){
             store.commit("insight_select_company",selected_company.value)
             console.log('1', selected_company.value)
-            start()
+            get_predict_category_next_month()
             rerender_signal.value +=1
         }
         return{
             group_list,
             selected_company,
             change_company,
-            rerender_signal
+            rerender_signal,
         }
       },
-      mouted(){
+      created(){
+      },  
+      mounted(){
         this.rerender_signal +=1
-        this.start()
       }
   }
 </script>
