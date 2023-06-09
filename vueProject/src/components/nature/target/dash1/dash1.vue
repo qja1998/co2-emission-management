@@ -45,17 +45,17 @@ import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
                 sum_total_category_data.value.push(sum.value)
             }
             var categoryLastEmission = [
-                {category:'고정연소', emission:sum_total_category_data.value[0] },
-                {category:'이동연소', emission:sum_total_category_data.value[1] },
-                {category:'탈루배출', emission:sum_total_category_data.value[2] },
-                {category:'폐기물 처리시설', emission:sum_total_category_data.value[3] },
-                {category:'비료사용', emission:sum_total_category_data.value[4] },
-                {category:'대학동물소유', emission:sum_total_category_data.value[5] },
-                {category:'산림에의한흡수', emission:sum_total_category_data.value[6] },
-                {category:'전력', emission:sum_total_category_data.value[7] },
-                {category:'열', emission:sum_total_category_data.value[8] },
-                {category:'수도', emission:sum_total_category_data.value[9] },
-                {category:'폐기물', emission:sum_total_category_data.value[10] },
+                {category:'고정연소', emission:sum_total_category_data.value[0]},
+                {category:'이동연소', emission:sum_total_category_data.value[1]},
+                {category:'탈루배출', emission:sum_total_category_data.value[2]},
+                {category:'폐기물 처리시설', emission:sum_total_category_data.value[3]},
+                {category:'비료사용', emission:sum_total_category_data.value[4]},
+                {category:'대학동물소유', emission:sum_total_category_data.value[5]},
+                {category:'산림에의한흡수', emission:sum_total_category_data.value[6]},
+                {category:'전력', emission:sum_total_category_data.value[7]},
+                {category:'열', emission:sum_total_category_data.value[8]},
+                {category:'수도', emission:sum_total_category_data.value[9]},
+                {category:'폐기물', emission:sum_total_category_data.value[10]},
             ]
             var activeColor = [
                 '#9FD72A',
@@ -68,7 +68,7 @@ import targetdonut from "@/components/nature/target/dash1/targetDonutGraph"
                 '#5E8CFF',
                 '#FF7D7D',
                 '#088AA6',
-                '#864887'
+                '#475674'
             ]
             return{
                 year,
