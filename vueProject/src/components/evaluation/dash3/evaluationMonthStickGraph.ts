@@ -49,12 +49,10 @@ export default defineComponent({
   setup(props) {
     var store = useStore()
     //날짜, 그룹명
-    var group_name = computed(()=> store.state.group_name)
-    var user_group = computed(()=> store.state.user_group)
     var now = new Date();	// 현재 날짜 및 시간
-    var year = ref(now.getFullYear())	// 년도
     
     //서버
+    var server_base = computed(()=> store.state.baseData)
     var server_total_data = computed(()=> store.state.getTotalLastDataList)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
 
@@ -65,12 +63,12 @@ export default defineComponent({
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
       datasets: [
         {
-          type: "bar" as const,
           label:'총 탄소 배출량',
           data: server_total_data.value,
           backgroundColor : '#3DC984',
           // barThickness: 30,
         },
+   
       ]
     }
 
@@ -93,6 +91,8 @@ export default defineComponent({
         y:{
           stacked:true,
           display:true,
+          min: 0,
+          max: server_base.value/12 + 1000,
         },
       },
     }

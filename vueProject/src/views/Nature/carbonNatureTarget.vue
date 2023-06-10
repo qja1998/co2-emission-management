@@ -8,11 +8,15 @@
                   <option v-for="item in group_list" :key="item">{{ item }}</option>
                 </select>
                 <div class="header-page">탄소 배출량 감축 목표 설정</div>
-                <div class="dash">
-                    <target_dash1 :key="rerender_signal" id = "target_dash1"></target_dash1>
-                    <target_dash2 :key="rerender_signal" id = "target_dash2"></target_dash2>
+                <div v-if ="server == 3">
+                    <div class="dash">
+                        <target_dash1 :key="rerender_signal" id = "target_dash1"></target_dash1>
+                        <target_dash2 :key="rerender_signal" id = "target_dash2"></target_dash2>
+                    </div>
+                    <target_dash3 :key="rerender_signal" id = "target_dash3"></target_dash3>
                 </div>
-                <target_dash3 :key="rerender_signal" id = "target_dash3"></target_dash3>
+                
+                
             </div>
         </div>
         <addTargetPopup v-if="targetPopup==true" class="popup"></addTargetPopup>
@@ -51,6 +55,7 @@ export default {
         var year = ref(now.getFullYear())
         var targetPopup = computed(() => store.state.CarbonCategories)
 
+        var server = ref(0)
         var rerender_signal = ref(0)
         
         const config = {
@@ -68,12 +73,10 @@ export default {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value= server.value +1 
+                    console.log(server.value)
             })
-        }
 
-
-        async function get_total_data(){
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
             axios.get(url,config).then(res=>{
                 store.commit('getTotalLastData',sumfun(res.data))
@@ -83,11 +86,10 @@ export default {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value= server.value +1 
+                    console.log(server.value)
             })
-        }
 
-        async function get_total_target_data(){
             var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+year.value+"/0"
             axios.get(url,config).then(res=>{
                 store.commit('getTargetData',res.data)
@@ -96,10 +98,12 @@ export default {
                 console.log(error)
                 })
                 .finally(()=>{
+                    server.value= server.value +1 
+                    console.log(server.value)
+                    rerender_signal.value +=1
+                    
             })
         }
-
-        
      
 
         function sumfun(list){
@@ -109,17 +113,14 @@ export default {
             }
             return sum.value
         }
-        get_total_data()
         get_total_category_data()
-        get_total_target_data()
+
 
 
         function change_company(){
             store.commit("insight_select_company", selected_company.value)
-            get_total_data()
+            server.value = 0
             get_total_category_data()
-            get_total_target_data()
-
         }
         
         return{
@@ -127,11 +128,9 @@ export default {
             selected_company,
             group_list,
             change_company,
-            rerender_signal
+            rerender_signal,
+            server
         }
-    },
-    mounted(){
-        this.rerender_signal +=1
     }
 }
 </script>
