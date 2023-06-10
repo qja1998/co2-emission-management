@@ -13,14 +13,14 @@
                 </p>
                 <div id="wrap1">
                     <div :key="rerender_signal">
-                        <div><dash1_footprint  style="padding-top: 3vh;" /></div>
-                        <div style="padding-top: 2vh;"><dash1_scopeChart/></div>
-                        <div style="padding-top: 2vh;"><dash1_predictChart/></div>
+                        <div><dash1_footprint   v-if="server==6" style="padding-top: 3vh;" /></div>
+                        <div style="padding-top: 2vh;"><dash1_scopeChart  v-if="server==6" /></div>
+                        <div style="padding-top: 2vh;"><dash1_predictChart  v-if="server==6" /></div>
                     </div>
-                    <dash2_reduceList :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"/>
+                    <dash2_reduceList :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"  v-if="server==6" />
                     <div>
-                        <dash3_progress :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"/>
-                        <dash3_benefit :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"/>
+                        <dash3_progress :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"  v-if="server==6" />
+                        <dash3_benefit :key="rerender_signal" style="padding: 3vh 0 0 1.5vw;"  v-if="server==6" />
                     </div>
                 </div>
               </div>
@@ -74,6 +74,7 @@
             var scope3 = ref(0)
             store.commit("insight_select_company",selected_company.value)
 
+            var server = ref(0)
             const config = {
                 headers:{
                     Authorization:"Bearer"+" "+store.state.accessToken,
@@ -83,7 +84,7 @@
             //기준량 데이터
             async function get_Base_Info(){
                 var url = "/CarbonNature/Evaluation/"+selected_company.value
-                axios.get(url,config).then(res=>{
+                await axios.get(url,config).then(res=>{
                     store.commit('getBaseYear',res.data.BaseYear)
                   store.commit('getBaseData',res.data.BaseEmissions)
                 })
@@ -93,11 +94,11 @@
                 store.commit('getBaseData',0)
                 })
                 .finally(()=>{
+                    server.value = server.value + 1
+                    console.log(server.value)
                 })
-            }
 
-            //감축 목표 총 데이터
-            async function get_total_target_data(){
+                //감축 목표 총 데이터
                 var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+year.value+"/0"
                 await axios.get(url,config).then(res=>{
                     store.commit('getTargetData',res.data)
@@ -106,70 +107,69 @@
                     console.log(error)
                     })
                     .finally(()=>{
+                        server.value = server.value + 1
+                        console.log(server.value)
                 })
-            }
 
-            async function get_target_list(){
                 var url = "/CarbonNature/TargetList/"+selected_company.value+"/"+year.value
                 await axios.get(url,config).then(res=>{
-                    store.commit("getTargetList", res.data)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(()=>{
-                })
-                
-            } 
+                        store.commit("getTargetList", res.data)
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                    .finally(()=>{
+                        server.value = server.value + 1
+                        console.log(server.value)
+                    })
 
-            async function get_total_emission_year(){
-              await axios.get("Company/Preview/경상대학교/2023-01-01/2023-05-28",config).then(res => {
-                    console.log(res.data)
-                    console.log("연월"+year.value)
-                    scope1.value = res.data.Scopes[0]
-                    scope2.value = res.data.Scopes[1]
-                    scope3.value = res.data.Scopes[2]
-                    total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
-                    store.commit("set_scopes",res.data.Scopes);
-                    store.commit("SetDetailEmission",res.data.EmissionList);
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(() => {
+                await axios.get("Company/Preview/경상대학교/2023-01-01/2023-05-28",config).then(res => {
+                        console.log(res.data)
+                        console.log("연월"+year.value)
+                        scope1.value = res.data.Scopes[0]
+                        scope2.value = res.data.Scopes[1]
+                        scope3.value = res.data.Scopes[2]
+                        total_emission  = res.data.Scopes.reduce((a, b) => a + b, 0)
+                        store.commit("set_scopes",res.data.Scopes);
+                        store.commit("SetDetailEmission",res.data.EmissionList);
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                    .finally(() => {
+                        server.value = server.value + 1
+                        console.log(server.value)   
+                    })
 
-                })
-            }
-
-            //현재 총 데이터
-            async function get_total_data_now(){
-              var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28/0"
+                var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28/0"
        
-              await axios.get(url,config).then(res=>{
-                    store.commit('getTotalNowData',sumfun(res.data))
-                  })
-                  .catch(error => {
-                    store.commit('getTotalNowData',sumfun(0))
-                    console.log(error)
-                  })
-                  .finally(()=>{
+                await axios.get(url,config).then(res=>{
+                        store.commit('getTotalNowData',sumfun(res.data))
+                    })
+                    .catch(error => {
+                        store.commit('getTotalNowData',sumfun(0))
+                        console.log(error)
+                    })
+                    .finally(()=>{
+                        server.value = server.value + 1
+                        console.log(server.value)
+                })
 
-              })
-            }
-
-            async function get_total_data(){
-              var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+lastyear.value+"-01-01/"+lastyear.value+"-12-28/0"
+                var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+lastyear.value+"-01-01/"+lastyear.value+"-12-28/0"
     
-              await axios.get(url,config).then(res=>{
-                  store.commit('getTotalLastData',sumfun(res.data))
-                  })
-                  .catch(error => {
-                  console.log(error)
-                  })
-                  .finally(()=>{
-                  rerender_signal.value +=1
-              })
-          }
+                await axios.get(url,config).then(res=>{
+                    store.commit('getTotalLastData',sumfun(res.data))
+                    })
+                    .catch(error => {
+                    console.log(error)
+                    })
+                    .finally(()=>{
+                        server.value = server.value + 1
+                        console.log(server.value)
+                        rerender_signal.value +=1
+                })
+
+            }
 
             function sumfun(list){
                 var sum =ref(0)
@@ -179,21 +179,14 @@
                 return sum.value
             }
             
-            get_total_emission_year()
-            get_total_data_now()
-            get_target_list()
+     
             get_Base_Info()
-            get_total_target_data()
-            get_total_data()
+      
 
             function change_company(){
                 store.commit("insight_select_company", selected_company.value)
-                get_total_emission_year()
-                get_total_data_now()
-                get_target_list()
                 get_Base_Info()
-                get_total_target_data()
-                get_total_data()
+                server.value = 0
                 rerender_signal.value +=1
     
             }
@@ -201,7 +194,8 @@
                 group_list,
                 selected_company,
                 change_company,
-                rerender_signal
+                rerender_signal,
+                server
             }
         }
     }

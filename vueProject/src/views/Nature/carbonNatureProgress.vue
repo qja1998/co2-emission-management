@@ -8,14 +8,22 @@
                   <option v-for="item in group_list" :key="item">{{ item }}</option>
                 </select>
                 <div class="header-page">탄소 배출량 감축 진행상황</div>
-                <div class ="dash">
-                    <progress_dash1 :key="rerender_signal" id="progress-dash1"></progress_dash1>
+                <div v-if="server == 7">
+                    <div class ="dash">
+                        <progress_dash1 :key="rerender_signal" id="progress-dash1"></progress_dash1>
+                    </div>
+                    
+                    <progress_dash2 :key="rerender_signal" id="progress-dash2"></progress_dash2>
+                    <progress_dash3 :key="rerender_signal" id="progress-dash3"></progress_dash3>
+                    <progress_dash4 :key="rerender_signal" id="progress-dash4"></progress_dash4>
                 </div>
-                
-                <progress_dash2 :key="rerender_signal" id="progress-dash2"></progress_dash2>
-                <progress_dash3 :key="rerender_signal" id="progress-dash3"></progress_dash3>
-                <progress_dash4 :key="rerender_signal" id="progress-dash4"></progress_dash4>
 
+                <div v-else-if="server!=7">
+                    <div class="progress-bar">
+                        <LoadingBar></LoadingBar>
+                        <div class="loding-title">감축 진행사항을 분석 중입니다</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -29,6 +37,7 @@ import progress_dash1 from "@/components/nature/progress/dash1/dash1.vue"
 import progress_dash2 from "@/components/nature/progress/dash2/dash2.vue"
 import progress_dash3 from "@/components/nature/progress/dash3/dash3.vue"
 import progress_dash4 from "@/components/nature/progress/dash4/dash4.vue"
+import LoadingBar from "@/components/Loading.vue"
 
 import { computed , ref} from 'vue';
 import { useStore } from 'vuex'
@@ -42,6 +51,7 @@ export default {
         progress_dash2,
         progress_dash3,
         progress_dash4,
+        LoadingBar
     },
     setup() {
         var store = useStore()
@@ -55,6 +65,8 @@ export default {
         var lastyear = year.value - 1
         var month = ref(now.getMonth()) //월
 
+        var server = ref(0)
+
         const config = {
             headers:{
                 Authorization:"Bearer"+" "+store.state.accessToken,
@@ -64,7 +76,7 @@ export default {
         //기준량 데이터
         async function get_Base_Info(){
             var url = "/CarbonNature/Evaluation/"+selected_company.value
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getBaseYear',res.data.BaseYear)
               store.commit('getBaseData',res.data.BaseEmissions)
             })
@@ -74,96 +86,89 @@ export default {
              store.commit('getBaseData',0)
             })
             .finally(()=>{
-             rerender_signal.value +=1
+                server.value = server.value + 1
+                console.log(server.value)
             })
-        }
 
-
-        //감축 목표 총 데이터
-        async function get_total_target_data(){
+            //감축 목표 총 데이터
             var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+year.value+"/0"
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getTargetData',res.data)
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
             })
-        }
 
-        //카테고리별 감축 목표 총 데이터
-        async function get_total_category_target_data(){
+            //카테고리별 감축 목표 총 데이터
             var url = "/CarbonNature/CarbonYear/"+selected_company.value+"/"+year.value+"/1"
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getTargetList',res.data)
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
             })
-        }
-     
-        //현재 총 데이터
-        async function get_total_data_now(){
+
+            //현재 총 데이터
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28/0"
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getTotalNowData',sumfun(res.data))
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
             })
-        }
-        //작년 총 데이터
-        async function get_total_data(){
+
+            //작년 총 데이터
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+lastyear+"-01-01/"+lastyear+"-12-28/0"
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getTotalLastData',sumfun(res.data))
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
             })
-        }
 
-        //작년 카테고리별 데이터
-        async function get_total_category_last_data(){
+            //작년 카테고리별 데이터
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+lastyear+"-01-01/"+lastyear+"-12-28/1"
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getTotalLastCategoryDataList',res.data)
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
             })
-        }
-
-        //카테고리별 현재 데이터
-        async function get_total_category_data(){
 
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28/1"
             console.log('카테고리별 현재 데이터', url)
-            axios.get(url,config).then(res=>{
+            await axios.get(url,config).then(res=>{
                 store.commit('getCategoryTotalList',res.data)
                 })
                 .catch(error => {
                 console.log(error)
                 })
                 .finally(()=>{
-                rerender_signal.value +=1
+                    server.value = server.value + 1
+                    console.log(server.value)
+                    rerender_signal =+1
             })
         }
-
 
         function sumfun(list){
             var sum =ref(0)
@@ -174,34 +179,21 @@ export default {
         }
 
         get_Base_Info()
-        get_total_data()
-        get_total_data_now()
-        get_total_category_data()
-        get_total_category_last_data()
-        get_total_target_data()
-        get_total_category_target_data()
 
 
         
         function change_company(){
             store.commit("insight_select_company",selected_company.value)
+            server.value = 0
             get_Base_Info()
-            get_total_data()
-            get_total_data_now()
-            get_total_category_data()
-            get_total_category_last_data()
-            get_total_target_data()
-            get_total_category_target_data()
-      }
+        }
         return{
             group_list,
             change_company,
             selected_company,
-            rerender_signal
+            rerender_signal,
+            server
         }
-    },
-    mounted(){
-        this.rerender_signal+=1
     }
 }
 </script>

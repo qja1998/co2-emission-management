@@ -11,18 +11,26 @@
                 <span class="header-page" style="margin:0">탄소 배출량 예측 전체보기<br>
                     <span class="subHeader-page">Predicted Carbon emission Overview</span>
                 </span>
-
-                <div id="wrap1">
-                    <div style="height:15vh"><predict_dash1 class="dash"/></div>
-                    <predict_dash2 :key="rerender_signal" class="dash" id="dash2"/>
+                <div v-if="server!=3">
+                    <div class="progress-bar">
+                        <LoadingBar></LoadingBar>
+                        <div class="loding-title">탄소 배출량을 예측 중입니다</div>
+                    </div>
+                </div>
+                <div v-else-if="server==3">
+                    <div id="wrap1">
+                        <div style="height:15vh"><predict_dash1 class="dash"/></div>
+                        <predict_dash2 :key="rerender_signal" class="dash" id="dash2"/>
+                    </div>
+                    
+                    <div id="wrap2" style="margin-top:2vh">
+                        <predict_dash3 :key="rerender_signal" class="dash"/>
+                        <predict_dash4  :key="rerender_signal" class="dash" id="dash4"/>
+                        
+                    </div>
+                    <predict_dash5 :key="rerender_signal" class="dash"  id="dash5"/>
                 </div>
                 
-                <div id="wrap2" style="margin-top:2vh">
-                    <predict_dash3 :key="rerender_signal" class="dash"/>
-                    <predict_dash4  :key="rerender_signal" class="dash" id="dash4"/>
-                    
-                </div>
-                <predict_dash5 :key="rerender_signal" class="dash"  id="dash5"/>
               </div>
             </div>
         </div>
@@ -73,6 +81,10 @@
     margin-right:2vw;
     margin-top:3vh
 }
+.progress-bar{
+    margin: auto;
+    margin-top: 30vh;
+}
 </style>
 
 <script>
@@ -86,7 +98,7 @@ import predict_dash5 from "@/components/predict/dash5/dash5.vue"
 import {useStore} from 'vuex'
 import {ref, computed} from 'vue'
 import axios from 'axios'
-
+import LoadingBar from '@/components/Loading.vue'
   export default {
       name :"predict",
       components:{
@@ -97,6 +109,7 @@ import axios from 'axios'
           predict_dash3,
           predict_dash4,
           predict_dash5,
+          LoadingBar
       },
       setup() {
         var store = useStore()
@@ -111,6 +124,8 @@ import axios from 'axios'
 
         var rerender_signal = ref(0)
 
+        var server  = ref(0)
+
         const config = {
             headers:{
                 Authorization:"Bearer"+" "+store.state.accessToken,
@@ -119,6 +134,7 @@ import axios from 'axios'
 
         //카테고리별 다음달 예측
         async function get_predict_category_next_month(){
+            server.value = 0
 
             store.commit("insight_select_company",selected_company.value)
 
@@ -130,7 +146,8 @@ import axios from 'axios'
                 console.log(error)
             })
             .finally(()=>{
-                rerender_signal.value +=1
+                server.value = server.value + 1
+                console.log(server.value)
             })
 
 
@@ -143,7 +160,8 @@ import axios from 'axios'
                 console.log(error)
             })
             .finally(()=>{
-                rerender_signal.value +=1
+                server.value =server.value + 1
+                console.log(server.value)
             })
             
             //총 데이터 예측 url 하드코딩 해놓음
@@ -157,38 +175,10 @@ import axios from 'axios'
             })
             .finally(()=>{
                 rerender_signal.value +=1
+                server.value =server.value + 1
+                console.log(server.value)
             })
-        }
-
-        
-        // async function get_total_data_now(){
-    
-        //     var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-"+"01"+"-01/"+year.value+"-"+"06"+"-28/0"
-        //     await axios.get(url,config).then(res=>{
-        //         store.commit('getTotalLastDataList',res.data)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //     })
-        //     .finally(()=>{
-
-        //     })
-        // }
-
-        
-        // async function get_total_Predict_data_now(){
-        //     var url = "/CarbonPrediction/PartPrediction/"+selected_company.value+"/0"
-        //     await axios.get(url,config).then(res=>{
-        //         store.commit('getPredictTotal',res.data)
-        //     })
-        //     .catch(error => {
-        //         console.log(error)
-        //         store.commit('getPredictTotal',[])
-        //     })
-        //     .finally(()=>{
-        //         rerender_signal.value +=1
-        //     })
-        // }
+        }       
 
         console.log('1', selected_company.value)
         get_predict_category_next_month()
@@ -196,14 +186,14 @@ import axios from 'axios'
         function change_company(){
             store.commit("insight_select_company",selected_company.value)
             console.log('1', selected_company.value)
-            get_predict_category_next_month()
-            rerender_signal.value +=1
+            get_predict_category_next_month()  
         }
         return{
             group_list,
             selected_company,
             change_company,
             rerender_signal,
+            server,
         }
       },
       created(){

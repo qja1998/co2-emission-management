@@ -14,7 +14,7 @@
               </div>
             </span><br>
             <span class="subHeader-page">Predicted Carbon emission Overview</span>
-            <div >  
+            <div v-if= "server >= 2" >  
               <span class="wrap" v-if="kindOfGraph == 'stick'">
                 <predict_categoryStickGraph :key="rerender_signal" class="categoryStickGraph"/>
               </span>
@@ -92,7 +92,8 @@ export default {
     var year = now.getFullYear()	// 년도
     var month = now.getMonth()+1 //월
     var rerender_signal = ref(0)
-        
+    var server = ref(0)
+
     const config = {
       headers:{
           Authorization:"Bearer"+" "+store.state.accessToken,
@@ -109,6 +110,8 @@ export default {
           console.log(error)
       })
       .finally(()=>{
+        server.value = server.value +1
+        console.log(server.value)
       })
     }
 
@@ -122,6 +125,8 @@ export default {
           console.log(error)
           })
           .finally(()=>{
+            server.value = server.value +1
+            console.log(server.value)
       })
     }
 
@@ -131,6 +136,7 @@ export default {
     const clickLine = () => {
       get_total_Predict_data_now()
       get_last_category_data()
+      
       kindOfGraph.value='line'
     }
     const clickBar = () => {
@@ -140,7 +146,7 @@ export default {
       console.log(kindOfGraph)
     }
     return{
-      kindOfGraph,clickLine,clickBar,rerender_signal
+      kindOfGraph,clickLine,clickBar,rerender_signal,server
     }
   },
   mounted(){

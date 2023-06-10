@@ -34,7 +34,11 @@ export default defineComponent({
     var store = useStore()
     var server_base = computed(()=> store.state.baseData)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+    
+    //서버
 
+    var server_evaluation = {BaseYear:2019, BaseEmissions:980}
+    var month_baseemissions = server_evaluation.BaseEmissions/12
     var month_baseemissions = server_base.value/12
 
     if(month_baseemissions == 0){
@@ -77,7 +81,9 @@ export default defineComponent({
           display:false,
           grid:{
             display:false
-          }
+          },
+          min: 0,
+          max: server_base.value/12 + 1000,
         },
       }
     }

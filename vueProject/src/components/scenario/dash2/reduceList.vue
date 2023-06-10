@@ -8,7 +8,7 @@
                 <div class="target-block">
                     <div v-for="(list, i) in targetList" :key="i" style="padding-bottom: 2vh; font-size:  1.7vh;">
                         <span v-if="list.listkind == 0">
-                            <li>{{ list.category }}의 {{ list.percentage }}%를 {{ list.target }}로 전환</li>
+                            <li id ="scenario_li">{{ list.category }}의 {{ list.percentage }}%를 {{ list.target }}로 전환</li>
                         </span>
                     </div>
                 </div>

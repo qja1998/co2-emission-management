@@ -11,20 +11,23 @@
                 </select>
                 <span class="header-page">탄소 배출량 평가</span><br>
                 <span class="subHeader-page">Carbon Emissions Evaluation</span>
-                <div>
-                    <span><evaluation_dash1 :key="rerender_signal"/></span>
-                    <span>
-                      <evaluation_dash2 style="margin-left: 3vw;"></evaluation_dash2>
-                    </span>
-                    <div>
-                      <evaluation_dash3 :key="rerender_signal" style="margin-left: 3vw"></evaluation_dash3>
-                    </div>
+                <div v-if ="server ==2">
+                  <div>
+                      <span><evaluation_dash1 :key="rerender_signal"/></span>
+                      <span>
+                        <evaluation_dash2 style="margin-left: 3vw;"></evaluation_dash2>
+                      </span>
+                      <div>
+                        <evaluation_dash3 :key="rerender_signal" style="margin-left: 3vw"></evaluation_dash3>
+                      </div>
+                  </div>
+                  <div style="display: inline-block;">
+                    <evaluation_decreaseList :key="rerender_signal" />
+                    <evaluation_progress :key="rerender_signal" style="margin-left: 1.4vw"/>
+                    <evaluation_scenario :key="rerender_signal" style="margin-left: 1.4vw"/>
+                  </div>
                 </div>
-                <div style="display: inline-block;">
-                  <evaluation_decreaseList :key="rerender_signal" />
-                  <evaluation_progress :key="rerender_signal" style="margin-left: 1.4vw"/>
-                  <evaluation_scenario :key="rerender_signal" style="margin-left: 1.4vw"/>
-                </div>
+                
               </div>
             </div>
         </div>
@@ -95,14 +98,18 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
       var rerender_signal = ref(0)
-      rerender_signal.value +=1
+
       store.commit("SetName",selected_company.value)
+
+      var server = ref(0)
+
       const config = {
           headers:{
               Authorization:"Bearer"+" "+store.state.accessToken,
               "Content-Type": "text/html; charset=utf-8",
           }
       }
+      
       async function get_Base_Info(){
         var url = "/CarbonNature/Evaluation/"+selected_company.value
         await axios.get(url,config).then(res=>{
@@ -115,21 +122,10 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
           store.commit('getBaseData',0)
         })
         .finally(()=>{
-          rerender_signal.value +=1
+          server.value=server.value +1
+          console.log(server.value)
         })
-      }
 
-      get_Base_Info()
-
-      var standardInfo = computed(()=>store.state.infopage)
-
-
-      
-      
-
-
-      // 해당 조직의 작년 총 탄소 배출량
-      async function get_total_data(){
         var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+(lastyear.value)+"-01-01/"+(lastyear.value)+"-12-28/0"
         await axios.get(url,config).then(res=>{
           store.commit('getTotalLastData',sumfun(res.data))
@@ -140,11 +136,14 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
         })
         .finally(()=>{
           rerender_signal.value +=1
+          server.value=server.value +1
+          console.log(server.value)
         })
       }
 
+      get_Base_Info()
 
-
+      var standardInfo = computed(()=>store.state.infopage)
       
       //합산 함수
       function sumfun(list){
@@ -157,21 +156,13 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
 
       function change_company(){
         store.commit("SetName",selected_company.value)
-        get_total_data()
-        get_total_data()
+        server.value=0
         get_Base_Info()
       }
 
       return{
-        group_list, selected_company, standardInfo,change_company,get_total_data,get_Base_Info
+        group_list, selected_company, standardInfo,change_company,get_Base_Info,server
       }
-    },
-    mounted(){
-        this.get_total_data(),
-        this.get_Base_Info(),
-
-        this.rerender_signal +=1
-
-      }
+    }
   }
  </script>
