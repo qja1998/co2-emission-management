@@ -70,6 +70,8 @@ export default defineComponent({
       
     }
 
+    console.log(server_total_data)
+    console.log(server_predict_data)
     //차트 데이터
     const chartData = {
       labels: x_legend,

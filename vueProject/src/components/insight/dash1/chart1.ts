@@ -87,12 +87,9 @@ export default defineComponent({
       if((data.value.reduce((a, b) => a + b, 0))!=0 ){
         
         chartData.datasets[0].data = data.value
-        console.log("3년치"+ data.value)
       }else{
         chartData.datasets[0].data = [2,1.4,1]
       }
-      
-      console.log("리렌ㅌ도ㅓ")
     }
     
     await get_list()

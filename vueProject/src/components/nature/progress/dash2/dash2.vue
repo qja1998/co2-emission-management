@@ -4,7 +4,7 @@
         <div class="frame" style="width:45vw; height:32.8vh;">
             <div id="profit-left">
                 <img id= "money_icon" src="@/assets/money.png">
-                <div class="dash-text" id="profit-total-text">{{profitMoney/1000}}<span>만원 이득</span></div>
+                <div class="dash-text" id="profit-total-text">{{profitMoney/1000}}<span>천원 이득</span></div>
             </div>
             <div id= "profit-right">
                 <div class="dash-text-middle" style="text-align: left; ">현재 탄소 배출권 시세

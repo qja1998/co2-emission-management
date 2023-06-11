@@ -154,6 +154,7 @@ import LoadingBar from '@/components/Loading.vue'
             //현재 총 데이터 url 하드코딩 해놓음
             var url = "/CarbonEmission/PartEmission/"+selected_company.value+"/"+year.value+"-"+"01"+"-01/"+year.value+"-"+"06"+"-28/0"
             await axios.get(url,config).then(res=>{
+                console.log(res.data)
                 store.commit('getTotalLastDataList',res.data)
             })
             .catch(error => {

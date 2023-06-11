@@ -63,7 +63,7 @@ export default {
         var now = new Date();	// 현재 날짜 및 시간
         var year = ref(now.getFullYear())	// 년도
         var lastyear = year.value - 1
-        var month = ref(now.getMonth()) //월
+        var month = ref(now.getMonth()+1) //월
 
         var server = ref(0)
 
