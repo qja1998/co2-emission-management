@@ -85,7 +85,8 @@ export default createStore({
         //탄소 예측
         getNextMonthcategory:[{name:'', data:0, predictData:0}],
         getPredictTotal:[],
-        getPredictCategory:[]
+        getPredictCategory:[],
+        reload:0
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -307,6 +308,10 @@ export default createStore({
         },
         getPredictCategory(state,datas){
             state.getPredictCategory = datas
+        },
+
+        setReload(state){
+            state.reload =state.reload+1
         }
 
         

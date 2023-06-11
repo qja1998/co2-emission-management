@@ -11,6 +11,7 @@
                 </select>
                 <span class="header-page">탄소 배출량 평가</span><br>
                 <span class="subHeader-page">Carbon Emissions Evaluation</span>
+                
                 <div v-if ="server ==2">
                   <div>
                       <span><evaluation_dash1 :key="rerender_signal"/></span>
@@ -26,6 +27,7 @@
                     <evaluation_progress :key="rerender_signal" style="margin-left: 1.4vw"/>
                     <evaluation_scenario :key="rerender_signal" style="margin-left: 1.4vw"/>
                   </div>
+                  
                 </div>
                 
               </div>
@@ -97,8 +99,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       var lastyear = ref(now.getFullYear()-1)	// 년도
       var group_list = computed(() => store.state.group_list).value
       var selected_company = ref(group_list[0])
-      var rerender_signal = ref(0)
-
+      var rerender_signal = computed(()=>store.state.reload)
       store.commit("SetName",selected_company.value)
 
       var server = ref(0)
@@ -161,7 +162,7 @@ import Popup_inputStandard from "@/components/evaluation/dash2/popup_inputStanda
       }
 
       return{
-        group_list, selected_company, standardInfo,change_company,get_Base_Info,server
+        group_list, selected_company, standardInfo,change_company,get_Base_Info,server,rerender_signal
       }
     }
   }

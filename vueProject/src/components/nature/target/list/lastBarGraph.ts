@@ -62,6 +62,7 @@ export default defineComponent({
 
     var sum = computed(()=>store.state.getTotalLastData).value //작년 총 탄소 배출량
     var server_targetTotal_data =computed(()=>store.state.getTargetData).value
+    console.log(server_targetTotal_data)
 
     for(var i=0; i<server_total_data.length; i++){
       sum = server_total_data[i] + sum

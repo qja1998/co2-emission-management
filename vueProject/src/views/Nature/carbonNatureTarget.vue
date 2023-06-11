@@ -14,9 +14,7 @@
                         <target_dash2 :key="rerender_signal" id = "target_dash2"></target_dash2>
                     </div>
                     <target_dash3 :key="rerender_signal" id = "target_dash3"></target_dash3>
-                </div>
-                
-                
+                </div>        
             </div>
         </div>
         <addTargetPopup v-if="targetPopup==true" class="popup"></addTargetPopup>

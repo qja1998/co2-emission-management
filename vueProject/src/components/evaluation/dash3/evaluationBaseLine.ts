@@ -34,12 +34,23 @@ export default defineComponent({
     var store = useStore()
     var server_base = computed(()=> store.state.baseData)
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
-    
+    var server_total_data = computed(()=> store.state.getTotalLastDataList)
     //서버
-
+    var server_total_data_max = Math.max(...server_total_data.value) 
+  
     var server_evaluation = {BaseYear:2019, BaseEmissions:980}
     var month_baseemissions = server_evaluation.BaseEmissions/12
     var month_baseemissions = server_base.value/12
+
+    var max =ref(0)
+
+    if( server_total_data_max > server_base.value/12){
+      max.value = server_total_data_max
+    }
+    else{
+      max.value = server_base.value
+    }
+    console.log('max',max.value)
 
     if(month_baseemissions == 0){
       month_baseemissions = NaN
@@ -83,7 +94,7 @@ export default defineComponent({
             display:false
           },
           min: 0,
-          max: server_base.value/12 + 1000,
+          max: max.value+ 1000,
         },
       }
     }

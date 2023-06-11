@@ -118,6 +118,7 @@ import axios from "axios"
             server_EmissionInfo.value.BaseYear = standardYear.value
             server_EmissionInfo.value.BaseEmissions = parseInt((standardEmission1.value+standardEmission2.value+standardEmission3.value)/3) + standardEmission.value
             set_base_info(server_EmissionInfo.value)
+            store.commit('setReload')
             close()
         }
         return{

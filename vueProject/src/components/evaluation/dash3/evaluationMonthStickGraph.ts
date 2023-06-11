@@ -58,6 +58,17 @@ export default defineComponent({
 
     var month_baseemissions = server_evaluation.BaseEmissions/12
 
+    var server_total_data_max = Math.max(...server_total_data.value) 
+  
+    var max =ref(0)
+
+    if( server_total_data_max > server_base.value/12){
+      max.value = server_total_data_max
+    }
+    else{
+      max.value = server_base.value
+    }
+
     const chartData = {
       
       labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
@@ -92,7 +103,7 @@ export default defineComponent({
           stacked:true,
           display:true,
           min: 0,
-          max: server_base.value/12 + 1000,
+          max: max.value + 1000,
         },
       },
     }

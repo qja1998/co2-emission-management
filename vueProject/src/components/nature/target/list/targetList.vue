@@ -129,7 +129,7 @@ import axios from "axios";
             ]
             var category =ref('고정연소')
             var transEnargy =ref('태양열 에너지')
-
+            var re = ref(0)
             //서버, 사용자의 전환, 감축 목표 리스트
 
             async function get_target_list(){
@@ -274,8 +274,8 @@ import axios from "axios";
                     year : year_now,
                     tList:server_add_list
                 }
-          
                 set_target_list(post_targetList)
+                
             }
 
        
@@ -283,13 +283,12 @@ import axios from "axios";
             async function set_target_list(list){
                 var url = "/CarbonNature/TargetList"
                 axios.post(url,list,config).then(res=>{
-                    console.log('추가 성공')
                 })
                 .catch(error => {
                     console.log(error)
                 })
                 .finally(()=>{
-                    console.log('추가 끝')
+                    store.commit("setReload")
                 })
             }
             
@@ -315,7 +314,8 @@ import axios from "axios";
                 transEnargyList,
                 transListNum,
                 increasListNum,
-                get_target_list
+                get_target_list,
+                re
 
             }
         },
