@@ -131,7 +131,7 @@ class CarbonYearQuery(APIView):
         '''
         
         UserRoot = func.GetUserRoot(request)
-
+        print('year:', year)
         try:  # 요청받은 회사가 루트가 아닌 경우
             Com_id = Company.objects.get(
                 ComName=depart_name  # 로그인이 구현된 이후에는 사용자의 root와 비교
@@ -164,7 +164,7 @@ class CarbonYearQuery(APIView):
             goal_with_cate = int(goal_with_cate)
             goal_carbon_category[cate] = goal_with_cate
             server_targetTotal_data += goal_with_cate
-        
+        print('list:', goal_carbon_category)
         if bool(is_category):
             return JsonResponse(goal_carbon_category, safe=False, status=status.HTTP_200_OK)
         else:
@@ -217,7 +217,7 @@ class TargetListQuery(APIView):
             
             except Exception as e:
                 continue
-
+        
         return JsonResponse(target_list, safe=False, status=status.HTTP_200_OK)
 
 class TargetListPost(APIView):
@@ -256,15 +256,15 @@ class TargetListPost(APIView):
                     "This Company/Department doesn't exist.",
                     status=status.HTTP_404_NOT_FOUND,
                 )
-
-        total_emissions = func.get_base_emission(year, Com_id, RootCom, UserRoot.Chief)
+        print('year:', year)
+        total_emissions = func.get_base_emission(year-1, Com_id, RootCom, UserRoot.Chief)
         print('emission', total_emissions)
 
         try:
             for data in GoalData:
                 cate = Category.objects.get(CarbonUnit = data['category'])
-                print(cate.Category)
                 decre_total = int(total_emissions[cate.Category] * (data['percentage'] / 100))
+                print('decre', cate.Category, decre_total)
                 goal_obj = Goal.objects.create(
                     Cate_id=cate,
                     IncreaseKind=data['listkind'],

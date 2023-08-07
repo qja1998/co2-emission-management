@@ -185,14 +185,13 @@ def get_base_emission(year, com_id, root_id, chief):
                     next_month = next_month if next_month < end_date else end_date
 
                     while pre_date < next_month:
-                        print(1)
                         carbon_info = CarModel.CarbonInfo.objects.get(StartDate=pre_date,
                                                                     EndDate=pre_date,
                                                                     Chief=chief,
                                                                     Category=cate)
                         carbon_data = CarModel.Carbon.objects.filter(RootCom=root_id,
                                                                  CarbonInfo=carbon_info).values('CarbonData')
-                        cate_total_emissions[cate] = carbon_data[0]['CarbonData']
+                        cate_total_emissions[cate] += carbon_data[0]['CarbonData']
                         pre_date += datetime.timedelta(days=1)
 
                 except:
