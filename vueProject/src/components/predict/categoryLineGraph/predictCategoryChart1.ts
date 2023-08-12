@@ -91,28 +91,15 @@ export default defineComponent({
           }
         },
         {
-<<<<<<< HEAD
-          label:'탈루배출',
-          backgroundColor: '#FFA800',
-          data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-          borderColor: '#FFA800',
-=======
           label: '탈루 배출',
           backgroundColor: '#49C5E0',
           data:  category_data.value[2],
           borderColor: '#49C5E0',
->>>>>>> origin/main
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
         },
         {
-<<<<<<< HEAD
-          label:'폐기물 처리시설',
-          backgroundColor: '#FFA800',
-          data: [530, 495, 486, 570, 573, 664, 667, 663, 660, 670, 673, 750],
-          borderColor: '#FFA800',
-=======
           label: '폐기물 처리시설',
           backgroundColor: '#B67FBF',
           data:  category_data.value[3],
@@ -153,7 +140,6 @@ export default defineComponent({
           backgroundColor: '#5E8CFF',
           data:  category_data.value[7],
           borderColor: '#5E8CFF',
->>>>>>> origin/main
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
@@ -177,26 +163,10 @@ export default defineComponent({
           }
         },
         {
-<<<<<<< HEAD
-          label: '대학동물소유',
-          backgroundColor: '#5E8CFF',
-          data: [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
-          borderColor: '#5E8CFF',
-          segment:{
-            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
-          }
-        },
-        {
-          label: '산림에 의한 흡수',
-          backgroundColor: '#FF1686',
-          data: [312, 274, 250, 280, 278, 320, 300, 298, 350, 380, 290, 420],
-          borderColor: '#FF1686',
-=======
           label: '폐기물',
           backgroundColor: '#475674',
           data:  category_data.value[10],
           borderColor: '#475674',
->>>>>>> origin/main
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
