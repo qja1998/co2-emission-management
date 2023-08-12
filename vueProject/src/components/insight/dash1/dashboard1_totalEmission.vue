@@ -32,7 +32,8 @@ import { useStore } from "vuex";
         const store = useStore();
         var total_emssion = ref(store.state.scopes[0]+store.state.scopes[1]+store.state.scopes[2]).value.toPrecision(8)
         console.log("3suscl222")
-        return{total_emssion
+        return{
+            total_emssion
         }
       },
       props:{

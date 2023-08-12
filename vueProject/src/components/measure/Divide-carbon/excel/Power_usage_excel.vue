@@ -49,7 +49,7 @@
   </template>
   
   <script>
-  import { XlsxRead, XlsxTable, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from "/home/hyemi/carbon/co2-emission-management/vueProject/node_modules/vue3-xlsx"
+  import { XlsxRead, XlsxTable, XlsxSheets, XlsxJson, XlsxWorkbook, XlsxSheet, XlsxDownload } from "vue3-xlsx"
   import {useStore} from 'vuex'
   import {ref} from 'vue'
   export default {
@@ -70,7 +70,7 @@
       var sheets=ref([
         { name: "전력사용양식", 
           data: [
-            { 탄소배출내용: String, 시작날짜: Date, 종료날짜:Date, 배출시설명:null, 운영주체:null,공급처:null,전력사용량:Number}
+            { 탄소배출내용: String, 시작날짜: Date, 배출시설명:null, 운영주체:null,공급처:null,전력사용량:Number}
           ] 
         }
       ])
@@ -93,10 +93,10 @@
             Type:"7",
             DetailType:"전력",
             StartDate: excelSerialDateToJSDate(sheets[i].시작날짜),
-            EndDate:excelSerialDateToJSDate(sheets[i].종료날짜),
+            EndDate:excelSerialDateToJSDate(sheets[i].시작날짜),
             Location:"",
             scope:2,
-            data:sheets[i].전력사용량,
+            data:sheets[i].전력사용량+"/"+'kg',
             emissions:sheets[i].전력사용량+4,
             Carbonunit:"kg",
             CarbonActivity:sheets[i].탄소배출내용,

@@ -13,7 +13,6 @@
     </div>
     <div style="margin-top:30px">소각 날짜
         <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true" style="margin-left:100px">
-        <input class = "date_btn" id = "end_data" type="month">
     </div>
 
     <div class="add_info_divide">폐기물 분류
@@ -135,7 +134,7 @@ import {ref,computed} from 'vue'
                 info_list.data =  usage_input+"/"+"ton"
                 info_list.emissions = usage_input+4
                 info_list.StartDate = document.getElementById('start_data').value+'-01'
-                info_list.EndDate = document.getElementById('end_data').value+'-01'
+                info_list.EndDate = document.getElementById('start_data').value+'-28'
                 info_list.DetailType = waste.value
                 info_list.kind = tech.value
                 store.commit("SetTableContent",info_list)

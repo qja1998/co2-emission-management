@@ -92,8 +92,10 @@ export default{
 
         const weigtArr=[1,2,3,4,5,6,7,8,9,10,11,12,13,14];
         var month = computed(() => store.state.insight_month+1);
+
+        var user_group = computed(()=> store.state.user_group)
         async function get_total_emission(){
-            await axios.get("Company/Preview/samsung/2023-0"+month.value+"-01/2023-0"+month.value+"-31",config).then(res => {
+            await axios.get("Company/Preview/"+user_group.value+"/2023-0"+month.value+"-01/2023-0"+month.value+"-31",config).then(res => {
                 store.commit("SetDetailEmission",res.data.EmissionList);
             })
             .catch(error => {

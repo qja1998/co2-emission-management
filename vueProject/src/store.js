@@ -35,7 +35,7 @@ export default createStore({
         selected_row:"",
         table_kind:"",
         group_name: "", //저장 필요
-
+        user_group:"", //로그인 한 유저의 조직명
         //토큰 관련 
         accessToken: null,
         refreshToken: null,
@@ -65,7 +65,28 @@ export default createStore({
             "폐기물처리시설(폐수)"
         ],
         //탄소 중립
-        targetPopup:false
+        targetPopup:false,
+        lastTotalEmissions: 0,
+        baseYear : 0,
+        baseData : 0,
+
+        getTotalLastData:0,
+        getTotalLastDataList:[],
+        getTotalLastCategoryDataList:[],
+
+        getTotalNowData:0,
+        getTotalNowCategoryData:[],
+        getTotalCategoryDataList: [],
+        getTotalCategoryData: [],
+
+        getTargetList: [],
+        getTargetData:200000,
+
+        //탄소 예측
+        getNextMonthcategory:[{name:'', data:0, predictData:0}],
+        getPredictTotal:[],
+        getPredictCategory:[],
+        reload:0
     }
     //state 데이터 호출후 상태 가공하여 전달 
     ,getters:{
@@ -80,6 +101,12 @@ export default createStore({
     } 
     //상태 접근 (변경)
     ,mutations:{
+
+        //로그인 한 유저의 그룹명
+        setGroupName(state,name){
+            state.user_group = name
+        },
+
         set_scopes(state,arr){
             state.scopes=arr
         },
@@ -236,7 +263,59 @@ export default createStore({
         },
         closeAddTarget(state){
             state.targetPopup = false
+        },
+
+        //탄소 배출량 평가
+        getTotalNowData(state, data){
+            state.getTotalNowData = data
+        },
+        getTotalLastData(state, data){
+            state.getTotalLastData = data
+        },
+        getTotalLastDataList(state, data){
+            state.getTotalLastDataList = data
+        },
+        getTotalLastCategoryDataList(state, data){
+            state.getTotalLastCategoryDataList = data
+        },
+        getBaseYear(state,year){
+            state.baseYear = year
+        },
+        getBaseData(state,data){
+            state.baseData = data
+        },
+        getCategoryTotalData(state,data){
+            state.getTotalCategoryData = data
+        },
+        getCategoryTotalList(state,datas){
+            state.getTotalCategoryDataList = datas
+        },
+
+        //탄소 감축 목표
+        getTargetList(state, dates){
+            state.getTargetList = dates
+        },
+        getTargetData(state, data){
+            state.getTargetData =data
+        },
+
+        //탄소 예측
+        getNextMonthcategory(state, datas){
+            state.getNextMonthcategory = datas
+        },
+        getPredictTotal(state,datas){
+            state.getPredictTotal = datas
+        },
+        getPredictCategory(state,datas){
+            state.getPredictCategory = datas
+        },
+
+        setReload(state){
+            state.reload =state.reload+1
         }
+
+        
+
     },
     //전처리 후 Mutations에 데이터 전달
     actions:{

@@ -13,7 +13,6 @@
     </div>
     <div style="margin-top:30px">하폐수 처리 날짜
         <input class = "date_btn" id = "start_data" type="month" data-placeholder="시작 날짜" required aria-required="true" style="margin-left:70px;">
-        <input class = "date_btn" id = "end_data" type="month">
     </div>
     <div class="add_info_divide" style="float:left; width:600px;">폐수 처리량
         <input class="addInfo_input" id="steam_usage_input" placeholder="12,456" style="width:200px;margin-left:120px;">
@@ -109,7 +108,7 @@ import {ref} from 'vue'
                 info_list.data =  usage_input+"/"+"ton"
                 info_list.emissions = usage_input+4
                 info_list.StartDate = document.getElementById('start_data').value+'-01'
-                info_list.EndDate = document.getElementById('end_data').value+'-01'
+                info_list.EndDate = document.getElementById('start_data').value+'-28'
                 info_list.R=document.getElementById('steam_usage_input_R').value
                 info_list.CODIN=document.getElementById('steam_usage_input_CODIN').value
                 info_list.CODOUT=document.getElementById('steam_usage_input_CODOUT').value

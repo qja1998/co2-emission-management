@@ -81,59 +81,67 @@
 
 
 <script>
+import {ref,computed} from 'vue'
+import {useStore} from 'vuex'
 
     export default {
         name :"predict_dash5",
         setup(){
-                var category = [
-                    {img:require('@/assets/previewDetail/1.png'),name:'고정 연소',data:210, predictData: 304},
-                    {img:require('@/assets/previewDetail/2.png'),name:'이동 연소', data:130, predictData: 120},
-                    {img:require('@/assets/previewDetail/3.png'),name:'탈루 배출', data:20, predictData: 513},
-                    {img:require('@/assets/previewDetail/4.png'),name:'폐기물 처리시설', data:150, predictData: 150},
-                    {img:require('@/assets/previewDetail/5.png'),name:'비료 사용', data:170, predictData: 120},
-                    {img:require('@/assets/previewDetail/6.png'),name:'대학 소유 동물', data:130, predictData: 53},
-                    {img:require('@/assets/previewDetail/7.png'),name:'산림에 의한 흡수', data:54, predictData: 316},
-                    {img:require('@/assets/previewDetail/8.png'),name:'전력 사용', data:21, predictData: 254},
-                    {img:require('@/assets/previewDetail/9.png'),name:'열 사용', data:34, predictData: 268},
-                    {img:require('@/assets/previewDetail/10.png'),name:'수도 사용', data:51, predictData: 270},
-                    {img:require('@/assets/previewDetail/11.png'),name:'폐기물', data:180, predictData: 240},
-                    {img:require('@/assets/previewDetail/12.png'),name:'통근/통학', data:53, predictData: 53},
-                    {img:require('@/assets/previewDetail/13.png'),name:'출장', data:547, predictData: 352},
-                    {img:require('@/assets/previewDetail/14.png'),name:'위탁운영 차량', data:71, predictData: 346},
+            var store = useStore()
+            //날짜 및 그룹명
+            var selected_company = computed(()=> store.state.insight_selected_company)
+            var user_group = computed(()=> store.state.user_group)
+            var now = new Date();	// 현재 날짜 및 시간
+            var year = ref(now.getFullYear())	// 년도
+            //서버
+            var server_category = computed(()=>store.state.getNextMonthcategory)
+            var category = [
+                    {img:require('@/assets/previewDetail/1.png'),name:'고정 연소',data:server_category.value[1].data, predictData: server_category.value[1].predictData},
+                    {img:require('@/assets/previewDetail/2.png'),name:'이동 연소', data:server_category.value[2].data, predictData: server_category.value[2].predictData},
+                    {img:require('@/assets/previewDetail/3.png'),name:'탈루 배출', data:server_category.value[3].data, predictData: server_category.value[3].predictData},
+                    {img:require('@/assets/previewDetail/4.png'),name:'폐기물 처리시설', data:server_category.value[4].data, predictData: server_category.value[4].predictData},
+                    {img:require('@/assets/previewDetail/5.png'),name:'비료 사용', data:server_category.value[5].data, predictData: server_category.value[5].predictData},
+                    {img:require('@/assets/previewDetail/6.png'),name:'대학 소유 동물', data:server_category.value[6].data, predictData: server_category.value[6].predictData},
+                    {img:require('@/assets/previewDetail/7.png'),name:'산림에 의한 흡수', data:server_category.value[7].data, predictData: server_category.value[7].predictData},
+                    {img:require('@/assets/previewDetail/8.png'),name:'전력 사용', data:server_category.value[0].data, predictData: server_category.value[0].predictData},
+                    {img:require('@/assets/previewDetail/9.png'),name:'열 사용', data:server_category.value[8].data, predictData: server_category.value[8].predictData},
+                    {img:require('@/assets/previewDetail/10.png'),name:'수도 사용', data:server_category.value[9].data, predictData: server_category.value[9].predictData},
+                    {img:require('@/assets/previewDetail/11.png'),name:'폐기물', data:server_category.value[10].data, predictData: server_category.value[10].predictData},
                 ]
-                var sortCategory = sort(category,14)
+            
+            var sortCategory = sort(category,11)
 
-                function sort(arr,size){
-                    var key
-                    var img_key
-                    var name_key
-                    var data_key
-                    for(var i=1; i<size; i++){
-                        key=arr[i].predictData
-                        data_key = arr[i].data
-                        img_key = arr[i].img
-                        name_key = arr[i].name
-                        for(var j=i-1; j>=0; j--){
-                            if(arr[j].predictData >key){
-                                arr[j+1].predictData = arr[j].predictData
-                                arr[j+1].data = arr[j].data
-                                arr[j+1].img = arr[j].img
-                                arr[j+1].name = arr[j].name
-                            }
-                            else{
-                                break
-                            }
-                        }   
-                        arr[j+1].predictData=key
-                        arr[j+1].data = data_key
-                        arr[j+1].img = img_key
-                        arr[j+1].name = name_key
-                    }
-                    return arr
+            function sort(arr,size){
+                var key
+                var img_key
+                var name_key
+                var data_key
+                for(var i=1; i<size; i++){
+                    key=arr[i].predictData
+                    data_key = arr[i].data
+                    img_key = arr[i].img
+                    name_key = arr[i].name
+                    for(var j=i-1; j>=0; j--){
+                        if(arr[j].predictData >key){
+                            arr[j+1].predictData = arr[j].predictData
+                            arr[j+1].data = arr[j].data
+                            arr[j+1].img = arr[j].img
+                            arr[j+1].name = arr[j].name
+                        }
+                        else{
+                            break
+                        }
+                    }   
+                    arr[j+1].predictData=key
+                    arr[j+1].data = data_key
+                    arr[j+1].img = img_key
+                    arr[j+1].name = name_key
                 }
-               
-                var name = '헤미'
-                return{category,name,sortCategory,sort}    
+                return arr
+            }
+            
+            var name = '헤미'
+            return{category,name,sortCategory,sort}    
         },
         components:{
         }

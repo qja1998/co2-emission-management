@@ -1,7 +1,6 @@
 <template>
     <div id="frame-category-lineChart">
-        <div class="title-chart">2023년 8월 시점</div>
-        <!--<canvas id="lineChart" width="400" height="400"></canvas>-->
+        <div class="title-chart">{{year}}년 {{month}}월 시점</div>
         <predict_chart id="category-lineGraph"/>
     </div>
 </template>
@@ -47,27 +46,14 @@ export default {
         predict_chart
     },
     setup(){
-        function changeBackgroundColor() {
-            console.log(123)
-            document.getElementById('stationaryCombustion').style.backgroundColor = predict_chart.chartData.datasets[0].backgroundColor
-        }
-        function changeInnerText() {
-            document.getElementById('stationaryCombustion').style.innerText = predict_chart.chartData.datasets[0].label
-        }
-        function toggleData(value) {
-            console.log(value)
-            const visibilityData = predict_chart.isDatasetVisible(value)
-            if (visibilityData === true ){
-                predict_chart.hide(value)
-            }
-            if (visibilityData === false ){
-                predict_chart.show(value)
-            }
-        }
+        var now = new Date();	// 현재 날짜 및 시간
+        var year = now.getFullYear()	// 년도
+        var month = now.getMonth()+1
         return{
-            changeBackgroundColor, changeInnerText, toggleData
+            year,
+            month
         }
-    }
+    },
 
 }
 </script>

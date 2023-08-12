@@ -11,7 +11,7 @@
                     <div class="dash-text progress-dash1-emission-text">{{carbonEmissions}} <span>CO2eq</span></div>
                 </div>
                 <div class="dash-text-middle progress-dash1-text" style="margin-top:5vh;">감축 목표 탄소 배출량
-                    <div  class="dash-text progress-dash1-emission-text" id ="goal-text">{{carbonEmissionsGoal}} <span>CO2eq</span></div>
+                    <div  class="dash-text progress-dash1-emission-text" id ="goal-text">{{ carbonLastEmissions - carbonEmissionsGoal}} <span>CO2eq</span></div>
                 </div>
             </div>
             
@@ -23,20 +23,29 @@
 
 <script>
 import progressDonutGraph from './progressDonutGraph';
-import {ref} from 'vue'
+import {ref,computed} from 'vue'
+import {useStore} from 'vuex'
+import axios from 'axios'
     export default {
         name :"progress_dash1",
         components:{
             progressDonutGraph
         },
         setup(){
-            var carbonEmissions =ref(5000)
-            var carbonEmissionsGoal = ref(51200)
+            var store =useStore()
+
             var now = new Date();	// 현재 날짜 및 시간
             var year = ref(now.getFullYear())	// 년도
+            
+            //서버
+            var carbonLastEmissions = computed(()=>store.state.getTotalLastData) 
+            var carbonEmissions = computed(()=> store.state.getTotalNowData)
+            var carbonEmissionsGoal = computed(()=> store.state.getTargetData)
+
             return{
                 carbonEmissions,
                 carbonEmissionsGoal,
+                carbonLastEmissions,
                 year
             }
         }
@@ -72,5 +81,3 @@ import {ref} from 'vue'
     margin-top:1vh;
 }
 </style>
-
-

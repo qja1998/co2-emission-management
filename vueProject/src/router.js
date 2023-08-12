@@ -8,6 +8,8 @@ import register from "./views/measureVue/Register"
 import insight from "./views/Insight"
 import predict from "./views/Predict/predictCarbonPreview"
 import predictCategory from "./views/Predict/predictCategoryDetailLine"
+import evaluation from "./views/Neutrality/evaluationCarbonPreview"
+import scenario from "./views/Scenario/carbonScenarioPreview"
 import assesment from "./views/Nature/carbonNatureAssessment"
 import target from "./views/Nature/carbonNatureTarget"
 import progress from "./views/Nature/carbonNatureProgress.vue"
@@ -67,9 +69,19 @@ const router = createRouter({
       component: predict,
     },
     {
+      path: "/scenario",
+      name: "scenario",
+      component: scenario,
+    },
+    {
       path: "/predict/predictCategory",
       name: "predictCategory",
       component: predictCategory,
+    },
+    {
+      path: "/evaluation",
+      name: "evaluationCarbon",
+      component: evaluation,
     },
     {
       path: "/nature",

@@ -14,7 +14,9 @@ export default{
             sampleData:''
         };
     },
-    setup(){},
+    async setup(){
+        
+    },
     created(){},
     mounted(){},
     unmounted(){},
