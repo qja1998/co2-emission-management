@@ -50,20 +50,12 @@
 
 
 <script>
-<<<<<<< HEAD
-import {ref} from 'vue'
-=======
 import {ref,computed} from 'vue'
 import {useStore} from 'vuex'
->>>>>>> origin/main
 
     export default {
         name :"predict_dash4",
         setup(){
-<<<<<<< HEAD
-            var server_total_data = [152,120,123,130,128,136,139,150,130]
-            var server_predict_total_data = [160,60,40,20,30,40]
-=======
             var store = useStore()
             //그룹명, 날짜
             var selected_company = computed(()=> store.state.insight_selected_company)
@@ -75,22 +67,14 @@ import {useStore} from 'vuex'
             //서버
             var server_total_data = computed(()=> store.state.getTotalLastDataList)
             var server_predict_total_data = computed(()=> store.state.getPredictTotal)
->>>>>>> origin/main
 
             var total_emission = ref({
                 data:0,
                 predictData:0
             })
 
-<<<<<<< HEAD
-            total_emission.value.data = server_total_data[server_total_data.length-1]
-            total_emission.value.predictData = server_predict_total_data[0]
-
-            console.log(total_emission.value)
-=======
             total_emission.value.data = server_total_data.value[month]
             total_emission.value.predictData = server_predict_total_data.value[0]
->>>>>>> origin/main
 
             var percent =Math.round(percentage(total_emission.value))
             function percentage(value){

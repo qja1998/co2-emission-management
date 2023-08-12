@@ -248,10 +248,7 @@ import { ref,computed } from "vue"
                     "Content-Type": "text/html; charset=utf-8",
                 }
             }
-<<<<<<< HEAD
-=======
         }
->>>>>>> origin/main
             
         var user_group = computed(()=> store.state.user_group)
         async function title_get_list_(){

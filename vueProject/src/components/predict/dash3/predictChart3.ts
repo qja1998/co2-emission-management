@@ -31,20 +31,6 @@ export default defineComponent({
     Line
   },
   setup(props) {
-<<<<<<< HEAD
-    var server_total_data = [152,120,123,130,128,136,139,150,130]
-    var server_predict_total_data = [50,60,40,20,30,40]
-    
-    var server_predict_data = [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN]
-    server_predict_data.push(server_total_data[server_total_data.length - 1])
-    for(var i=0; i<server_predict_total_data.length; i++){
-      server_predict_data.push(server_predict_total_data[i])
-      
-    }
-    console.log(server_predict_data)
-    const chartData = {
-      labels: ['January','February','March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
-=======
     var store = useStore()
     //그룹명
     var selected_company = computed(()=> store.state.insight_selected_company)
@@ -89,7 +75,6 @@ export default defineComponent({
     //차트 데이터
     const chartData = {
       labels: x_legend,
->>>>>>> origin/main
       datasets: [
         {
           label: 'Total Carbon Emission',
