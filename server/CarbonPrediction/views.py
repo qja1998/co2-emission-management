@@ -204,7 +204,7 @@ class PartPredictionQuery(APIView):
                                                                     EndDate=pre_date,
                                                                     Chief=UserRoot.Chief,
                                                                     Category=cate)
-                        if department != None: 
+                        if department != None:
                             carbon_data = Carbon.objects.filter(RootCom=RootCom,
                                                                     BelongDepart=department,
                                                                     CarbonInfo=carbon_info).values('CarbonData')
