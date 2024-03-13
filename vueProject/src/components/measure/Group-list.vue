@@ -243,9 +243,10 @@ import { ref,computed } from "vue"
             }
 
             const config = {
-            headers:{
-              Authorization:"Bearer"+" "+store.state.accessToken,
-              "Content-Type": "text/html; charset=utf-8",
+                headers:{
+                    Authorization:"Bearer"+" "+store.state.accessToken,
+                    "Content-Type": "text/html; charset=utf-8",
+                }
             }
         }
             

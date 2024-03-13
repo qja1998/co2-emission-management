@@ -170,9 +170,67 @@ export default defineComponent({
           segment:{
             borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
           }
-        }
+        },
+ 
+        {
+          label: '전력',
+          backgroundColor: '#5E8CFF',
+          data: [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
+          borderColor: '#5E8CFF',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '스팀',
+          backgroundColor: '#5E8CFF',
+          data: [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
+          borderColor: '#5E8CFF',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+
+        {
+          label: '수도',
+          backgroundColor: '#5E8CFF',
+          data: [381, 363, 321, 350, 348, 371, 365, 362, 384, 391, 342, 370],
+          borderColor: '#5E8CFF',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+        {
+          label: '폐기물',
+          backgroundColor: '#ED86EF',
+          data: [208, 175, 143, 167, 160, 220, 198, 194, 222, 270, 200, 315],
+          borderColor: '#ED86EF',
+          segment:{
+            borderDash: (ctx: any) => dash(ctx,[2,2]) || [6,0]
+          }
+        },
+
       ],
     }
+    var server_category_predict_data = [
+      [580,300,800,400,200,200],
+      [580,300,800,400,200,200],
+      [580,300,800,400,200,200],
+      [580,300,800,400,200,200],
+      [580,300,800,400,200,30],
+      [580,300,800,400,200,30],
+      [580,300,800,200,200,30]
+    ]
+
+    var server_category_data = [
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20],
+      [580,300,800,400,200,200,30,50,20]
+    ]
 
     const chartOptions = {
       responsive: true,

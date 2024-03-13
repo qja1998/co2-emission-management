@@ -1,0 +1,11 @@
+db_config.py
+setDjango.sh
+config.py
+.env
+mysql
+logs
+Carbon/migrations/
+Company/migrations/
+Human/migrations/
+__pycache__
+venv
