@@ -1,5 +1,5 @@
-import { defineComponent, h, PropType } from 'vue'
-
+import { defineComponent, h, PropType, ref  ,computed } from 'vue'
+import {useStore} from 'vuex'
 import { Bar } from 'vue-chartjs'
 
 import {
@@ -49,6 +49,24 @@ export default defineComponent({
     
   },
   setup(props) {
+
+    var store =useStore()
+    //날짜 그룹명
+    var user_group = computed(()=> store.state.user_group)
+    var selected_company = computed(()=> store.state.insight_selected_company)
+
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+
+    //서버
+    var BaseEmissions = computed(()=>store.state.baseData).value
+
+
+    var server_targetTotal_data = computed(()=>store.state.getTargetData).value
+    var sum = computed(()=>store.state.getTotalLastData).value
+
+
+
     const chartData = {
       labels: [
         '기준량', '2022년 탄소 배출량', '감축 목표 달성시 2023년 탄소 배출량'
@@ -58,7 +76,7 @@ export default defineComponent({
           label : '총 탄소 배출량',
           backgroundColor: ['#777777', '#2A565B','#3DC984'],
           borderRadius:10,
-          data: [70,40,30],
+          data: [BaseEmissions,sum,sum- server_targetTotal_data],
           barThickness:27,
         },
       ]

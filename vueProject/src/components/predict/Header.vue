@@ -3,7 +3,7 @@
         <p class="measure-name">탄소 예측</p>
         <div class="measure-setting">
             <router-link to="/predict" class="header-text">탄소 배출량 예측</router-link>
-            <router-link to="/predictCategory" class="header-text">카테고리별 탄소 배출량</router-link>
+            <router-link to="/predict/predictCategory" class="header-text">카테고리별 탄소 배출량</router-link>
         </div>
     </div>
 </template>

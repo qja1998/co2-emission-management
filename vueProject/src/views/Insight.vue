@@ -227,8 +227,9 @@ import { computed,ref } from "vue";
             }
           }
           async function get_total_emission_month(){
-              await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-"+month.value+"-01/"+year.value+"-"+month.value+"-28",config).then(res => {
-                    console.log(res.data)
+              await axios.get("Company/Preview/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28",config).then(res => {
+                console.log("Company/Preview/"+selected_company.value+"/"+year.value+"-01-01/"+year.value+"-"+month.value+"-28")    
+                console.log(res.data)
                     console.log("연월"+year.value+month.value)
                     scope1.value = res.data.Scopes[0]
                     scope2.value = res.data.Scopes[1]

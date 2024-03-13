@@ -1,4 +1,5 @@
-import { defineComponent, h, PropType  } from 'vue'
+import { defineComponent, h, PropType,ref, computed  } from 'vue'
+import {useStore} from 'vuex'
 import { Doughnut } from 'vue-chartjs'
 
 import {
@@ -42,6 +43,21 @@ export default defineComponent({
     },
   },
   setup(props) {
+    var store =useStore()
+    //날짜 그룹명
+    var user_group = computed(()=> store.state.user_group)
+    var selected_company = computed(()=> store.state.insight_selected_company)
+
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+    var month = now.getMonth()
+
+    //서버
+    var server_last_total_data = computed(()=> store.state.getTotalLastData).value
+    var server_total_data = computed(()=> store.state.getTotalNowData).value
+    var server_targetTotal_data = computed(()=> store.state.getTargetData).value
+
+
     const chartData = {
       labels: [
         '현재 총 탄소 배출량','목표 탄소 배출량'
@@ -50,7 +66,7 @@ export default defineComponent({
         {
           label: '탄소 배출량 percent',
           backgroundColor: ['#3DC984','white'],
-          data: [150,100],
+          data: [server_total_data , ((server_last_total_data-server_targetTotal_data)-server_total_data)],
         },
       ],
     }

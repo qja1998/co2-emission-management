@@ -1,6 +1,7 @@
 import { defineComponent, h, PropType } from 'vue'
 import { Line } from 'vue-chartjs'
-
+import {ref,computed} from 'vue'
+import {useStore} from 'vuex'
 
 
 import {
@@ -30,18 +31,50 @@ export default defineComponent({
     Line
   },
   setup(props) {
-    var server_total_data = [152,120,123,130,128,136,139,150,130]
-    var server_predict_total_data = [50,60,40,20,30,40]
+    var store = useStore()
+    //그룹명
+    var selected_company = computed(()=> store.state.insight_selected_company)
+    var user_group = computed(()=> store.state.user_group)
+    //날짜 
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+    var month = now.getMonth()+1 //월
+    // x범위 만들기
+    var month_Eng = ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','Setember','October','November','December']
+    var x_legend =['']
+
+    for(var i = 0; i< month_Eng.length; i++){
+      if(month-6+i < 0){
+          x_legend[i] = month_Eng[month_Eng.length + (month-6+i)]
+          console.log(x_legend)
+      }
+      else{
+        x_legend[i] = month_Eng[month-6+i]
+      }
+    }
+
+    //서버
+    var total =  computed(()=> store.state.getTotalLastDataList)
+    var server_total_data = [0,0,0,0,0,0] 
     
-    var server_predict_data = [NaN, NaN, NaN, NaN, NaN,NaN,NaN,NaN]
+    for(var i =0; i < 6; i++){
+      server_total_data[i]=total.value[i]
+    }
+    var server_predict_total_data = computed(()=> store.state.getPredictTotal)
+    
+    var server_predict_data = [NaN, NaN, NaN, NaN, NaN]
     server_predict_data.push(server_total_data[server_total_data.length - 1])
-    for(var i=0; i<server_predict_total_data.length; i++){
-      server_predict_data.push(server_predict_total_data[i])
+
+    for(var i=0; i<server_predict_total_data.value.length; i++){
+      server_predict_data.push(server_predict_total_data.value[i])
       
     }
+
+    console.log(server_total_data)
     console.log(server_predict_data)
+    //차트 데이터
     const chartData = {
-      labels: ['January','February','March', 'April', 'May', 'June', 'July','August','Setember','October','November','December'],
+      labels: x_legend,
       datasets: [
         {
           label: 'Total Carbon Emission',
@@ -85,8 +118,9 @@ export default defineComponent({
         y:{
           display:true,
           grid:{
-            display:false
-          }
+            display:false,
+          },
+  
         },
       }
     }

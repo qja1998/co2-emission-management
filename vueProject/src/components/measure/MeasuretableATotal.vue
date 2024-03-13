@@ -140,7 +140,7 @@ export default {
                 }
                 //{id:"",content:"",data:"",emissions:"",StartDate:"",EndDate:"",scope:""}
                 async function get_total_emission(input_data){
-                    await axios.post("/CarbonEmission/samsung",input_data,config).then(res => {
+                    await axios.post("/CarbonEmission/경상대학교",input_data,config).then(res => {
                         console.log(JSON.stringify(input_data))
                     })
                     .catch(error => {

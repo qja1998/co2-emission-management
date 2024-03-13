@@ -50,14 +50,14 @@ import { useStore } from 'vuex'
             const store = useStore()
             var transList=[
                 {index:0, category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:1,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:2,category:'전력사용', percentage: 30, target: "태양열 에너지"},
-                {index:3,category:'전력사용', percentage: 30, target: "태양열 에너지"},
+                {index:1, category:'전력사용', percentage: 30, target: "태양열 에너지"},
+                {index:2, category:'전력사용', percentage: 30, target: "태양열 에너지"},
+                {index:3, category:'전력사용', percentage: 30, target: "태양열 에너지"},
             ]
             var increasList=[
-                {index:0,category:'전력사용', percentage: 30},
-                {index:1,category:'전력사용', percentage: 30},
-                {index:12,category:'전력사용', percentage: 30}
+                {index:0, category:'전력사용', percentage: 30},
+                {index:1, category:'전력사용', percentage: 30},
+                {index:12, category:'전력사용', percentage: 30}
             ]
             const clickSaveTarget = () => {
                 console.log('open')
@@ -72,7 +72,6 @@ import { useStore } from 'vuex'
                 else{
                     listKind.value = 'trans'
                 }
-                console.log(listKind.value)
             }
             const leaveTarget=()=>{
                 select.value = -1

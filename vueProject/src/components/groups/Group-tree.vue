@@ -70,7 +70,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { defineComponent,ref,reactive,onMounted} from 'vue';
+import { defineComponent,ref,reactive,onMounted, computed} from 'vue';
 import GroupTreeNode from "./GroupTreeNode.vue"
 import axios from "axios";
 import { useRouter } from "vue-router";
@@ -124,8 +124,11 @@ import { useRouter } from "vue-router";
               "Content-Type": "text/html; charset=utf-8",
             }
           }
+
+          var user_group = computed(()=> store.state.user_group)
+          console.log('유저 그룹', user_group.value)
           async function get_tree(){
-              await axios.get("/Company/Organization/samsung",config).then(res => {
+              await axios.get("/Company/Organization/" + user_group.value , config).then(res => {
                     console.log(res.data)
                     treeData = res.data
                     store.commit("SetGroupTree",res.data);

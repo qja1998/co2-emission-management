@@ -1,7 +1,7 @@
-import { defineComponent, h, PropType } from 'vue'
-
+import { defineComponent, h, PropType, ref, computed } from 'vue'
+import {useStore} from 'vuex'
 import { Bar } from 'vue-chartjs'
-
+import axios from 'axios'
 import {
   Chart as ChartJS,
   Title,
@@ -49,16 +49,42 @@ export default defineComponent({
     
   },
   setup(props) {
+    var store = useStore()
+    //날짜 그룹명
+    var user_group = computed(()=> store.state.user_group)
+    var selected_company = computed(()=> store.state.insight_selected_company)
+
+    var now = new Date();	// 현재 날짜 및 시간
+    var year = now.getFullYear()	// 년도
+
+    //서버
+    var server_total_data = [20,50,60,40,20,30,50,50,40,20,30,60]
+
+    var sum = computed(()=>store.state.getTotalLastData).value //작년 총 탄소 배출량
+    var server_targetTotal_data =computed(()=>store.state.getTargetData).value
+    console.log(server_targetTotal_data)
+
+    for(var i=0; i<server_total_data.length; i++){
+      sum = server_total_data[i] + sum
+    }
+
+    const config = {
+        headers:{
+            Authorization:"Bearer"+" "+store.state.accessToken,
+            "Content-Type": "text/html; charset=euc-kr",
+        }
+    }
+
     const chartData = {
       labels: [
-        '2022년 총 탄소 배출량', '2023년 총 탄소 배출량',
+        year-1+'년 총 탄소 배출량', year+'년 총 탄소 배출량',
       ],
       datasets: [
         {
           label : '총 탄소 배출량',
           backgroundColor: ['#2A565B','#3DC984'],
           borderRadius:10,
-          data: [40,30],
+          data: [sum , sum - server_targetTotal_data],
           barThickness:20,
         },
       ]

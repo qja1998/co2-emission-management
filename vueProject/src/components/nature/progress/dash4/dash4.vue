@@ -3,7 +3,7 @@
         <div class="title-border">감축 목표 대비 현재 카테고리별 탄소 배출량</div>
         
         <div class="frame" style="width:77vw; height:37vh;">
-            <div class="dash-text-middle" style="font-size:2.5rem; margin:0">{{year}}년</div>
+            <div class="dash-text-middle" style="font-size:4vh; margin:0">{{year}}년</div>
             <cateBarGraph id="progress-cate-graph"></cateBarGraph>
         </div>
     </div>
