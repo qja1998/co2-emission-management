@@ -1,22 +1,21 @@
-# Get Started
 # How to start back-end server(`server/README.md`)
 
-# 서버 실행 방법
-## 1. 우분투 20.04 환경을 준비합니다.
-## 2. 해당 환경에 docker와 docker-compose를 설치합니다.
-## 3. 이 깃허브에서 코드를 git clone "repository" 하여 가져옵니다.
-## 4. CarbonServerDjango 디렉토리에서 bash runServer.sh를 실행합니다.
-## 5. 해당 서버에 접속하여 제대로 동작하는지 확인합니다.
+## 서버 실행 방법
+### 1. 우분투 20.04 환경을 준비합니다.
+### 2. 해당 환경에 docker와 docker-compose를 설치합니다.
+### 3. 이 깃허브에서 코드를 git clone "repository" 하여 가져옵니다.
+### 4. CarbonServerDjango 디렉토리에서 bash runServer.sh를 실행합니다.
+### 5. 해당 서버에 접속하여 제대로 동작하는지 확인합니다.
 이 서버의 경우 Api 서버이며, ~서버 ip/{사용자가 설정한 포트 번호}/swagger로 이동하면 Api에 관한 설명을 확인할 수 있습니다.
 
-## 서버 실행 시 주의 사항
+### 서버 실행 시 주의 사항
 .env 파일과 config.py 보안 상의 이유로 파일이 제공되지 않습니다. 본인의 원하는 형태로 작성하여 주십시요. 
 
 
 logs 폴더는 생성하지 않은 상태입니다. 해당 폴더를 생성한 후, 해당 폴더에 Server.log 파일을 생성해 주십시요.
 
 
-## runServer.sh 셸스크립트 실행 시 선행 조건
+### runServer.sh 셸스크립트 실행 시 선행 조건
 git clone한 디렉토리 위의 디렉토리에 CarMigrate, ComMigrate, HuMigrate 폴더가 존재해야 합니다.
 
 
@@ -27,7 +26,7 @@ docker-compose가 빌드 될 때 MySQL 도커가 실행되는 도커 볼륨에 .
 
 mysql이 실행되는 도커의 경우, .env 파일에서 정의한 도커 볼륨을 사용하여 생성됩니다.
 
-## config.py 예시
+### config.py 예시
 SECRET_KEY = "본인이 선택한 비밀 암호화 키"
 
 
@@ -146,7 +145,7 @@ CARBON_PORT=본인이 사용할 포트 번호
 
 
 # How to start front-end(`vueProject/README.md`)
-# carbon dashboard
+## carbon dashboard
 
 ## Project setup
 ```
